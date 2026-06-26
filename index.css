@@ -18,7 +18,7 @@
 
   --periwinkle: #7A9CFF;
   --periwinkle-soft: #A8C0FF;
-  --coral:      #FF9472;
+  --lime:      #00FF00;
 
   --serif:  'Fraunces', Georgia, serif;
   --sans:   'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -312,7 +312,7 @@ button:focus-visible {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--coral);
+  background: var(--lime);
   flex-shrink: 0;
 }
 
