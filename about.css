@@ -1,0 +1,721 @@
+/* =============================================
+   TOKENS — "Philippine Flag"
+   Deep navy base, three accent families drawn
+   from the flag: royal blue (structure),
+   golden sun (personality/voice), red (one
+   bold moment — the philosophy quote border
+   and nav hover). White becomes chalk text.
+   Fraunces display (matches index nav),
+   Cormorant Garamond for editorial quotes,
+   Outfit for all body and utility text.
+============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+  /* ── Surfaces ── */
+  --void:         #080E1C;
+  --void-2:       #0D1427;
+  --surface:      #0E1830;
+
+  /* ── Text ── */
+  --chalk:        #EEF2FF;
+  --chalk-dim:    #C8D0E0;
+  --chalk-quiet:  #7A8BAD;
+  --chalk-muted:  #3A4F7A;
+
+  /* ── Flag: Royal Blue ── */
+  --blue:         #0052D6;
+  --blue-bright:  #4A7FE8;
+  --blue-light:   #7AAEF5;
+  --blue-soft:    rgba(0, 82, 214, 0.18);
+  --blue-line:    rgba(0, 82, 214, 0.25);
+  --blue-glow:    rgba(0, 56, 168, 0.28);
+
+  /* ── Flag: Golden Sun ── */
+  --gold:         #F5C518;
+  --gold-soft:    rgba(245, 197, 24, 0.10);
+  --gold-line:    rgba(245, 197, 24, 0.28);
+  --gold-glow:    rgba(206, 163, 23, 0.16);
+
+  /* ── Flag: Red ── */
+  --red:          #CE2028;
+  --red-soft:     rgba(206, 32, 40, 0.15);
+
+  /* ── Green (availability only) ── */
+  --green:        #22C77A;
+  --green-glow:   rgba(34, 199, 122, 0.20);
+
+  /* ── Typography ── */
+  --serif-display: 'Fraunces', Georgia, serif;
+  --serif-voice:   'Cormorant Garamond', Georgia, serif;
+  --sans:          'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* ── Layout ── */
+  --measure:      640px;
+  --measure-wide: 1120px;
+
+  /* ── Motion ── */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* =============================================
+   RESET & BASE
+============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--void);
+  color: var(--chalk-dim);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+a { color: var(--blue-bright); text-decoration: none; }
+
+img { max-width: 100%; display: block; }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--blue-bright);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--blue);
+  color: var(--chalk);
+}
+
+/* =============================================
+   SKIP LINK
+============================================= */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--blue-bright);
+  color: var(--void);
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  z-index: 200;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+/* =============================================
+   AMBIENT GLOWS
+   Blue top-left (near avatar, flag's blue field),
+   gold bottom-right (the golden sun radiating out).
+============================================= */
+.glow {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(1px);
+}
+
+.glow-tl {
+  top: -80px;
+  left: -60px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--blue-glow), transparent 70%);
+}
+
+.glow-br {
+  bottom: 0;
+  right: -80px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, var(--gold-glow), transparent 70%);
+}
+
+/* =============================================
+   ENTRANCE ANIMATIONS
+============================================= */
+.load-in {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: load-in-rise 0.85s var(--ease-out) forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes load-in-rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease-spring), transform 0.7s var(--ease-spring);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =============================================
+   NAV
+============================================= */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.4rem 3rem;
+  background: rgba(8, 14, 28, 0.90);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--blue-line);
+}
+
+.nav-logo {
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  color: var(--chalk);
+}
+
+.nav-logo span { color: var(--gold); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--chalk-quiet);
+  position: relative;
+  padding-bottom: 2px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  transition: color 0.2s ease;
+}
+
+/* Nav hover — red underline, the flag's boldest color */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  width: 0%;
+  height: 2px;
+  background: var(--red);
+  border-radius: 2px;
+  transition: width 0.25s var(--ease-out);
+}
+
+.nav-links a:hover { color: var(--chalk); }
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after { width: 100%; }
+
+.nav-cta {
+  color: var(--blue-bright) !important;
+  font-weight: 600 !important;
+}
+
+.nav-cta:hover { color: var(--gold) !important; }
+.nav-cta::after { background: var(--gold) !important; }
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  color: var(--chalk);
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.nav-toggle:hover { background: var(--blue-soft); }
+
+.nav-links-mobile {
+  display: none;
+  list-style: none;
+  flex-direction: column;
+  background: var(--void-2);
+  border-bottom: 1px solid var(--blue-line);
+  position: relative;
+  z-index: 100;
+}
+
+.nav-links-mobile.is-open { display: flex; }
+
+.nav-links-mobile li { border-top: 1px solid var(--blue-line); }
+.nav-links-mobile li:first-child { border-top: none; }
+
+.nav-links-mobile a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--chalk-quiet);
+  transition: color 0.2s ease;
+}
+
+.nav-links-mobile a:hover { color: var(--chalk); }
+.nav-links-mobile a.nav-cta { color: var(--blue-bright); font-weight: 600; }
+
+/* =============================================
+   PAGE FRAME
+============================================= */
+.page {
+  max-width: var(--measure-wide);
+  margin: 0 auto;
+  padding: 0 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* =============================================
+   BACK LINK — red, the flag's accent colour
+============================================= */
+.subpage-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--red);
+  margin: 2rem 0 1rem;
+  transition: opacity 0.2s ease;
+}
+
+.subpage-back:hover { opacity: 0.75; }
+
+/* =============================================
+   HERO — avatar left, intro text right
+============================================= */
+.hero {
+  padding: clamp(1.5rem, 4vw, 2.5rem) 0 2rem;
+}
+
+.avatar-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.25rem;
+}
+
+/* ── Avatar ── */
+.avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--blue-line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gold sun glow behind the avatar */
+.avatar::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 197, 24, 0.14), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* When swapping in a real photo:
+   add <img src="your-photo.jpg" alt="Mark Pabustan"> inside .avatar
+   The CSS below fills the circle automatically. */
+.avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.avatar-icon {
+  width: 52px;
+  height: 52px;
+  color: var(--gold);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 6px;
+}
+
+.avatar-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--chalk-muted);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Hero text ── */
+.hero-text { flex: 1; min-width: 0; }
+
+.hero-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+  margin-bottom: 0.65rem;
+}
+
+.hero h1,
+.hero-text h1 {
+  font-family: var(--serif-display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+  line-height: 1.1;
+  color: var(--chalk);
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.015em;
+}
+
+.hero h1 em,
+.hero-text h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-sub {
+  font-size: 0.92rem;
+  color: var(--chalk-quiet);
+  line-height: 1.65;
+  max-width: 42ch;
+}
+
+/* ── Animated gradient rule: blue → gold → red (flag stripe order) ── */
+.rule-wrap {
+  margin-top: 1.1rem;
+  height: 2px;
+  background: var(--blue-line);
+  border-radius: 2px;
+  overflow: hidden;
+  max-width: 320px;
+}
+
+.rule-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--blue), var(--gold), var(--red));
+  border-radius: 2px;
+  animation: rule-draw 1.3s var(--ease-out) 0.5s forwards;
+}
+
+@keyframes rule-draw {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* =============================================
+   SECTION DIVIDER
+============================================= */
+.section-divider {
+  height: 1px;
+  background: var(--blue-line);
+  margin: 0.5rem 0 0;
+}
+
+/* =============================================
+   CONTENT COLUMNS
+============================================= */
+.about-columns {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 3rem;
+  padding: 2.5rem 0 3rem;
+}
+
+.about-left,
+.about-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* =============================================
+   BLOCK LABELS
+   Gold — voice and personality (left column)
+   Blue — facts and structure (right column)
+============================================= */
+.block-label {
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.9rem;
+  display: block;
+}
+
+.block-label--gold { color: var(--gold); }
+.block-label--blue { color: var(--blue-bright); }
+
+/* =============================================
+   PHILOSOPHY QUOTE
+   Red left border — the flag's boldest colour
+   given its one strong structural moment.
+============================================= */
+.philosophy-quote {
+  font-family: var(--serif-voice);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  line-height: 1.55;
+  color: var(--chalk);
+  border: none;
+  padding: 0 0 0 1.25rem;
+  margin: 0;
+  border-left: 3px solid var(--red);
+}
+
+/* =============================================
+   BODY TEXT
+============================================= */
+.body-text {
+  font-size: 0.94rem;
+  line-height: 1.85;
+  color: var(--chalk-quiet);
+}
+
+.body-text em {
+  font-style: italic;
+  color: var(--chalk-dim);
+  font-family: var(--serif-voice);
+  font-size: 1.06em;
+}
+
+/* =============================================
+   FACTS LIST
+============================================= */
+.facts-list { list-style: none; }
+
+.facts-list li {
+  font-size: 0.9rem;
+  color: var(--chalk-quiet);
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--blue-line);
+  line-height: 1.55;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.facts-list li:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.facts-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--blue-bright);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+
+/* =============================================
+   SKILL PILLS
+   Blue — design tools and methods
+   Gold — technical / engineering skills
+============================================= */
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-pill {
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+}
+
+.skill-pill--blue {
+  color: var(--blue-light);
+  background: var(--blue-soft);
+  border: 1px solid rgba(0, 82, 214, 0.35);
+}
+
+.skill-pill--gold {
+  color: var(--gold);
+  background: var(--gold-soft);
+  border: 1px solid var(--gold-line);
+}
+
+/* =============================================
+   AVAILABILITY BAR — green dot signals "open"
+============================================= */
+.avail-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1.2rem;
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-line);
+  border-radius: 10px;
+}
+
+.avail-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--green-glow);
+}
+
+.avail-bar span {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--blue-bright);
+}
+
+/* =============================================
+   FOOTER
+============================================= */
+footer {
+  border-top: 1px solid var(--blue-line);
+  padding: 2rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--measure-wide);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-logo {
+  font-family: var(--serif-display);
+  font-size: 0.92rem;
+  color: var(--chalk-muted);
+}
+
+.footer-logo span { color: var(--gold); }
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--chalk-muted);
+}
+
+/* =============================================
+   RESPONSIVE — 1024px
+============================================= */
+@media (max-width: 1024px) {
+  .page  { padding: 0 2.25rem; }
+  .nav   { padding: 1.2rem 2.25rem; }
+  footer { padding: 1.75rem 2.25rem; }
+}
+
+/* =============================================
+   RESPONSIVE — 900px
+============================================= */
+@media (max-width: 900px) {
+  .nav        { padding: 1.1rem 1.75rem; }
+  .nav-links  { gap: 1.5rem; }
+  .page       { padding: 0 1.75rem; }
+
+  .about-columns {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  footer { padding: 1.75rem; }
+}
+
+/* =============================================
+   RESPONSIVE — 640px (mobile)
+============================================= */
+@media (max-width: 640px) {
+  .nav-links  { display: none; }
+  .nav-toggle { display: flex; }
+  .nav        { padding: 1rem 1.25rem; }
+  .page       { padding: 0 1.25rem; }
+
+  /* Stack avatar above headline on small screens */
+  .avatar-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .avatar {
+    width: 140px;
+    height: 140px;
+  }
+
+  .avatar-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .rule-wrap { max-width: 100%; }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem 1.25rem;
+    gap: 0.5rem;
+  }
+
+  .glow { display: none; }
+}
+
+/* =============================================
+   RESPONSIVE — 400px
+============================================= */
+@media (max-width: 400px) {
+  .hero h1,
+  .hero-text h1 { font-size: clamp(1.9rem, 10vw, 2.4rem); }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+  }
+}
