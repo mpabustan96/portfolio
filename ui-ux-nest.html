@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI/UX Nest Case Study | Mark Pabustan</title>
+<link rel="stylesheet" href="ui-ux-nest.css">
+</head>
+<body>
+
+  <div class="tape-track" aria-hidden="true">
+    <div class="tape-fill" id="tapeFill"></div>
+  </div>
+
+  <header class="site-header">
+    <span class="logo">Mark Pabustan</span>
+    <nav>
+      <a href="education.html">&larr; Bootcamp Projects</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 40 C 10 26, 20 16, 32 16 C 44 16, 54 26, 54 40" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M16 40 C 16 30, 23 22, 32 22 C 41 22, 48 30, 48 40" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity="0.55"/>
+          <circle cx="32" cy="40" r="4.5" fill="currentColor"/>
+          <path d="M22 48 H42" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="hero-eyebrow">UI/UX Case Study, Columbia Engineering Bootcamp Final Team Project</span>
+      <h1>A map towards the designer you can become.</h1>
+      <p class="lede">A four-person team builds a learning platform for people trying to break into UI/UX, and immediately runs into the same problem every new designer faces: too many directions, not enough runway to chase them all.</p>
+      <span class="scroll-cue">Scroll to begin ↓</span>
+    </section>
+
+    <!-- METADATA STRIP -->
+    <section class="meta-strip fade-in">
+      <div class="meta-item">
+        <span class="label">Role</span>
+        <span class="value">Team Lead, Design &amp; Frontend</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Timeline</span>
+        <span class="value">Final Project, Columbia Bootcamp</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Tools</span>
+        <span class="value">Figma, HTML/CSS, user interviews</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Status</span>
+        <span class="value">Coded prototype, built but not deployed</span>
+      </div>
+    </section>
+
+    <!-- HOOK -->
+    <section class="section fade-in">
+      <p class="hook-line">"We weren't short on ideas. We were short on time. Figuring out which ideas earned a place in the MVP was the real design problem."</p>
+    </section>
+
+    <!-- THE PROBLEM -->
+    <section class="section fade-in" id="problem">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>The Problem</h2>
+      </div>
+      <p>For our final group project, the brief was open: pick a product, design it, and code it ourselves. That last part mattered. This wasn't a design exercise with engineering handed off to someone else, it was meant to build the muscle of actually translating a Figma file into a working site, the same muscle that separates a designer who can spec something from one who understands what it costs to build.</p>
+      <p>We chose to build for people just outside the field looking in: aspiring UI/UX designers who know they want in, but don't know where to start. That's a real, specific gap. There's no shortage of UI/UX content online, YouTube tutorials, Medium posts, bootcamp ads, but very little of it is sequenced. We set out to build <strong style="color: var(--ink);">UI/UX Nest</strong>: a guided starting point, not another firehose of scattered resources.</p>
+
+      <div class="team-strip">
+        <span class="team-chip lead">Mark Pabustan: Team Lead</span>
+        <span class="team-chip">Melica Dehghani</span>
+        <span class="team-chip">Deb Kim</span>
+        <span class="team-chip">Tara Jarzabkowski</span>
+      </div>
+    </section>
+
+    <!-- RESEARCH & DISCOVERY -->
+    <section class="section fade-in" id="research">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>Research &amp; Discovery</h2>
+      </div>
+
+      <p>We ran interviews and a short survey with people either learning UI/UX on their own or actively considering it, to find out where they actually got stuck. One answer came back again and again, in different words but the same shape: people didn't need more material, they needed to know where to start and what order to learn things in.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-label">Most common blocker</span>
+          <p>Not a lack of resources, but <strong>no clear starting point</strong> among the resources that already exist.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">What they asked for</span>
+          <p>A <strong>structured learning path</strong>, something that told them what to learn first, second, and after that.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Scope beyond "UI/UX basics"</span>
+          <p>Several wanted help that went past theory, into <strong>building a portfolio and resume</strong>.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Learning style</span>
+          <p>People learn differently, some wanted to <strong>watch</strong>, some wanted to <strong>read</strong>, neither alone was enough.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="note-label">Honest framing</span>
+        <p>This was a real interview-and-survey round, but a small, informal one run by a four-person student team on a fixed bootcamp timeline, not a validated research study. We treated the pattern as a strong directional signal, not statistically rigorous data, and it's the reason "find your starting point" became the spine of the whole product instead of one feature among many.</p>
+      </div>
+    </section>
+
+    <!-- DEFINE & IDEATE -->
+    <section class="section wide fade-in" id="ideate">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>Define &amp; Ideate</h2>
+      </div>
+
+      <p>With four people, a self-chosen concept, and no client to draw a line for us, scope creep showed up immediately. Everyone had a feature they were excited about, and almost all of them were genuinely good ideas. The defining tension of this project wasn't disagreement about quality, it was about fit: which of these ideas actually served "help someone find their starting point," and which were exciting tangents that would eat the time we didn't have.</p>
+
+      <div class="scope-ledger">
+        <div class="scope-ledger-head">
+          <span class="kept-label">Kept in the MVP</span>
+          <span class="cut-label">Cut for time</span>
+        </div>
+        <div class="scope-row">
+          <div class="scope-cell kept">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
+            Step-by-step curriculum with video + written summaries
+          </div>
+          <div class="scope-cell cut">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            <span class="strike">Live tutoring via video calls</span>
+          </div>
+        </div>
+        <div class="scope-row">
+          <div class="scope-cell kept">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
+            Portfolio &amp; resume guidance built into the path
+          </div>
+          <div class="scope-cell cut">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            <span class="strike">Mock interview practice</span>
+          </div>
+        </div>
+        <div class="scope-row">
+          <div class="scope-cell kept">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
+            Job-prep reference: roles, skills, pay ranges
+          </div>
+          <div class="scope-cell cut">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            <span class="strike">Practice exams / knowledge retention testing</span>
+          </div>
+        </div>
+        <div class="scope-row">
+          <div class="scope-cell kept">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
+            Networking page pointing to real events &amp; communities
+          </div>
+          <div class="scope-cell empty">Reserved for a future iteration, see below</div>
+        </div>
+        <div class="scope-ledger-foot">
+          Every cut feature solved a real problem. None of them solved <em>"where do I even start,"</em> which is the one problem the MVP had to solve completely.
+        </div>
+      </div>
+
+      <p>Sorting features this way turned an emotional argument, whose idea gets cut, into a practical one: does this serve the starting point, or does it serve a more advanced stage we don't have time to build well? That question didn't make every disagreement painless, but it gave us a shared standard to argue against instead of arguing against each other.</p>
+    </section>
+
+    <!-- DESIGN DECISIONS -->
+    <section class="section wide fade-in" id="decisions">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2>Design Decisions</h2>
+      </div>
+
+      <div class="subsection">
+        <h3>A curriculum that's actually a path, not a library</h3>
+        <p>The core deliverable became a phased curriculum: a sequence of phases, each broken into specific topics, each topic paired with a short video tutorial and a written summary of that same video. That pairing was deliberate, not redundant. The research told us people learn differently, some want to watch, some want to read a quick recap before or instead of watching, and building both into every topic meant neither type of learner had to settle for the format that didn't suit them.</p>
+
+        <div class="curriculum-path">
+          <div class="path-phase">
+            <div class="path-marker">
+              <span class="path-num">1</span>
+              <span class="path-line"></span>
+            </div>
+            <div class="path-content">
+              <h4>Introduction to UI/UX</h4>
+              <p>The absolute starting point: what the field is, how UI and UX differ, and the vocabulary everything after this builds on.</p>
+              <span class="path-tag">Video + summary</span>
+            </div>
+          </div>
+          <div class="path-phase">
+            <div class="path-marker">
+              <span class="path-num">2</span>
+              <span class="path-line"></span>
+            </div>
+            <div class="path-content">
+              <h4>Core concepts &amp; tools</h4>
+              <p>Design principles and a first hands-on pass at Figma, the tool nearly every later step assumes familiarity with.</p>
+              <span class="path-tag">Video + summary</span>
+            </div>
+          </div>
+          <div class="path-phase">
+            <div class="path-marker">
+              <span class="path-num">3</span>
+              <span class="path-line"></span>
+            </div>
+            <div class="path-content">
+              <h4>Portfolio &amp; resume</h4>
+              <p>Turning what was just learned into something a hiring manager can actually evaluate.</p>
+              <span class="path-tag">Guided steps</span>
+            </div>
+          </div>
+          <div class="path-phase">
+            <div class="path-marker">
+              <span class="path-num">4</span>
+            </div>
+            <div class="path-content">
+              <h4>Job prep &amp; networking</h4>
+              <p>What roles exist, what they pay, and where to find the people already doing them.</p>
+              <span class="path-tag">Reference + directory</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="shot-row">
+          <div class="shot-frame">
+            <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/></svg>
+            <span class="shot-label">Homepage: screenshot pending</span>
+          </div>
+          <div class="shot-frame">
+            <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/></svg>
+            <span class="shot-label">Curriculum phases: screenshot pending</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Color as a wayfinding system, not decoration</h3>
+        <p>Once the curriculum had multiple phases and topics, the real risk wasn't visual dullness, it was a learner losing their place. We assigned a distinct color to each topic area and carried it consistently across every related screen, the topic card, the video page, the written summary. That gave a learner a quiet, constant answer to "where am I in this," without needing a progress bar to spell it out every time.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>A style system built to hold four people together</h3>
+        <p>Because four people were building different pages simultaneously, the style system wasn't decoration, it was infrastructure. Without a shared visual language locked down early, each teammate's section would have drifted: slightly different blues, different type hierarchies, different button shapes. The system gave everyone the same rules to code against, which is what made the final product feel like one site instead of four.</p>
+        <p>The two main colors, a sky blue (#30ABF0) and a deep teal (#06405A), were chosen to feel approachable and calm without tipping into clinical. The sky blue carries the primary UI weight, buttons, active states, key labels, while the dark teal grounds the overall layout. The highlight palette of four distinct hue pairs, purple, gold, brown, and teal-sage, served a functional purpose as much as a visual one: each topic area in the curriculum got its own color, so a learner always had a quiet visual cue for where they were without needing a label to say it.</p>
+        <p>Typography split across two distinct roles. Monda handled all headline levels in regular weight, clean and geometric without being cold. Audiowide handled topic numbers at 60pt with 10% letter spacing, giving the curriculum structure a stamp-like presence that made navigating phases feel intentional rather than arbitrary. Inter Light carried all body copy, subtitles, quotes, and list items, keeping the reading experience low-friction once you were inside content. The illustration style followed the same logic: 2D pop art characters, bold, friendly, and retro-chic, were chosen specifically to counterbalance information density. A curriculum platform has a lot to say; the illustrations gave the eye somewhere to rest.</p>
+
+        <div class="style-system">
+
+          <!-- Color -->
+          <div class="style-block">
+            <span class="style-block-label">Color system</span>
+            <div class="color-row">
+              <div class="color-swatch-group">
+                <span class="color-group-label">Main</span>
+                <div class="color-swatch" style="background:#30ABF0;">
+                  <span class="color-name">Sky Blue</span>
+                  <span class="color-hex">#30ABF0</span>
+                </div>
+                <div class="color-swatch dark" style="background:#06405A;">
+                  <span class="color-name">Deep Teal</span>
+                  <span class="color-hex">#06405A</span>
+                </div>
+              </div>
+              <div class="color-swatch-group">
+                <span class="color-group-label">Neutrals</span>
+                <div class="color-swatch dark" style="background:#111111;">
+                  <span class="color-name">Black</span>
+                  <span class="color-hex">#111111</span>
+                </div>
+                <div class="color-swatch" style="background:#777777;">
+                  <span class="color-name">Gray</span>
+                  <span class="color-hex">#777777</span>
+                </div>
+                <div class="color-swatch" style="background:#FFFFFF; border: 1px solid var(--line);">
+                  <span class="color-name" style="color:var(--ink-quiet);">White</span>
+                  <span class="color-hex" style="color:var(--ink-quiet);">#FFFFFF</span>
+                </div>
+              </div>
+              <div class="color-swatch-group">
+                <span class="color-group-label">Highlight palette</span>
+                <div class="highlight-pair-row">
+                  <div class="highlight-pill" style="background:#7B7FD4; color:#fff;">Purple</div>
+                  <div class="highlight-pill" style="background:#E8EAFF; color:#4a4a8a; border:1px solid #7B7FD4;">Lavender</div>
+                </div>
+                <div class="highlight-pair-row">
+                  <div class="highlight-pill" style="background:#C49A2A; color:#fff;">Gold</div>
+                  <div class="highlight-pill" style="background:#F5E6C0; color:#7a5e10; border:1px solid #C49A2A;">Tan</div>
+                </div>
+                <div class="highlight-pair-row">
+                  <div class="highlight-pill" style="background:#5C4A42; color:#fff;">Brown</div>
+                  <div class="highlight-pill" style="background:#E8DDD8; color:#5C4A42; border:1px solid #5C4A42;">Taupe</div>
+                </div>
+                <div class="highlight-pair-row">
+                  <div class="highlight-pill" style="background:#3D6B5A; color:#fff;">Teal</div>
+                  <div class="highlight-pill" style="background:#D6E8E0; color:#2a4d3e; border:1px solid #3D6B5A;">Sage</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typography -->
+          <div class="style-block">
+            <span class="style-block-label">Typography</span>
+            <div class="type-scale">
+              <div class="type-row type-row--display">
+                <span class="type-specimen" style="font-family: sans-serif; font-weight: 400; letter-spacing: 0.04em;">Big Shoulder Inline Display</span>
+                <span class="type-meta">100pt · Logo only</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em;">H1 Headline — Monda</span>
+                <span class="type-meta">56pt · Regular</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 1.25rem; font-weight: 600;">H2 Headline — Monda</span>
+                <span class="type-meta">48pt · Regular</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 1.1rem; font-weight: 600;">H3 Headline — Monda</span>
+                <span class="type-meta">40pt · Regular</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 0.95rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #30ABF0;">60 — Audiowide</span>
+                <span class="type-meta">60pt · Topic numbers, 10% letter spacing</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 0.95rem; font-weight: 500; letter-spacing: 0.055em;">Subtitle — Inter Medium</span>
+                <span class="type-meta">32pt · 5.5% letter spacing</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 0.92rem; font-style: italic; font-weight: 300;">Quotes — Inter Light</span>
+                <span class="type-meta">32pt · Italicized</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 0.88rem; font-weight: 300;">Body — Inter Light</span>
+                <span class="type-meta">24pt · 150% line height</span>
+              </div>
+              <div class="type-row">
+                <span class="type-specimen" style="font-size: 0.78rem; font-weight: 300;">List items — Inter Light</span>
+                <span class="type-meta">16pt · Small list items only</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Illustration -->
+          <div class="style-block">
+            <span class="style-block-label">Illustration &amp; icon style</span>
+            <div class="illus-chars">
+              <div class="illus-char-pill">2D pop art illustration</div>
+              <div class="illus-char-pill">Retro chic &amp; artistic</div>
+              <div class="illus-char-pill">Bold &amp; approachable</div>
+              <div class="illus-char-pill">Counterbalance for dense content</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Splitting design and code without losing consistency</h3>
+        <p>Because we each had to code our own sections, I coded the video/curriculum pages myself, and then went back through every other teammate's code afterward to check it against a shared structure, naming conventions, component patterns, the same handful of decisions that keep four people's code from reading like four different sites stitched together. That review pass was as much a part of my role as leading design decisions: as team lead, the job wasn't to have the loudest opinion in the room, it was to make sure everyone's ideas made it into the product fairly, while still holding the line on what the MVP actually needed to be.</p>
+      </div>
+    </section>
+
+    <!-- USABILITY TESTING -->
+    <section class="section fade-in" id="testing">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2>Putting It in Front of People</h2>
+      </div>
+      <p>We tested the prototype with people in roughly the same position as our original interviewees, and the findings validated the two biggest structural bets we'd made.</p>
+
+      <ul class="findings-list">
+        <li><span class="findings-dot" aria-hidden="true"></span>The minimalist layout was easy to follow, and testers said it made the key features, the curriculum path especially, stand out rather than compete with decoration</li>
+        <li><span class="findings-dot" aria-hidden="true"></span>The per-topic color coding helped people track where they were in the curriculum without being told explicitly</li>
+        <li><span class="findings-dot" aria-hidden="true"></span>Pairing video and written summaries on every topic was called out specifically as useful for accommodating different learning styles</li>
+      </ul>
+
+      <p>The same testing also surfaced the features we'd cut for scope, mentorship matching, community forums, and a job board, as things people wanted next. We treated that as confirmation rather than a miss: those ideas were good in our scope ledger for a reason, and now we had real user signal, not just internal instinct, pointing at them as the right next phase rather than the right first one.</p>
+    </section>
+
+    <!-- RESULTS & REFLECTION -->
+    <section class="section fade-in" id="reflection">
+      <div class="section-head">
+        <span class="section-num">06</span>
+        <h2>Results &amp; Reflection</h2>
+      </div>
+
+      <div class="reflection-card">
+        <div class="note">
+          <span class="note-label">Honest framing</span>
+          <p>This was a bootcamp final project on a fixed timeline, not a shipped product, there's no deployment or usage data to point to. What I can speak to is the process: real interviews that shaped a real prioritization decision, a built and reviewed codebase across four people, and usability testing that confirmed both what we built and what we were right to defer.</p>
+        </div>
+
+        <div class="placeholder">
+          <span class="placeholder-label">Placeholder</span>
+          <p>Pull final screenshots and the Figma prototype link in once available, lo-fi through hi-fi, to show the progression from wireframe to the final UI/UX Nest branding.</p>
+        </div>
+
+        <p style="margin-top: 1.5rem;"><strong style="color: var(--ink);">What I'd do differently:</strong> set an explicit scope budget before ideation started, not during it. The ledger above worked, but we built it reactively, after feature ideas had already multiplied and people were attached to them. Naming the budget up front would have made the cuts feel like a plan we'd agreed to in advance, rather than a negotiation we had to have in the moment, every time.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="project-nav">
+    <a href="education.html" class="prev">
+      <span class="direction">&larr; Previous</span>
+      <span class="title">Bootcamp Projects</span>
+    </a>
+    <a href="big-cat-rescue.html" class="next">
+      <span class="direction">Next &rarr;</span>
+      <span class="title">Big Cat Rescue</span>
+    </a>
+  </nav>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Mark Pabustan, UI/UX Designer</p>
+  </footer>
+
+<script>
+  // Margin-tape progress fill
+  const tapeFill = document.getElementById('tapeFill');
+  function updateTape() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+    tapeFill.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateTape, { passive: true });
+  updateTape();
+
+  // Scroll-triggered fade-ins
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
