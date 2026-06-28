@@ -328,7 +328,7 @@ button:focus-visible {
 .hero h1 em {
   font-style: italic;
   color: var(--periwinkle);
-  animation: pulse-fade-dyn 7s ease-in-out infinite !important;
+  animation: pulse-fade-dyn 6s ease-in-out infinite !important;
 }
 
 @keyframes pulse-fade-dyn{
