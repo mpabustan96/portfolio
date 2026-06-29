@@ -230,14 +230,12 @@
           </div>
         </div>
 
-        <div class="shot-row">
-          <div class="shot-frame">
-            <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/></svg>
-            <span class="shot-label">Homepage: screenshot pending</span>
+        <div class="shot-row tall-shot-row">
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-homepage.png" alt="UI/UX Nest homepage, showing the Who We Are and What We Do intro, featured tutorial thumbnails, and Portfolio Building and Resume Preparation callout cards">
           </div>
-          <div class="shot-frame">
-            <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/></svg>
-            <span class="shot-label">Curriculum phases: screenshot pending</span>
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-curriculum.png" alt="UI/UX Nest UI/UX Topics page, a ten-item curriculum grid with color-coded cards for User Research, Ideation Process, Information Architecture, Prototyping, Usability Testing, Design Principles, Typography, Color Theory, Portfolio Building, and Resume Preparation">
           </div>
         </div>
       </div>
@@ -426,6 +424,14 @@
     <p>&copy; 2026 Mark Pabustan, UI/UX Designer</p>
   </footer>
 
+  <!-- IMAGE LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close enlarged image">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </div>
+
 <script>
   // Margin-tape progress fill
   const tapeFill = document.getElementById('tapeFill');
@@ -448,6 +454,51 @@
   }, { threshold: 0.12 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Image lightbox — click any case-study screenshot to enlarge
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  let lastFocused = null;
+
+  function openLightbox(imgEl) {
+    lastFocused = document.activeElement;
+    lightboxImg.src = imgEl.src;
+    lightboxImg.alt = imgEl.alt || '';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.shot-frame.has-image img').forEach(img => {
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', 'Click to enlarge image');
+    img.addEventListener('click', () => openLightbox(img));
+    img.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(img);
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
 </script>
 
 </body>

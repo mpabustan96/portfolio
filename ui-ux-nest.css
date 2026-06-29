@@ -6,31 +6,40 @@
    numbered structure is earned here instead of decorative.
    The signature motif is the scope ledger: a kept/cut tally
    that makes the scope-creep tension visible and literal.
+
+   Palette: blueish-white canvas with deep teal (#06405A) as
+   the dominant structural ink — headlines, nav, body text,
+   links — paired with a deep sage as the one accent reserved
+   for anything kept or carried forward in the project. Teal
+   doubles as the signal for anything cut or deferred, so the
+   kept/cut tension reads as sage-vs-teal everywhere it shows
+   up, not just inside the ledger itself.
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400;1,8..60,500&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --canvas:      #F7F4EC;
-  --canvas-2:    #EFEADA;
+  --canvas:      #F1F6F8;
+  --canvas-2:    #E4EDF0;
   --paper:       #FFFFFF;
-  --ink:         #232017;
-  --ink-soft:    #4A4636;
-  --ink-quiet:   #847E68;
-  --line:        #DDD6BF;
-  --line-strong: #C7BEA0;
+  --ink:         #06405A;
+  --ink-soft:    #355769;
+  --ink-quiet:   #7C93A0;
+  --line:        #D9E3E8;
+  --line-strong: #C2D2D9;
 
-  --moss:        #2F4A3A;
-  --moss-bright: #3E6650;
-  --moss-soft:   #E1E8DF;
-  --moss-line:   rgba(47, 74, 58, 0.22);
+  --teal:        #06405A;
+  --teal-bright: #0E5C7E;
+  --teal-soft:   #E3EEF1;
+  --teal-line:   rgba(6, 64, 90, 0.24);
 
-  --clay:        #B6502F;
-  --clay-soft:   #F3E1D6;
-  --clay-line:   rgba(182, 80, 47, 0.3);
+  --sage:        #3E5C3E;
+  --sage-bright: #4F7350;
+  --sage-soft:   #E6EDE2;
+  --sage-line:   rgba(62, 92, 62, 0.32);
 
-  --sky:         #4D6A85;
-  --sky-soft:    #E3EAF0;
+  --sky:         #4D7C9E;
+  --sky-soft:    #E6EEF3;
 
   --serif:  'Source Serif 4', Georgia, serif;
   --sans:   'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -72,11 +81,11 @@ body {
   overflow-x: hidden;
 }
 
-a { color: var(--moss); text-decoration: none; }
+a { color: var(--teal); text-decoration: none; }
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--moss-bright);
+  outline: 2px solid var(--teal-bright);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -111,8 +120,8 @@ img { max-width: 100%; display: block; }
   width: 0%;
   background: repeating-linear-gradient(
     -45deg,
-    var(--clay) 0px, var(--clay) 6px,
-    var(--moss) 6px, var(--moss) 12px
+    var(--teal) 0px, var(--teal) 6px,
+    var(--sage) 6px, var(--sage) 12px
   );
   transition: width 0.1s linear;
 }
@@ -163,7 +172,7 @@ img { max-width: 100%; display: block; }
   bottom: -2px;
   width: 0%;
   height: 2px;
-  background: var(--clay);
+  background: var(--sage);
   transition: width 0.25s ease;
 }
 
@@ -186,7 +195,7 @@ img { max-width: 100%; display: block; }
   width: 64px;
   height: 64px;
   margin-bottom: var(--space-3);
-  color: var(--moss);
+  color: var(--teal);
   opacity: 0;
   animation: rise 1s ease forwards;
   animation-delay: 0.05s;
@@ -197,7 +206,7 @@ img { max-width: 100%; display: block; }
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.06em;
-  color: var(--clay);
+  color: var(--sage);
   margin-bottom: var(--space-3);
   opacity: 0;
   animation: rise 0.9s ease forwards;
@@ -233,7 +242,7 @@ img { max-width: 100%; display: block; }
   opacity: 0;
   animation: rise 1s ease forwards, float 2.6s ease-in-out infinite;
   animation-delay: 0.7s, 1.6s;
-  color: var(--moss);
+  color: var(--teal);
   font-family: var(--mono);
   font-size: 0.78rem;
   letter-spacing: 0.04em;
@@ -269,7 +278,7 @@ img { max-width: 100%; display: block; }
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--moss);
+  color: var(--sage);
   margin-bottom: 0.35rem;
   display: block;
 }
@@ -300,7 +309,7 @@ img { max-width: 100%; display: block; }
 .section-num {
   font-family: var(--mono);
   font-size: 0.85rem;
-  color: var(--clay);
+  color: var(--teal);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
@@ -357,23 +366,23 @@ img { max-width: 100%; display: block; }
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--ink);
-  background: var(--moss-soft);
-  border: 1px solid var(--moss-line);
+  background: var(--sage-soft);
+  border: 1px solid var(--sage-line);
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
 }
 
 .team-chip.lead {
-  background: var(--clay-soft);
-  border-color: var(--clay-line);
-  color: var(--clay);
+  background: var(--teal-soft);
+  border-color: var(--teal-line);
+  color: var(--teal);
 }
 
 /* ---------- Honest framing / placeholder callouts ---------- */
 
 .note {
   background: var(--paper);
-  border-left: 3px solid var(--moss);
+  border-left: 3px solid var(--sage);
   border-radius: 4px;
   padding: var(--space-3) var(--space-4);
   margin: var(--space-3) 0 var(--space-4);
@@ -385,7 +394,7 @@ img { max-width: 100%; display: block; }
   font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--moss);
+  color: var(--sage);
   display: block;
   margin-bottom: 0.4rem;
 }
@@ -406,7 +415,7 @@ img { max-width: 100%; display: block; }
   font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--clay);
+  color: var(--teal);
   display: block;
   margin-bottom: 0.3rem;
 }
@@ -449,14 +458,16 @@ img { max-width: 100%; display: block; }
 .stat-card p strong {
   font-family: var(--serif);
   font-style: italic;
-  color: var(--moss);
+  color: var(--sage);
   font-size: 1.05em;
 }
 
 /* ---------- SCOPE LEDGER — signature motif ----------
    The literal scope-creep tension made visible: a kept
    column and a cut column, balanced like a ledger, with
-   a running tally line connecting them. */
+   a running tally line connecting them. Kept = sage,
+   cut = teal, matching the kept/cut convention used
+   everywhere else in this design. */
 
 .scope-ledger {
   margin: var(--space-4) 0;
@@ -481,8 +492,8 @@ img { max-width: 100%; display: block; }
   padding: var(--space-2) var(--space-4);
 }
 
-.scope-ledger-head .kept-label { color: var(--moss); background: var(--moss-soft); }
-.scope-ledger-head .cut-label { color: var(--clay); background: var(--clay-soft); }
+.scope-ledger-head .kept-label { color: var(--sage); background: var(--sage-soft); }
+.scope-ledger-head .cut-label { color: var(--teal); background: var(--teal-soft); }
 
 .scope-row {
   display: grid;
@@ -502,12 +513,12 @@ img { max-width: 100%; display: block; }
 
 .scope-cell.kept { color: var(--ink-soft); border-right: 1px solid var(--line); }
 .scope-cell.cut { color: var(--ink-quiet); }
-.scope-cell.cut span.strike { text-decoration: line-through; text-decoration-color: var(--clay-line); text-decoration-thickness: 1.5px; }
+.scope-cell.cut span.strike { text-decoration: line-through; text-decoration-color: var(--teal-line); text-decoration-thickness: 1.5px; }
 .scope-cell.empty { color: var(--line-strong); font-style: italic; }
 
 .scope-mark { flex-shrink: 0; width: 14px; height: 14px; }
-.scope-cell.kept .scope-mark { color: var(--moss); }
-.scope-cell.cut .scope-mark { color: var(--clay); }
+.scope-cell.kept .scope-mark { color: var(--sage); }
+.scope-cell.cut .scope-mark { color: var(--teal); }
 
 .scope-ledger-foot {
   padding: var(--space-3) var(--space-4);
@@ -519,7 +530,9 @@ img { max-width: 100%; display: block; }
   text-align: center;
 }
 
-/* ---------- Curriculum path (the actual sequence) ---------- */
+/* ---------- Curriculum path (the actual sequence) ----------
+   This is forward motion through the project, so the path
+   markers use sage — the "kept / moving ahead" signal. */
 
 .curriculum-path {
   margin: var(--space-4) 0;
@@ -547,7 +560,7 @@ img { max-width: 100%; display: block; }
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--moss);
+  background: var(--sage);
   color: var(--canvas);
   font-family: var(--mono);
   font-weight: 600;
@@ -612,7 +625,9 @@ img { max-width: 100%; display: block; }
   margin: 0 0 var(--space-2);
 }
 
-/* ---------- Findings list (usability test results) ---------- */
+/* ---------- Findings list (usability test results) ----------
+   Findings are confirmations carried forward into the design,
+   so the dot uses sage. */
 
 .findings-list {
   list-style: none;
@@ -639,7 +654,7 @@ img { max-width: 100%; display: block; }
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--moss);
+  background: var(--sage);
   flex-shrink: 0;
   margin-top: 8px;
 }
@@ -665,7 +680,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  color: var(--moss);
+  color: var(--teal);
 }
 
 .shot-frame .shot-icon {
@@ -684,6 +699,122 @@ img { max-width: 100%; display: block; }
   color: var(--ink-quiet);
 }
 
+/* Real images replacing placeholders — solid border, image fills frame */
+.shot-frame.has-image {
+  border-style: solid;
+  border-color: var(--line-strong);
+  padding: 0;
+  overflow: hidden;
+  display: block;
+}
+
+.shot-frame.has-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+  display: block;
+  cursor: zoom-in;
+  transition: filter 0.2s ease, transform 0.3s ease;
+}
+
+.shot-frame.has-image img:hover,
+.shot-frame.has-image img:focus-visible {
+  filter: brightness(1.04);
+  transform: scale(1.01);
+}
+
+.shot-frame.has-image img:focus-visible {
+  outline: 2px solid var(--teal-bright);
+  outline-offset: -2px;
+}
+
+/* Full-page captures (homepage, curriculum grid) are naturally tall —
+   let them run their own ratio instead of forcing a 16:11 crop, the
+   same approach used for the full-page shots in the Big Cat Rescue
+   case study. */
+.tall-shot-row {
+  align-items: start;
+}
+
+.shot-frame.has-image.tall-shot {
+  aspect-ratio: auto;
+}
+
+.shot-frame.has-image.tall-shot img {
+  object-fit: contain;
+  background: var(--canvas-2);
+}
+
+/* ---------- Image lightbox ---------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(6, 20, 28, 0.82);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-img {
+  max-width: min(92vw, 1400px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 24px 64px -16px rgba(6, 20, 28, 0.5);
+  background: var(--paper);
+  transform: scale(0.96);
+  transition: transform 0.25s ease;
+}
+
+.lightbox.is-open .lightbox-img {
+  transform: scale(1);
+}
+
+.lightbox-close {
+  position: fixed;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus-visible {
+  border-color: var(--teal);
+  background: var(--canvas-2);
+}
+
+@media (max-width: 480px) {
+  .lightbox { padding: var(--space-2); }
+  .lightbox-close { top: var(--space-2); right: var(--space-2); width: 40px; height: 40px; }
+}
+
 /* ---------- Reflection card ---------- */
 
 .reflection-card {
@@ -693,7 +824,7 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--line-strong);
 }
 
-.reflection-card .note { background: var(--paper); border-left-color: var(--clay); }
+.reflection-card .note { background: var(--paper); border-left-color: var(--teal); }
 .reflection-card .placeholder { background: var(--paper); }
 
 /* ---------- Footer / project nav ---------- */
@@ -722,7 +853,7 @@ img { max-width: 100%; display: block; }
 }
 
 .project-nav a:hover {
-  border-color: var(--moss);
+  border-color: var(--sage);
   transform: translateY(-2px);
 }
 
@@ -733,7 +864,7 @@ img { max-width: 100%; display: block; }
   font-weight: 500;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--clay);
+  color: var(--teal);
   margin-bottom: 0.3rem;
 }
 
@@ -775,7 +906,7 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--clay);
+  color: var(--teal);
   display: block;
   margin-bottom: var(--space-3);
 }
@@ -889,9 +1020,9 @@ img { max-width: 100%; display: block; }
 .illus-char-pill {
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--moss-bright);
-  background: var(--moss-soft);
-  border: 1px solid var(--moss-line);
+  color: var(--sage-bright);
+  background: var(--sage-soft);
+  border: 1px solid var(--sage-line);
   padding: 0.45rem 1rem;
   border-radius: 999px;
 }
@@ -933,7 +1064,8 @@ img { max-width: 100%; display: block; }
   .scope-cell { padding: var(--space-2) var(--space-2); font-size: 0.85rem; }
 
   .shot-row { grid-template-columns: 1fr; }
-  .shot-frame { aspect-ratio: 4 / 3; }
+  .shot-frame:not(.has-image) { aspect-ratio: 4 / 3; }
+  .shot-frame.has-image.tall-shot { max-width: 420px; margin: 0 auto; }
 
   .reflection-card { padding: var(--space-3) var(--space-3); border-radius: 10px; }
 
