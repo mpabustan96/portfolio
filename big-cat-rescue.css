@@ -176,18 +176,6 @@ img { max-width: 100%; display: block; }
   z-index: 2;
 }
 
-.hero-tiger {
-  width: 84px;
-  height: 84px;
-  margin-bottom: var(--space-4);
-  opacity: 0;
-  color: var(--sand);
-  animation: rise 1.1s ease forwards;
-  animation-delay: 0.1s;
-}
-
-.hero-tiger svg { width: 100%; height: 100%; }
-
 .hero-eyebrow {
   font-family: var(--sans);
   font-size: 0.78rem;
@@ -698,6 +686,17 @@ img { max-width: 100%; display: block; }
 }
 
 .shot-frame.has-image.mobile-shot.tall img {
+  object-fit: contain;
+  background: var(--lava-2);
+}
+
+/* Full-page hifi screenshot — runs its natural tall ratio instead of
+   forcing a fixed 16:11 crop, so the full redesign scroll is visible */
+.shot-frame.has-image.tall-shot {
+  aspect-ratio: auto;
+}
+
+.shot-frame.has-image.tall-shot img {
   object-fit: contain;
   background: var(--lava-2);
 }
