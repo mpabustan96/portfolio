@@ -468,6 +468,60 @@ img { max-width: 100%; display: block; }
   margin: 0 0 var(--space-2);
 }
 
+/* ---------- Style block (color palette) — mirrors ui-ux-nest pattern ---------- */
+
+.style-block {
+  background: var(--surface);
+  border: 1px solid var(--vein-strong);
+  border-radius: 12px;
+  padding: var(--space-4);
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.style-block-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--violet);
+  display: block;
+  margin-bottom: var(--space-3);
+}
+
+.color-row {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.color-swatch-group {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.aa-color-swatch {
+  width: 160px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.aa-color-swatch .color-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.aa-color-swatch .color-hex {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.7);
+}
+
 /* ---------- Pivot callout (Squarespace -> Donorbox) ---------- */
 
 .pivot {
@@ -620,6 +674,119 @@ img { max-width: 100%; display: block; }
   z-index: 2;
 }
 
+/* ---------- 3-column equal-height screenshot row ---------- */
+
+.shot-row--3col {
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+}
+
+.shot-frame--fixed {
+  aspect-ratio: auto;
+  height: 320px;
+  margin: 0;
+  display: block;
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+.shot-frame--fixed img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 8px;
+  display: block;
+  cursor: zoom-in;
+  transition: filter 0.2s ease, transform 0.3s ease;
+}
+
+.shot-frame--fixed img:hover,
+.shot-frame--fixed img:focus-visible {
+  filter: brightness(1.04);
+  transform: scale(1.01);
+}
+
+.shot-caption {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-quiet);
+  text-align: center;
+  margin-top: 0.6rem;
+}
+
+/* ---------- Image lightbox ---------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(15, 20, 28, 0.88);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-img {
+  max-width: min(92vw, 1400px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.6);
+  background: var(--dusk-2);
+  transform: scale(0.96);
+  transition: transform 0.25s ease;
+}
+
+.lightbox.is-open .lightbox-img {
+  transform: scale(1);
+}
+
+.lightbox-close {
+  position: fixed;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--vein-strong);
+  border-radius: 50%;
+  color: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus-visible {
+  border-color: var(--wing);
+  background: var(--dusk-2);
+}
+
+@media (max-width: 480px) {
+  .lightbox { padding: var(--space-2); }
+  .lightbox-close { top: var(--space-2); right: var(--space-2); width: 40px; height: 40px; }
+}
+
 /* ============================================================
    RESPONSIVE — 760px and below
    ============================================================ */
@@ -665,6 +832,9 @@ img { max-width: 100%; display: block; }
 
   .note { padding: var(--space-2) var(--space-3); }
 
+  .color-swatch-group { gap: var(--space-1); }
+  .aa-color-swatch { width: 100%; }
+
   .origin-block {
     grid-template-columns: 1fr;
     padding: var(--space-3);
@@ -690,6 +860,8 @@ img { max-width: 100%; display: block; }
 
   .shot-row { grid-template-columns: 1fr; }
   .shot-frame { aspect-ratio: 4 / 3; }
+  .shot-row--3col { grid-template-columns: 1fr; }
+  .shot-frame--fixed { height: 260px; }
 
   .reflection-card { padding: var(--space-3) var(--space-3); border-radius: 10px; }
 

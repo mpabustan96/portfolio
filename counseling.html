@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connett Family Counseling — Case Study | Mark Pabustan</title>
+<title>Connett Family Counseling, Case Study | Mark Pabustan</title>
 <link rel="stylesheet" href="counseling.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
   </div>
 
   <header class="site-header">
-    <a href="index.html" class="logo"><img src="images/logo-black.png" alt="Mark Pabustan — home" width="195" height="114"></a>
+    <a href="index.html" class="logo"><img src="images/logo-black.png" alt="Mark Pabustan, home" width="195" height="114"></a>
     <nav>
       <a href="index.html">&larr; All Work</a>
       <a href="about.html">About</a>
@@ -78,7 +78,7 @@
       </div>
 
       <p>We met weekly over Zoom for the life of the project. It wasn't a single intake call but an ongoing brainstorming cadence. Each session, I brought design questions and rough direction, and she brought her read on what mattered to the people who'd be landing on this site, drawn from years of sitting across from them.</p>
-      <p>That input was real, but it was limited in a specific way: it was her general impressions of patients, not documented patient feedback. I treated it as informed stakeholder discovery rather than a substitute for talking to actual users, and that distinction shaped how much weight I put on any one opinion versus my own judgment as the designer.</p>
+      <p>That input was real, but it was limited in a specific way: it was her general impressions of patients, not documented patient feedback. I treated it as informed stakeholder discovery rather than a substitute for talking to users directly, and that distinction shaped how much weight I put on any one opinion versus my own judgment as the designer.</p>
     </section>
 
     <!-- DEFINE & IDEATE -->
@@ -131,14 +131,18 @@
         <p>Rather than picking a side and dropping it, I kept her instinct intact. Services information stayed complete and easy to find, but I moved it a layer deeper than page one. That way, an anxious visitor isn't confronted with a clinical list before they're ready, and a visitor who is ready can still find exactly what she treats in one click.</p>
       </div>
 
-      <div class="shot-row">
-        <div class="shot-frame">
-          <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/></svg>
-          <span class="shot-label">Homepage: screenshot pending</span>
+      <div class="shot-row single">
+        <div class="shot-frame has-image tall-shot">
+          <img src="images/counseling-homepage.png" alt="Connett Family Counseling homepage, showing the calming teal hero with 'A path to hope: stronger minds, healthier lives' headline, and the Contact Us section with practice address and hours below">
         </div>
-        <div class="shot-frame">
-          <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/><circle cx="6" cy="6.5" r="0.6" fill="currentColor"/></svg>
-          <span class="shot-label">Services: screenshot pending</span>
+      </div>
+
+      <div class="shot-row">
+        <div class="shot-frame has-image">
+          <img src="images/counseling-contact.png" alt="Connett Family Counseling Contact Us page, showing the practice address, phone, and hours beside an embedded Google map of the San Jose office location">
+        </div>
+        <div class="shot-frame has-image">
+          <img src="images/counseling-services.png" alt="Connett Family Counseling Services page, listing mental health service areas including Anger Management, Family Conflict, Grief, Trauma and PTSD, and LGBTQ+ support">
         </div>
       </div>
     </section>
@@ -155,7 +159,7 @@
           <span class="note-label">Honest framing</span>
           <p>I don't have a measured outcome for this project. No inquiry counts, no booking data, no follow-up survey. What I have is that the site shipped, has been live since spring 2025, and my client is still using it as her practice's primary online presence. I'd rather flag that limitation directly than imply a result I can't back up.</p>
         </div>
-        <p style="margin-top: 1.5rem;"><strong style="color: var(--harbor);">What I'd do differently:</strong> ask her to actually gather patient feedback, even informally, with a quick question like "how did you find us, and what almost stopped you from reaching out," instead of relying on her general impressions. That single change would turn a stakeholder opinion into real evidence, and it would tell me whether the trust-before-services bet actually paid off, instead of leaving it as a decision I still believe in but can't prove.</p>
+        <p style="margin-top: 1.5rem;"><strong style="color: var(--harbor);">What I'd do differently:</strong> ask her to gather patient feedback, even informally, with a quick question like "how did you find us, and what almost stopped you from reaching out," instead of relying on her general impressions. That single change would turn a stakeholder opinion into real evidence, and it would tell me whether the trust-before-services bet paid off, instead of leaving it as a decision I still believe in but can't prove.</p>
       </div>
     </section>
 
@@ -173,8 +177,16 @@
   </nav>
 
   <footer class="site-footer">
-    <p>&copy; 2026 Mark Pabustan — UI/UX Designer</p>
+    <p>&copy; 2026 Mark Pabustan, UI/UX Designer</p>
   </footer>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close enlarged image">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </div>
 
 <script>
   // Trust progress fill — ties scroll position to the page's own thesis
@@ -198,6 +210,51 @@
   }, { threshold: 0.12 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Image lightbox — click any case-study screenshot to enlarge
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  let lastFocused = null;
+
+  function openLightbox(imgEl) {
+    lastFocused = document.activeElement;
+    lightboxImg.src = imgEl.src;
+    lightboxImg.alt = imgEl.alt || '';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.shot-frame.has-image img').forEach(img => {
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', 'Click to enlarge image');
+    img.addEventListener('click', () => openLightbox(img));
+    img.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(img);
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
 </script>
 
 </body>

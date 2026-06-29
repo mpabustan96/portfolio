@@ -426,6 +426,8 @@ img { max-width: 100%; display: block; }
   margin: var(--space-4) 0;
 }
 
+.shot-row.single { grid-template-columns: 1fr; }
+
 .shot-frame {
   aspect-ratio: 16 / 11;
   border: 1.5px dashed var(--current);
@@ -452,6 +454,120 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
   text-align: center;
   padding: 0 var(--space-2);
+}
+
+/* Real images replacing placeholders — solid border, image fills frame */
+.shot-frame.has-image {
+  border-style: solid;
+  border-color: var(--line);
+  padding: 0;
+  overflow: hidden;
+  display: block;
+}
+
+.shot-frame.has-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+  display: block;
+  cursor: zoom-in;
+  transition: filter 0.2s ease, transform 0.3s ease;
+}
+
+.shot-frame.has-image img:hover,
+.shot-frame.has-image img:focus-visible {
+  filter: brightness(1.04);
+  transform: scale(1.01);
+}
+
+.shot-frame.has-image img:focus-visible {
+  outline: 2px solid var(--current);
+  outline-offset: -2px;
+}
+
+/* Full-page homepage capture is naturally near-square and content-dense
+   top to bottom — let it run its own ratio instead of forcing a 16:11
+   crop, the same approach used for full-page shots in the other case
+   studies. */
+.shot-frame.has-image.tall-shot {
+  aspect-ratio: auto;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.shot-frame.has-image.tall-shot img {
+  object-fit: contain;
+  background: var(--linen);
+}
+
+/* ---------- Image lightbox ---------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(15, 30, 38, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lightbox-img {
+  max-width: min(92vw, 1400px);
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 24px 64px -16px rgba(15, 30, 38, 0.5);
+  background: var(--linen);
+  transform: scale(0.96);
+  transition: transform 0.25s ease;
+}
+
+.lightbox.is-open .lightbox-img {
+  transform: scale(1);
+}
+
+.lightbox-close {
+  position: fixed;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--linen);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--harbor);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.lightbox-close:hover,
+.lightbox-close:focus-visible {
+  border-color: var(--current);
+  background: var(--seafoam-soft);
+}
+
+@media (max-width: 480px) {
+  .lightbox { padding: var(--space-2); }
+  .lightbox-close { top: var(--space-2); right: var(--space-2); width: 40px; height: 40px; }
 }
 
 /* ---------- Subsection blocks (Design Decisions) ---------- */
@@ -637,7 +753,7 @@ img { max-width: 100%; display: block; }
     grid-template-columns: 1fr;
   }
 
-  .shot-frame {
+  .shot-frame:not(.has-image) {
     aspect-ratio: 4 / 3;
   }
 
