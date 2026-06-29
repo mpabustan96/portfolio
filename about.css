@@ -194,14 +194,16 @@ button:focus-visible {
 }
 
 .nav-logo {
-  font-family: var(--serif-display);
-  font-weight: 500;
-  font-size: 1.1rem;
-  letter-spacing: 0.01em;
-  color: var(--chalk);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
-.nav-logo span { color: var(--gold); }
+.nav-logo img {
+  height: 30px;
+  width: auto;
+  display: block;
+}
 
 .nav-links {
   display: flex;

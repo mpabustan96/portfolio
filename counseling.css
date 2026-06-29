@@ -113,11 +113,15 @@ img { max-width: 100%; display: block; }
 }
 
 .site-header .logo {
-  font-family: var(--serif);
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--harbor);
-  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.site-header .logo img {
+  height: 28px;
+  width: auto;
+  display: block;
 }
 
 .site-header nav {
@@ -546,8 +550,8 @@ img { max-width: 100%; display: block; }
     height: 56px;
   }
 
-  .site-header .logo {
-    font-size: 1rem;
+  .site-header .logo img {
+    height: 24px;
   }
 
   /* Hero */
