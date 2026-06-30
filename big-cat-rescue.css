@@ -166,6 +166,48 @@ img { max-width: 100%; display: block; }
 
 .site-header nav a:hover::after { width: 100%; }
 
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  color: var(--sand);
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.nav-toggle:hover { background: var(--olive-soft); }
+
+.nav-links-mobile {
+  display: none;
+  list-style: none;
+  flex-direction: column;
+  background: var(--lava-2);
+  border-bottom: 1px solid var(--olive);
+  position: relative;
+  z-index: 49;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links-mobile.is-open { display: flex; }
+
+.nav-links-mobile li { border-top: 1px solid var(--olive); }
+.nav-links-mobile li:first-child { border-top: none; }
+
+.nav-links-mobile a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 var(--space-3);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--silver);
+}
+
 /* ---------- Hero ---------- */
 
 .hero {
@@ -866,6 +908,12 @@ img { max-width: 100%; display: block; }
 
   .site-header { padding: 0 var(--space-3); height: 56px; }
   .site-header .logo img { height: 24px; }
+
+  .site-header nav { display: none; }
+
+  .nav-toggle { display: flex; order: -1; }
+
+  .site-header .logo { order: 1; }
 
   .hero { min-height: 80vh; padding: var(--space-5) var(--space-3) var(--space-4); }
   .hero-tiger { width: 62px; height: 62px; }
