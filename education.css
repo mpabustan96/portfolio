@@ -536,54 +536,6 @@ button:focus-visible {
 .edu-card:focus-visible .work-link svg { opacity: 0.85; }
 
 /* =============================================
-   PROJECT NAV (prev/next)
-============================================= */
-.project-nav {
-  max-width: var(--measure-wide);
-  margin: 5rem auto 0;
-  padding: 2rem 3rem;
-  border-top: 1px dashed var(--line-strong);
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-}
-
-.project-nav a {
-  flex: 1;
-  padding: 1.5rem;
-  border: 1.5px solid var(--line);
-  border-radius: 8px;
-  background: var(--board-2);
-  min-height: 44px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: border-color 0.2s ease, transform 0.2s ease;
-}
-
-.project-nav a:hover {
-  border-color: var(--chalk);
-  transform: translateY(-2px);
-}
-
-.project-nav .direction {
-  display: block;
-  font-family: var(--hand);
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--chalk-quiet);
-  margin-bottom: 0.2rem;
-}
-
-.project-nav .title {
-  font-family: var(--serif);
-  color: var(--chalk);
-  font-size: 1.05rem;
-}
-
-.project-nav a.next { text-align: right; }
-
-/* =============================================
    FOOTER
 ============================================= */
 footer {
@@ -657,14 +609,6 @@ footer {
 
   .edu-card:nth-of-type(even) .edu-card-image { order: 0; }
   .edu-card:nth-of-type(even) .edu-card-text { order: 1; }
-
-  .project-nav {
-    flex-direction: column;
-    padding: 1.5rem 0;
-    margin-top: 3rem;
-  }
-
-  .project-nav a.next { text-align: left; }
 
   footer {
     flex-direction: column;
