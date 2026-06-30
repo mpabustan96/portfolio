@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chiron, Case Study | Mark Pabustan</title>
+<link rel="stylesheet" href="chiron.css">
+</head>
+<body>
+
+  <div class="reticle-spine" id="reticleSpine" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a href="index.html" class="logo"><img src="images/logo-white.png" alt="Mark Pabustan, home" width="194" height="114"></a>
+    <nav>
+      <a href="education.html">&larr; Bootcamp Projects</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-target" aria-hidden="true">
+        <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Concentric target rings, outermost to innermost -->
+          <circle cx="36" cy="36" r="33" stroke="var(--bronze-line)" stroke-width="1"/>
+          <circle cx="36" cy="36" r="25" stroke="var(--bronze-line)" stroke-width="1"/>
+          <circle cx="36" cy="36" r="17" stroke="var(--bronze)" stroke-width="1.2"/>
+          <circle cx="36" cy="36" r="9"  stroke="var(--bronze)" stroke-width="1.5"/>
+          <!-- Crosshair ticks -->
+          <line x1="36" y1="1"  x2="36" y2="9"  stroke="var(--bronze)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="36" y1="63" x2="36" y2="71" stroke="var(--bronze)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="1"  y1="36" x2="9"  y2="36" stroke="var(--bronze)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="63" y1="36" x2="71" y2="36" stroke="var(--bronze)" stroke-width="1.2" stroke-linecap="round"/>
+          <!-- Bullseye -->
+          <circle cx="36" cy="36" r="3" fill="var(--bronze-bright)"/>
+        </svg>
+      </div>
+      <span class="hero-eyebrow">UI/UX Case Study &mdash; Columbia Engineering Bootcamp, First Team Project</span>
+      <h1>Take aim and shoot for your goals.</h1>
+      <p class="lede">A four-person team builds a fitness app from scratch — and navigates what happens when one teammate has already drawn the bow before and the other three are pulling it for the first time.</p>
+      <span class="scroll-cue">Scroll to begin &darr;</span>
+    </section>
+
+    <!-- METADATA STRIP -->
+    <section class="meta-strip fade-in">
+      <div class="meta-item">
+        <span class="label">Role</span>
+        <span class="value">UI/UX Designer (one of four) &mdash; research, design &amp; mentorship</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Team</span>
+        <span class="value">Stylianos Zissopulos, William Lin, Kiara Azize &amp; Mark Pabustan</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Tools</span>
+        <span class="value">Figma, Miro, FigJam</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Status</span>
+        <span class="value">Figma prototype &mdash; first bootcamp project, unshipped</span>
+      </div>
+    </section>
+
+    <!-- HOOK -->
+    <section class="section fade-in">
+      <p class="hook-line">"Everyone on the team was committed. Not everyone had the same starting line. My job was to close that gap without making it the story."</p>
+    </section>
+
+    <!-- THE PROBLEM -->
+    <section class="section fade-in" id="problem">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>The Problem</h2>
+      </div>
+      <p>Most people who want to be healthier already know it. They don't lack motivation in the abstract — they lack the infrastructure to act on it. The gym is an option, but finding the time is a negotiation. Food choices are made in the middle of a busy day, not at a planning session. A diet plan, if it exists at all, lives in someone's head.</p>
+      <p>That's what our user interviews confirmed: people had some version of a workout habit, but almost none had a diet plan alongside it, and the two weren't connected. The app category was crowded, but most of it solved one side or the other. Chiron's premise was that they belong together, tracked in the same place, built around what an actual user needs rather than what's easiest to build.</p>
+      <p>The name itself is a statement of intent. In Greek mythology, Chiron was the centaur — half-human, half-horse — who served as mentor and healer to heroes. The tagline the team landed on: <em>"Take aim and shoot for your goals."</em> Both the name and the line stayed throughout the project, and they're worth noting because they shaped every design conversation: this wasn't just a tracker, it was something that would actively coach you toward a target.</p>
+
+      <div class="team-strip">
+        <span class="team-chip lead">Mark Pabustan</span>
+        <span class="team-chip">Stylianos Zissopulos</span>
+        <span class="team-chip">William Lin</span>
+        <span class="team-chip">Kiara Azize</span>
+      </div>
+    </section>
+
+    <!-- RESEARCH & DISCOVERY -->
+    <section class="section fade-in" id="research">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>Research &amp; Discovery</h2>
+      </div>
+
+      <div class="note">
+        <span class="note-label">Honest framing</span>
+        <p>This was a bootcamp team's first research sprint, not a validated study. We ran 6 user interviews and sent out a survey — real methods, real participants, a short timeline. We treated the patterns as directional signal, not statistical proof, and weighed our own judgment alongside the findings rather than letting a handful of data points override every design conversation.</p>
+      </div>
+
+      <p>We ran 6 user interviews alongside a short survey, both aimed at the same question: how do people actually manage their diet and workout routines, and where does that process break down? The pattern that came back was more consistent than we expected.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <span class="stat-label">Prefer gym workouts (if they can find the time)</span>
+          <span class="stat-num">66.7%</span>
+          <p>Gym access wasn't the barrier. Time and consistency were.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Currently have no diet plan</span>
+          <span class="stat-num">62%</span>
+          <p>The workout existed in some form. The diet piece almost never did.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Don't track their diet at all</span>
+          <span class="stat-num">56%</span>
+          <p>Not because they didn't care — because there was no easy place to do it.</p>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Workout primarily as stress relief</span>
+          <span class="stat-num">Majority</span>
+          <p>Which meant consistency mattered even more — stress relief only works if you show up.</p>
+        </div>
+      </div>
+
+      <p>The clearest signal across all of it: people found it <strong style="color: var(--paper);">difficult to find time to work out and eat well at the same time</strong>. Not one or the other — both together, in a life that wasn't built around either.</p>
+
+    </section>
+
+    <!-- USER PERSONA -->
+    <section class="section fade-in" id="persona">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>User Persona</h2>
+      </div>
+
+      <p>We built one composite persona from the interview patterns. Anthony Walker sat at the center of almost everything we heard: driven enough to want consistency, busy enough to keep missing it, and genuinely short on the fitness knowledge that would let him solve the problem himself.</p>
+
+      <div class="persona-card">
+        <div class="persona-avatar">
+          <svg viewBox="0 0 38 38" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="19" cy="13" r="6"/>
+            <path d="M5 35c0-7.732 6.268-14 14-14s14 6.268 14 14"/>
+          </svg>
+        </div>
+        <div>
+          <p class="persona-name">Anthony Walker</p>
+          <p class="persona-quote">"A healthy body and mind starts with great habits."</p>
+          <div class="persona-facts">
+            <span>Age: 30</span>
+            <span>IT Professional</span>
+            <span>Manhattan, New York</span>
+            <span>Characteristic: Energetic</span>
+          </div>
+          <div class="persona-cols">
+            <div class="goals">
+              <h4>Goals</h4>
+              <ul>
+                <li>Live a healthy life and maintain good physique</li>
+                <li>Do an organized set of workout routines</li>
+                <li>Keep track of diet and build body mass</li>
+              </ul>
+            </div>
+            <div class="pains">
+              <h4>Pain Points</h4>
+              <ul>
+                <li>Often loses track of diet, eats fast food</li>
+                <li>Inconsistent workout routines</li>
+                <li>Lacks fitness knowledge</li>
+                <li>Finds it difficult to make time to work out</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- DEFINE & IDEATE -->
+    <section class="section wide fade-in" id="ideate">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>Define &amp; Ideate</h2>
+      </div>
+
+      <p>The experience gap between teammates was the real design constraint of this phase — more than any disagreement about features. Three of the four of us were in our first formal design project. One wasn't. That asymmetry shapes a team's process more than most people talk about in case studies, and smoothing it over would mean writing around the most real thing that happened here.</p>
+
+      <div class="draw-block">
+        <div class="draw-card lead">
+          <span class="who">Coming in with prior knowledge</span>
+          <p>I had experience with Figma and the UX process before the bootcamp started. That meant I could move faster, hold opinions earlier, and see where the project was going before the rest of the team could.</p>
+        </div>
+        <div class="draw-card team">
+          <span class="who">Three quick learners, first project</span>
+          <p>My teammates were sharp and committed — they learned the tools fast. But this was their first time running a real design process, which meant the instinct of "what to do next" wasn't there yet. That's not a criticism. It's just the reality of a first project.</p>
+        </div>
+      </div>
+      <p class="draw-resolution">The job wasn't to design the app for them. It was to teach the process as we went, so they could make real decisions alongside me rather than just execute what I handed them.</p>
+
+      <p style="margin-top: var(--space-4);">Competitor analysis shaped what we didn't want to rebuild. We looked at three established players in the space and found the same pattern across all of them: they had the tracking features, but none made the workout-and-diet connection feel like a single experience. That was the gap Chiron could actually occupy.</p>
+
+      <div class="competitor-row">
+        <div class="competitor-chip">
+          <div class="dot">MFP</div>
+          <span class="name">MyFitnessPal</span>
+        </div>
+        <div class="competitor-chip">
+          <div class="dot">NTC</div>
+          <span class="name">Nike Training Club</span>
+        </div>
+        <div class="competitor-chip">
+          <div class="dot">FO</div>
+          <span class="name">FitOn</span>
+        </div>
+      </div>
+
+      <p>All three had programs, scheduling, and some combination of nutrition and workout tracking. None of them made the two feel like they were designed for the same person at the same time. That was Chiron's lane.</p>
+
+      <p>From there, we worked through feature prioritization — not everything the research surfaced made it into the prototype. What we kept was whatever directly served someone like Anthony getting from "I want to be consistent" to "here's my workout today and here's what I'm eating for it."</p>
+
+      <ul class="feature-list">
+        <li>
+          <svg class="feature-mark" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          Workout videos with sets, reps &amp; rest intervals
+        </li>
+        <li>
+          <svg class="feature-mark" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          Diet planner with diet-style tabs (Vegan, Veggie, Meat, Classic)
+        </li>
+        <li>
+          <svg class="feature-mark" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          Progress tracking with visual ring indicator
+        </li>
+        <li>
+          <svg class="feature-mark" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          Recommended food plans based on current diet status
+        </li>
+        <li>
+          <svg class="feature-mark" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          Workout regime with calendar-based scheduling
+        </li>
+        <li>
+          <svg class="feature-mark" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3"/></svg>
+          Suggested recipes with full prep instructions
+        </li>
+      </ul>
+
+      <p>The survey-driven onboarding was the one structural decision that made Chiron feel different from a general-purpose fitness app: the app would evaluate a user's current stats from the intake survey and then recommend a workout program specifically for them. The idea of a mentor-like first experience — you tell Chiron where you are, Chiron tells you where to start — stayed in the design from the first conversation through the final hi-fi screens.</p>
+
+    </section>
+
+    <!-- USER FLOW -->
+    <section class="section fade-in" id="flow">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>User Flow</h2>
+      </div>
+
+      <p>The onboarding sequence was designed to earn personalization before the app asked anything of the user. You don't land on a generic dashboard — you arrive at a coaching screen that explains what Chiron does before asking you to sign up, then a survey that lets the app match your program to your starting point.</p>
+
+      <div class="range-path">
+        <div class="range-step">
+          <div class="range-marker"><span class="range-num">1</span><span class="range-line"></span></div>
+          <div class="range-content">
+            <h4>Download &rarr; Splash screen</h4>
+            <p>The brand moment: "Take Aim And Shoot For Your Goals." Tone set before anything else.</p>
+          </div>
+        </div>
+        <div class="range-step">
+          <div class="range-marker"><span class="range-num">2</span><span class="range-line"></span></div>
+          <div class="range-content">
+            <h4>Coaching screens 1 &amp; 2</h4>
+            <p>Chiron explains the two things it does — diet plan management and workout planning — before asking for anything in return.</p>
+          </div>
+        </div>
+        <div class="range-step">
+          <div class="range-marker"><span class="range-num">3</span><span class="range-line"></span></div>
+          <div class="range-content">
+            <h4>Login / Sign up</h4>
+            <p>Email, name, password, or connect with Apple, Google, or Facebook. First-time account creation only after the value pitch is made.</p>
+          </div>
+        </div>
+        <div class="range-step">
+          <div class="range-marker"><span class="range-num">4</span><span class="range-line"></span></div>
+          <div class="range-content">
+            <h4>Intake survey</h4>
+            <p>Fitness level, goals, available time. The app evaluates responses and uses them to recommend a starting program — the "Chiron as coach" moment.</p>
+          </div>
+        </div>
+        <div class="range-step">
+          <div class="range-marker"><span class="range-num">5</span><span class="range-line"></span></div>
+          <div class="range-content">
+            <h4>Home screen</h4>
+            <p>Personalized greeting ("Hi Anthony") and the week's activity at a glance. View Progress and today's workout ready from the first screen.</p>
+          </div>
+        </div>
+        <div class="range-step">
+          <div class="range-marker"><span class="range-num">6</span><span class="range-line"></span></div>
+          <div class="range-content">
+            <h4>Set diet &amp; set workout</h4>
+            <p>Two parallel tracks, navigable from the same bottom nav, designed to feel like parts of one experience rather than two separate apps.</p>
+          </div>
+        </div>
+        <div class="range-step">
+          <div class="range-marker"><span class="range-num">7</span></div>
+          <div class="range-content">
+            <h4>Track fitness journey</h4>
+            <p>Progress rings, calendar history, and ongoing meal and workout logging — the long-term loop that turns a first session into a habit.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESIGN DECISIONS / PROTOTYPING -->
+    <section class="section wide fade-in" id="decisions">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>Design Decisions</h2>
+      </div>
+
+      <div class="subsection">
+        <h3>Paper first, then Figma</h3>
+        <p>We started with hand-sketched wireframes before anyone opened Figma — partly good process, partly practical. With three teammates learning the tool as we went, settling the structure on paper first meant Figma was used to build a layout that had already been agreed on, rather than have four people designing against each other in the same file. The sketches covered the full flow: splash, coaching screen, login, sign up, survey, home, workout, and the diet and schedule views.</p>
+        <div class="note" style="margin-top: var(--space-3);">
+          <span class="note-label">From the Figma file</span>
+          <p>The Figma file (Group Chiron, "Drawn Wireframes" page) contains the full hi-fi prototype spanning splash through schedule — every screen listed in the user flow section above exists there. The lo-fi sketches were done on paper before any digital wireframing began, so there's no lo-fi Figma page to export; the paper sketches predate the tool. What's in Figma is the finished hi-fi.</p>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Dark, focused visual tone</h3>
+        <p>The hi-fi prototype leaned into a dark, high-contrast visual style — not just a convention but a deliberate choice. Fitness apps live on phone screens during workouts: in gyms with overhead lighting, outdoors, or in home environments where ambient brightness varies. A dark interface with clear typographic hierarchy holds up better in those conditions than a flat white UI does. The palette also matched the mood the research suggested: workouts weren't a productivity exercise for these users, they were a release. The interface should feel like that, not like a spreadsheet.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>Personalization before content</h3>
+        <p>The survey-to-recommendation flow was the design decision I'm most confident about in retrospect. Most fitness apps dump you on a content library and expect you to self-sort. Chiron's bet was that a new user shouldn't have to know what they need — the app should figure that out from the intake data and give them a starting point. The coaching screens before sign-up were deliberate: they explained the premise before asking for a commitment, which is an easier ask for someone who's sceptical about whether a fitness app will be any different from the last one.</p>
+      </div>
+
+      <!-- HI-FI SCREENS — from Figma file Group Chiron, "Drawn Wireframes" page -->
+      <div class="shot-row cols-3" style="margin-top: var(--space-4);">
+        <div class="shot-frame has-image tall" style="aspect-ratio: auto; max-width: 220px;">
+          <img src="https://www.figma.com/api/mcp/asset/7ce0d105-a655-4f6c-9819-0f821345aaf7"
+               alt="Chiron splash screen — CHIRON wordmark over a dark photo of two runners, with the tagline 'Take Aim And Shoot For Your Goals' and a Let's Get Started button at the bottom"
+               style="object-fit: cover; object-position: top; border-radius: 8px; width: 100%; height: 100%;">
+        </div>
+        <div class="shot-frame tall" style="aspect-ratio: 9 / 16; max-width: 220px;">
+          <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/></svg>
+          <span class="shot-label">Sign Up Screen</span>
+          <span class="shot-sub">First Name, Last Name, Email, Password fields + Apple, Google, Facebook sign-in options</span>
+        </div>
+        <div class="shot-frame has-image tall" style="aspect-ratio: auto; max-width: 220px;">
+          <img src="https://www.figma.com/api/mcp/asset/565e6e14-ba90-4e6c-a212-276db6ac8e8e"
+               alt="Chiron home screen — 'Hi Anthony,' greeting, January date strip, Activity section with View Progress card and Full Body Workout banner and Let's Get Started button, Today's Meal carousel with Vegan Banana Pancakes, Vegan Curried Squash Soup, and Vegan Ramen"
+               style="object-fit: cover; object-position: top; border-radius: 8px; width: 100%; height: 100%;">
+        </div>
+      </div>
+      <div class="shot-row cols-3">
+        <div class="shot-frame tall" style="aspect-ratio: 9 / 16; max-width: 220px;">
+          <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/></svg>
+          <span class="shot-label">Workout Detail</span>
+          <span class="shot-sub">Home Squatting — video player, Sets 3–4, Reps 8–30, Rest 60 sec, More Workouts + Finish Workout</span>
+        </div>
+        <div class="shot-frame tall" style="aspect-ratio: 9 / 16; max-width: 220px;">
+          <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/></svg>
+          <span class="shot-label">Diet Plan — Thursday, Vegan</span>
+          <span class="shot-sub">Meal Plan: Vegan, 1614 kcal — 25% proteins / 24% fats / 51% carbs — Breakfast, Lunch, Dinner carousel</span>
+        </div>
+        <div class="shot-frame tall" style="aspect-ratio: 9 / 16; max-width: 220px;">
+          <svg class="shot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 18h6"/></svg>
+          <span class="shot-label">Recipe Detail</span>
+          <span class="shot-sub">Vegan Banana Pancakes — 94 kcal, 14g carbs, 4g fat, 1g protein — ingredients and step-by-step recipe</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- USER TESTING -->
+    <section class="section fade-in" id="testing">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>Putting It in Front of People</h2>
+      </div>
+
+      <p>We tested the hi-fi prototype against three concrete tasks. The objective wasn't to validate that it looked good — it was to find out where the experience broke down in actual use: getting an account set up, completing a workout, and choosing a diet plan.</p>
+
+      <div class="test-grid">
+        <div class="test-card">
+          <svg class="test-mark" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13l5 5L22 6"/></svg>
+          <p><strong>Create an account</strong><br>All participants completed sign-up with little to no friction.</p>
+        </div>
+        <div class="test-card">
+          <svg class="test-mark" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13l5 5L22 6"/></svg>
+          <p><strong>Select and complete a workout</strong><br>Users navigated to and through a workout without needing guidance.</p>
+        </div>
+        <div class="test-card">
+          <svg class="test-mark" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13l5 5L22 6"/></svg>
+          <p><strong>Pick a diet plan</strong><br>The diet-style filter tabs (Vegan / Veggie / Meat / Classic) were understood and used correctly.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="note-label">Honest framing</span>
+        <p>All three tasks completed without issues across participants. For a first bootcamp prototype that means the core flows were usable — which is the bar a first project should clear. It doesn't tell us whether users would have returned to the app the next day, whether the onboarding survey actually produced better recommendations, or whether the workout-and-diet pairing felt meaningfully different from just having two separate features. Those are the questions a second round of testing, with more time, would need to answer.</p>
+      </div>
+    </section>
+
+    <!-- RESULTS & REFLECTION -->
+    <section class="section fade-in" id="reflection">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1"/>
+          <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.2"/>
+          <circle cx="9" cy="9" r="1" fill="currentColor"/>
+        </svg>
+        <h2>Results &amp; Reflection</h2>
+      </div>
+
+      <div class="reflection-card">
+        <div class="note">
+          <span class="note-label">Honest framing</span>
+          <p>Chiron was a learning exercise more than a polished product — and that's the right way to describe it. We built a real prototype with a real process: interviews, a persona, a competitor audit, paper sketches, digital lo-fi wireframes, a hi-fi that all four of us contributed to, and usability testing that confirmed the core flows worked. None of that happened by accident. But the prototype also shows the rougher edges you'd expect from a team that was learning the tools and the discipline at the same time as building the product. The full prototype is in <a href="https://www.figma.com/design/zjkXw7vJfOMCxk0lXfgrY0/Group-Chiron?node-id=6-6" target="_blank" rel="noopener">Figma (Group Chiron)</a> — every screen from splash through diet plan is there.</p>
+        </div>
+
+        <p style="margin-top: 1.5rem;"><strong style="color: var(--paper);">On the team dynamic:</strong> the experience gap didn't hurt the project — if anything it made the process more deliberate. Teaching the "why" behind a decision meant I had to know the why myself, and that sharpens your own thinking. What I'd do differently is build in more explicit checkpoints: moments where I asked the team "does this make sense to you" rather than assuming the pace was working for everyone. Moving fast is easier when you already know the territory. It's worth checking who's keeping up.</p>
+
+        <p style="margin-top: 1rem;"><strong style="color: var(--paper);">What I'd do differently:</strong> push for a second round of testing focused specifically on the survey-to-recommendation flow — whether the app's "coach" premise actually felt different in use, not just in concept. All three tasks passed cleanly, but the question Chiron's design was really making ("does a personalized starting point matter?") requires users to experience a recommendation they didn't expect, and that test wasn't in scope for the timeline we had.</p>
+
+        <p style="margin-top: 1rem;"><strong style="color: var(--paper);">Future opportunities identified:</strong> calorie counting integrated into the diet tracker, expanded workout planning with more video variety, and deeper diet tips tied to specific workout days — making the workout-and-diet connection feel structural rather than just co-located.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="project-nav">
+    <a href="ui-ux-nest.html" class="prev">
+      <span class="direction">&larr; Previous</span>
+      <span class="title">UI/UX Nest</span>
+    </a>
+    <a href="big-cat-rescue.html" class="next">
+      <span class="direction">Next &rarr;</span>
+      <span class="title">Big Cat Rescue</span>
+    </a>
+  </nav>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Mark Pabustan, UI/UX Designer</p>
+  </footer>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close enlarged image">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </div>
+
+<script>
+  // Reticle spine — fills as the visitor moves through the page
+  const reticleSpine = document.getElementById('reticleSpine');
+  function updateReticle() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+    reticleSpine.style.setProperty('--reticle-progress', pct + '%');
+  }
+  window.addEventListener('scroll', updateReticle, { passive: true });
+  updateReticle();
+
+  // Scroll-triggered fade-ins
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Image lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  let lastFocused = null;
+
+  function openLightbox(imgEl) {
+    lastFocused = document.activeElement;
+    lightboxImg.src = imgEl.src;
+    lightboxImg.alt = imgEl.alt || '';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.shot-frame.has-image img').forEach(img => {
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', 'Click to enlarge image');
+    img.addEventListener('click', () => openLightbox(img));
+    img.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(img);
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
+</script>
+
+</body>
+</html>
