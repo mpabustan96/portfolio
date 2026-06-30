@@ -858,6 +858,32 @@ img { max-width: 100%; display: block; }
   transform: scale(1.01);
 }
 
+/* ---------- Unboxed shot row (no border/background frame) ---------- */
+
+.shot-row-plain {
+  align-items: start;
+}
+
+.shot-frame-plain {
+  display: block;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.shot-frame-plain img {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: zoom-in;
+  transition: filter 0.2s ease, transform 0.3s ease;
+}
+
+.shot-frame-plain img:hover,
+.shot-frame-plain img:focus-visible {
+  filter: brightness(1.04);
+  transform: scale(1.01);
+}
+
 /* ---------- Reflection card ---------- */
 
 .reflection-card {
@@ -1060,6 +1086,16 @@ img { max-width: 100%; display: block; }
   }
 
   body { font-size: 16px; }
+
+  .site-header {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+    height: auto;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .site-header nav { gap: var(--space-2); }
+  .site-header nav a { font-size: 0.85rem; min-height: 36px; }
 
   .hero { min-height: 78vh; }
   .hero h1 { font-size: clamp(1.7rem, 9vw, 2.2rem); line-height: 1.25; }
