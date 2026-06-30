@@ -747,6 +747,7 @@ img { max-width: 100%; display: block; }
 }
 
 .shot-frame.has-image.tall-shot img {
+  height: auto;
   object-fit: contain;
   background: var(--canvas-2);
 }

@@ -678,6 +678,7 @@ img { max-width: 100%; display: block; }
 }
 
 .shot-frame.has-image.wide-shot img {
+  height: auto;
   object-fit: contain;
   background: var(--lava-2);
 }
@@ -690,6 +691,7 @@ img { max-width: 100%; display: block; }
 }
 
 .shot-frame.has-image.mobile-shot.tall img {
+  height: auto;
   object-fit: contain;
   background: var(--lava-2);
 }
@@ -701,6 +703,7 @@ img { max-width: 100%; display: block; }
 }
 
 .shot-frame.has-image.tall-shot img {
+  height: auto;
   object-fit: contain;
   background: var(--lava-2);
 }
@@ -717,6 +720,7 @@ img { max-width: 100%; display: block; }
 }
 
 .shot-row.style-system-row .shot-frame.has-image img {
+  height: auto;
   object-fit: contain;
   background: #fff;
 }
