@@ -12,11 +12,19 @@
 
   <header class="site-header">
     <a href="index.html" class="logo"><img src="images/logo-white.png" alt="Mark Pabustan, home" width="194" height="114"></a>
-    <nav>
+    <nav aria-label="Primary">
       <a href="education.html">&larr; Bootcamp Projects</a>
       <a href="about.html">About</a>
     </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links-mobile" aria-label="Open menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16"/></svg>
+    </button>
   </header>
+  <ul class="nav-links-mobile" id="nav-links-mobile">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="education.html">All Projects</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
 
   <main>
 
@@ -303,6 +311,37 @@
   </div>
 
 <script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('nav-toggle');
+  const mobileNav = document.getElementById('nav-links-mobile');
+
+  // Keep the mobile dropdown pinned directly under the sticky header,
+  // measuring its real height since it can wrap on small screens.
+  function updateMobileNavOffset() {
+    const headerEl = document.querySelector('.site-header') || document.querySelector('.nav');
+    if (headerEl) {
+      document.documentElement.style.setProperty('--mobile-nav-offset', headerEl.offsetHeight + 'px');
+    }
+  }
+  updateMobileNavOffset();
+  window.addEventListener('resize', updateMobileNavOffset);
+  window.addEventListener('orientationchange', updateMobileNavOffset);
+
+  navToggle.addEventListener('click', () => {
+    updateMobileNavOffset();
+    const isOpen = mobileNav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+  });
+
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Open menu');
+    });
+  });
+
   // Seam spine — fills as the visitor moves through the story
   const seamSpine = document.getElementById('seamSpine');
   function updateSeam() {

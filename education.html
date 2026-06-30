@@ -116,7 +116,20 @@
     const navToggle = document.getElementById('nav-toggle');
     const mobileNav = document.getElementById('nav-links-mobile');
 
+    // Keep the mobile dropdown pinned directly under the sticky nav,
+    // measuring its real height since it can wrap on small screens.
+    function updateMobileNavOffset() {
+      const headerEl = document.querySelector('.nav') || document.querySelector('.site-header');
+      if (headerEl) {
+        document.documentElement.style.setProperty('--mobile-nav-offset', headerEl.offsetHeight + 'px');
+      }
+    }
+    updateMobileNavOffset();
+    window.addEventListener('resize', updateMobileNavOffset);
+    window.addEventListener('orientationchange', updateMobileNavOffset);
+
     navToggle.addEventListener('click', () => {
+      updateMobileNavOffset();
       const isOpen = mobileNav.classList.toggle('is-open');
       navToggle.setAttribute('aria-expanded', String(isOpen));
       navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');

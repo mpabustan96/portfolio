@@ -690,7 +690,21 @@ footer {
 ============================================= */
 @media (max-width: 640px) {
   .nav-links  { display: none; }
-  .nav-toggle { display: flex; }
+  .nav-toggle { display: flex; order: -1; }
+  .nav-logo { order: 1; }
+  .nav { z-index: 101; }
+
+  /* Pinned mobile dropdown — stays fixed directly under the sticky
+     nav as the page scrolls, instead of scrolling away with content. */
+  .nav-links-mobile.is-open {
+    position: fixed;
+    top: var(--mobile-nav-offset, 64px);
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - var(--mobile-nav-offset, 64px));
+    overflow-y: auto;
+    z-index: 99;
+  }
   .nav        { padding: 1rem 1.25rem; }
   .page       { padding: 0 1.25rem; }
 
