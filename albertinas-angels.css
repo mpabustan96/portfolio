@@ -3,7 +3,7 @@
    Design system: dragonfly memory / wing-vein structure
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Work+Sans:wght@400;500;600&display=swap');
 
 :root {
   --dusk: #1B2128;
@@ -22,8 +22,8 @@
   --ember: #C2483A;
   --ember-soft: #D97468;
 
-  --serif: 'Newsreader', Georgia, serif;
-  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --serif: 'EB Garamond', Georgia, serif;
+  --sans: 'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --measure: 660px;
   --measure-wide: 960px;

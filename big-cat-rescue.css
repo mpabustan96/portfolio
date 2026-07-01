@@ -9,7 +9,7 @@
    the four-person compromise that shaped every real decision.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bevan&family=Nunito+Sans:wght@400;500;600;700&display=swap');
 
 :root {
   /* ── Big Cat Rescue brand colors, pulled from the file's own style system ── */
@@ -27,8 +27,8 @@
   --silver-dim:  #A8AE9C;
   --silver-quiet:#7C8270;
 
-  --serif:  'Rubik Mono One', 'Work Sans', monospace;
-  --sans:   'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --serif:  'Bevan', Georgia, serif;
+  --sans:   'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --measure: 660px;
   --measure-wide: 960px;

@@ -20,8 +20,8 @@
   --periwinkle-soft: #A8C0FF;
   --lime:      #00FF00;
 
-  --serif:  'Fraunces', Georgia, serif;
-  --sans:   'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --serif:  'Unbounded', -apple-system, BlinkMacSystemFont, sans-serif;
+  --sans:   'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --measure: 640px;
   --measure-wide: 1120px;
@@ -349,7 +349,7 @@ button:focus-visible {
 }
 
 .hero-pullquote p {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-style: italic;
   font-size: clamp(1.1rem, 1.8vw, 1.35rem);
   line-height: 1.55;
@@ -583,7 +583,7 @@ button:focus-visible {
 }
 
 .about-philosophy p {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-style: italic;
   font-size: clamp(1.3rem, 2.2vw, 1.6rem);
   line-height: 1.5;
