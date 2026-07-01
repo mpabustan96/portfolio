@@ -398,10 +398,16 @@ button:focus-visible {
   font-weight: 500;
   border-bottom: 1.5px solid var(--line-strong);
   padding-bottom: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
+.btn-ghost svg { transition: transform 0.2s ease; }
+
 .btn-ghost:hover { color: var(--paper); border-color: var(--ink-quiet); }
+.btn-ghost:hover svg { transform: translateX(3px); }
 
 /* =============================================
    SECTION SHARED
