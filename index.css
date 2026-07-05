@@ -91,6 +91,24 @@ body {
   position: relative;
 }
 
+/* =============================================
+   MATRIX BACKGROUND
+   Full-page, fixed, always running. Sits behind
+   every section (they're transparent over body)
+   and behind the decorative .glow blobs too.
+   Deliberately not paused for prefers-reduced-motion
+   per design direction — kept slow instead.
+============================================= */
+#matrix-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+}
+
 a { color: var(--periwinkle); text-decoration: none; }
 
 img { max-width: 100%; display: block; }
