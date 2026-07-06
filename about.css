@@ -87,6 +87,25 @@ body {
   position: relative;
 }
 
+/* =============================================
+   GLITCH BACKGROUND
+   Full-page, fixed, always running. Sits behind
+   everything else on the page (nav, glows, content
+   are all layered above it). Not paused for
+   prefers-reduced-motion — kept deliberately slow
+   and faint instead, same call as index.html's
+   matrix-bg.
+============================================= */
+#glitch-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+}
+
 a { color: var(--blue-bright); text-decoration: none; }
 
 img { max-width: 100%; display: block; }
