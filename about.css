@@ -96,7 +96,7 @@ body {
    and faint instead, same call as index.html's
    matrix-bg.
 ============================================= */
-#glitch-bg {
+#matrix-bg {
   position: fixed;
   inset: 0;
   width: 100vw;
