@@ -12,20 +12,29 @@
    - index.html, about.html, education.html are
      "hub" pages; the other five are case studies.
      The effect is chosen by the DESTINATION alone:
-   - Landing on a CASE STUDY (from anywhere — a hub
-     page or another case study) plays SIGNATURE
-     STROKE: a single bold diagonal bar carrying the
-     destination's name, set in that case study's OWN
-     hero display typeface, sweeping across like a
-     signature being drawn. Direction depends on
-     whether the clicked link has class="next" or
-     class="prev" (already present on every
-     project-nav link; defaults to "next" otherwise).
    - Landing on a HUB page (from anywhere) plays
-     SHUTTER SLATS: a bank of vertical bars that sweep
-     closed in a stagger, then lift away in reverse.
+     DATA CASCADE: a bank of vertical bars sweeps
+     closed in a stagger, then lifts away in reverse,
+     same structure the old Shutter Slats used — but
+     each bar is now a live column of falling code
+     instead of a flat panel, colored by the
+     DESTINATION'S own accent, over the destination's
+     own background.
+   - Landing on a CASE STUDY (from anywhere — a hub
+     page or another case study) plays DECRYPT
+     FLICKER: the destination's name scrambles in
+     from random glyphs to plain text, like a cipher
+     resolving, set in that case study's OWN hero
+     display typeface, in its own accent color, over
+     its own background, with a couple of thin
+     glitch bands flashing top and bottom. This is
+     the direct replacement for the old diagonal
+     Signature Stroke — same personalization (font +
+     color pulled from the destination), different
+     mechanic (decrypt instead of a sweeping panel).
    - The covering fill always matches the
-     DESTINATION page's own theme colors.
+     DESTINATION page's own theme colors (and, for
+     Decrypt Flicker, its own typeface).
    - Pacing sits between snappy and theatrical
      (~550-650ms per phase) — deliberate enough to
      register as a moment, not so slow it drags.
@@ -36,14 +45,14 @@
    - All overlay geometry is percentage/viewport
      based (no fixed pixel panels), so it holds up
      identically from a phone to an ultrawide monitor.
-   - Because a Signature Stroke can render a case
+   - Because Decrypt Flicker can render a case
      study's font on a DIFFERENT page that never
      loaded it (e.g. leaving Counseling for Chiron
      shows Chiron's Russo One while still physically
      on the Counseling page), this file injects a
      combined Google Fonts stylesheet on every
-     case-study page covering all five case fonts, so
-     the label never flashes a fallback typeface.
+     page covering all five case fonts, so the label
+     never flashes a fallback typeface.
 
    Usage: include this once, near the very top of
    <body>, on every page listed in PAGES below:
@@ -85,17 +94,24 @@
   var STORAGE_KEY = 'mp-page-transition';
   var STALE_MS = 4500;
 
-  // Shutter Slats timing — medium (between snappy and theatrical)
-  var SHUTTER_BARS = 8;
-  var SHUTTER_STAGGER_MS = 32;
-  var SHUTTER_CLOSE_MS = 560;
-  var SHUTTER_PAUSE_MS = 130;
-  var SHUTTER_OPEN_MS = 580;
+  // Data Cascade timing — medium (between snappy and theatrical)
+  var CASCADE_BARS = 9;
+  var CASCADE_STAGGER_MS = 34;
+  var CASCADE_CLOSE_MS = 560;
+  var CASCADE_PAUSE_MS = 130;
+  var CASCADE_OPEN_MS = 580;
+  var CASCADE_GLYPHS = '01アイウエオカキクケコ.:/_'.split('');
+  var CASCADE_FONT_SIZE = 12;   // px, size of each falling glyph
+  var CASCADE_FALL_SPEED = 0.9; // rows per animation step
+  var CASCADE_SPARKLE_RATIO = 0.12; // fraction of glyphs drawn in the lightened "sparkle" tint
 
-  // Signature Stroke timing — medium (between snappy and theatrical)
-  var SIGNATURE_COVER_MS = 620;
-  var SIGNATURE_PAUSE_MS = 130;
-  var SIGNATURE_OPEN_MS = 640;
+  // Decrypt Flicker timing — medium (between snappy and theatrical)
+  var DECRYPT_SCRAMBLE_DELAY_MS = 160; // gap before the scramble starts, after the cover fades in
+  var DECRYPT_SCRAMBLE_FRAMES = 24;
+  var DECRYPT_FRAME_MS = 27;
+  var DECRYPT_HOLD_MS = 800;   // exit: total time covered before navigating (delay + scramble + hold)
+  var DECRYPT_PAUSE_MS = 150;  // entrance: how long the resolved name holds before clearing away
+  var DECRYPT_CLEAR_MS = 460;  // how long the cover takes to fade + bands sweep away
 
   function filename(pathOrHref) {
     var clean = pathOrHref.replace(/[?#].*$/, '');
@@ -108,17 +124,34 @@
     return PAGES[name] || { type: 'hub', bg: '#0A0C12', accent: '#7A9CFF', name: name };
   }
 
-  /* ---------- Font preload (case-study pages only) ----------
+  /* ---------- Color helpers (Data Cascade + Decrypt Flicker are both
+     themed off each destination's own accent, so both need a couple of
+     small hex utilities rather than fixed palette constants) ---------- */
+
+  function hexToRgb(hex) {
+    return [
+      parseInt(hex.slice(1, 3), 16),
+      parseInt(hex.slice(3, 5), 16),
+      parseInt(hex.slice(5, 7), 16)
+    ];
+  }
+
+  function lighten(hex, amt) {
+    var rgb = hexToRgb(hex);
+    var r = Math.round(rgb[0] + (255 - rgb[0]) * amt);
+    var g = Math.round(rgb[1] + (255 - rgb[1]) * amt);
+    var b = Math.round(rgb[2] + (255 - rgb[2]) * amt);
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  /* ---------- Font preload (every page) ----------
      Ensures every case study's hero display font is available
-     before a Signature Stroke label needs to render it, even
-     when that label is showing on a DIFFERENT case study's page
-     that never linked that font itself. */
+     before a Decrypt Flicker label needs to render it, even
+     when that label is showing on a DIFFERENT page that never
+     linked that font itself (a hub page linking out to a case
+     study, or one case study linking to another). */
 
   function ensureCaseFontsLoaded() {
-    // Loaded on every page (hub or case): a hub page can now trigger a
-    // Signature Stroke label whenever it links OUT to a case study, so
-    // the destination's font needs to be ready there too, not just on
-    // case-study pages themselves.
     if (document.getElementById('mp-transition-fonts')) return;
 
     var families = [];
@@ -147,130 +180,250 @@
     el.style.transition = 'transform ' + ms + 'ms cubic-bezier(.6,0,.4,1)' + (delay ? ' ' + delay + 'ms' : '');
   }
 
-  /* ---------- SHUTTER SLATS ---------- */
+  /* ---------- DATA CASCADE ----------
+     Same staggered vertical-bar skeleton as the old Shutter
+     Slats, but each bar renders its own live canvas of falling
+     glyphs instead of a flat color panel. Bar background and
+     glyph color both come from the DESTINATION theme, so the
+     effect looks different landing on Home vs. About vs.
+     Bootcamp Projects. */
 
-  function buildShutterBars(theme) {
-    var wrap = overlayShell();
-    var bars = [];
-    for (var i = 0; i < SHUTTER_BARS; i++) {
-      var bar = document.createElement('div');
-      bar.style.cssText =
-        'position:absolute; top:0; bottom:0;' +
-        'left:' + (i * 100 / SHUTTER_BARS) + '%;' +
-        'width:' + (100 / SHUTTER_BARS) + '%;' +
-        'background:' + theme.bg + ';' +
-        'border-right:1px solid ' + theme.accent + '55;' +
-        'transform:scaleY(0); transform-origin:top;';
-      wrap.appendChild(bar);
-      bars.push(bar);
-    }
-    return { wrap: wrap, bars: bars };
+  function buildCascadeBar(theme, barWidthPx, heightPx) {
+    var bar = document.createElement('div');
+    bar.style.cssText =
+      'position:relative; overflow:hidden;' +
+      'width:' + (100 / CASCADE_BARS) + '%; height:100%;' +
+      'background:' + theme.bg + ';' +
+      'transform:scaleY(0); transform-origin:top;';
+
+    var canvas = document.createElement('canvas');
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.floor(barWidthPx * dpr));
+    canvas.height = Math.max(1, Math.floor(heightPx * dpr));
+    canvas.style.cssText = 'position:absolute; inset:0; width:100%; height:100%;';
+    bar.appendChild(canvas);
+
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    var colWidth = CASCADE_FONT_SIZE + 3;
+    var colCount = Math.max(1, Math.floor(barWidthPx / colWidth));
+    var drops = [];
+    for (var c = 0; c < colCount; c++) drops.push(Math.random() * (heightPx / CASCADE_FONT_SIZE));
+
+    return { el: bar, ctx: ctx, w: barWidthPx, h: heightPx, colWidth: colWidth, drops: drops };
   }
 
-  function playShutterExit(theme, href) {
-    var s = buildShutterBars(theme);
+  function buildCascadeBars(theme) {
+    var wrap = overlayShell();
+    var row = document.createElement('div');
+    row.style.cssText = 'position:absolute; inset:0; display:flex;';
+    wrap.appendChild(row);
+
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    var barWidthPx = w / CASCADE_BARS;
+
+    var rgb = hexToRgb(theme.accent);
+    var primary = 'rgba(' + rgb.join(',') + ',';
+    var sparkle = lighten(theme.accent, 0.55);
+
+    var bars = [];
+    for (var i = 0; i < CASCADE_BARS; i++) {
+      var b = buildCascadeBar(theme, barWidthPx, h);
+      row.appendChild(b.el);
+      bars.push(b);
+    }
+
+    var running = true;
+    function paint() {
+      bars.forEach(function (bar) {
+        bar.ctx.fillStyle = 'rgba(0,0,0,0.20)';
+        bar.ctx.fillRect(0, 0, bar.w, bar.h);
+        bar.ctx.font = CASCADE_FONT_SIZE + 'px monospace';
+        bar.ctx.textBaseline = 'top';
+        for (var k = 0; k < bar.drops.length; k++) {
+          var y = bar.drops[k];
+          var ch = CASCADE_GLYPHS[(Math.random() * CASCADE_GLYPHS.length) | 0];
+          var a = 0.45 + Math.random() * 0.4;
+          bar.ctx.fillStyle = Math.random() < CASCADE_SPARKLE_RATIO ? sparkle : (primary + a.toFixed(2) + ')');
+          bar.ctx.fillText(ch, k * bar.colWidth, y * CASCADE_FONT_SIZE);
+          var next = y + CASCADE_FALL_SPEED;
+          bar.drops[k] = (next * CASCADE_FONT_SIZE > bar.h && Math.random() > 0.9) ? -Math.random() * 6 : next;
+        }
+      });
+      if (running) requestAnimationFrame(paint);
+    }
+    paint();
+
+    return { wrap: wrap, bars: bars, stop: function () { running = false; } };
+  }
+
+  function playCascadeExit(theme, href) {
+    var s = buildCascadeBars(theme);
     requestAnimationFrame(function () {
       s.bars.forEach(function (bar, i) {
-        ease(bar, SHUTTER_CLOSE_MS, i * SHUTTER_STAGGER_MS);
-        bar.style.transform = 'scaleY(1)';
+        ease(bar.el, CASCADE_CLOSE_MS, i * CASCADE_STAGGER_MS);
+        bar.el.style.transform = 'scaleY(1)';
       });
     });
-    var total = SHUTTER_CLOSE_MS + (SHUTTER_BARS - 1) * SHUTTER_STAGGER_MS;
+    var total = CASCADE_CLOSE_MS + (CASCADE_BARS - 1) * CASCADE_STAGGER_MS;
     setTimeout(function () { window.location.href = href; }, total);
   }
 
-  function playShutterEntrance(theme) {
-    var s = buildShutterBars(theme);
-    s.bars.forEach(function (bar) { bar.style.transform = 'scaleY(1)'; });
+  function playCascadeEntrance(theme) {
+    var s = buildCascadeBars(theme);
+    s.bars.forEach(function (bar) { bar.el.style.transform = 'scaleY(1)'; });
     void s.wrap.offsetHeight;
     setTimeout(function () {
       s.bars.forEach(function (bar, i) {
-        var idx = SHUTTER_BARS - 1 - i;
-        bar.style.transformOrigin = 'bottom';
-        ease(bar, SHUTTER_OPEN_MS, idx * SHUTTER_STAGGER_MS);
-        bar.style.transform = 'scaleY(0)';
+        var idx = CASCADE_BARS - 1 - i;
+        bar.el.style.transformOrigin = 'bottom';
+        ease(bar.el, CASCADE_OPEN_MS, idx * CASCADE_STAGGER_MS);
+        bar.el.style.transform = 'scaleY(0)';
       });
-      var total = SHUTTER_OPEN_MS + (SHUTTER_BARS - 1) * SHUTTER_STAGGER_MS;
-      setTimeout(function () { s.wrap.remove(); }, total + 80);
-    }, SHUTTER_PAUSE_MS);
+      var total = CASCADE_OPEN_MS + (CASCADE_BARS - 1) * CASCADE_STAGGER_MS;
+      setTimeout(function () { s.stop(); s.wrap.remove(); }, total + 60);
+    }, CASCADE_PAUSE_MS);
   }
 
-  /* ---------- SIGNATURE STROKE ---------- */
+  /* ---------- DECRYPT FLICKER ----------
+     Replaces the old diagonal Signature Stroke. A full-cover
+     panel in the DESTINATION'S own background fades in, a
+     couple of thin glitch bands flash top and bottom in its
+     accent color, and the destination's name resolves out of
+     scrambled glyphs into its own display typeface — the same
+     "typography carries the personalization" idea Signature
+     Stroke had, via a decrypt instead of a sweep. */
 
-  function buildSignaturePanel(theme, label) {
+  function buildDecryptPanel(theme, label, resolved) {
     var wrap = overlayShell();
+
     var panel = document.createElement('div');
     panel.style.cssText =
-      'position:absolute; top:-100%; bottom:-100%; left:-100%; width:300%;' +
-      'background:' + theme.bg + ';' +
-      'border-top:2px solid ' + theme.accent + ';' +
-      'border-bottom:2px solid ' + theme.accent + ';' +
-      'display:flex; align-items:center; justify-content:center;' +
-      'transform:rotate(-6deg) translateX(-140%);';
-    var tag = document.createElement('span');
-    tag.textContent = label;
-    tag.style.cssText =
-      'display:inline-block; transform:rotate(6deg);' +
+      'position:absolute; inset:0; background:' + theme.bg + '; opacity:0;';
+
+    var bandTop = document.createElement('div');
+    bandTop.style.cssText =
+      'position:absolute; left:0; right:0; top:0; height:16%;' +
+      'background:' + theme.accent + '22; mix-blend-mode:screen;' +
+      'transform:translateY(-100%);';
+
+    var bandBottom = document.createElement('div');
+    bandBottom.style.cssText =
+      'position:absolute; left:0; right:0; bottom:0; height:11%;' +
+      'background:' + theme.accent + '18; mix-blend-mode:screen;' +
+      'transform:translateY(100%);';
+
+    var text = document.createElement('div');
+    text.style.cssText =
+      'position:absolute; inset:0; display:flex; align-items:center; justify-content:center;' +
+      'text-align:center; padding:0 2rem;' +
       'font-family:' + (theme.font || 'inherit') + ';' +
       'font-weight:' + (theme.weight || 400) + ';' +
       'font-style:' + (theme.italic ? 'italic' : 'normal') + ';' +
-      'letter-spacing:0.01em; white-space:nowrap;' +
+      'letter-spacing:0.01em;' +
       'font-size:clamp(1.6rem, 6vw, 3.6rem);' +
-      'color:' + theme.accent + ';';
-    panel.appendChild(tag);
+      'color:' + theme.accent + ';' +
+      'opacity:0;';
+    text.textContent = resolved ? label : '';
+
     wrap.appendChild(panel);
-    return { wrap: wrap, panel: panel };
+    wrap.appendChild(bandTop);
+    wrap.appendChild(bandBottom);
+    wrap.appendChild(text);
+
+    return { wrap: wrap, panel: panel, bandTop: bandTop, bandBottom: bandBottom, text: text };
   }
 
-  function playSignatureExit(theme, label, direction, href) {
-    var startX = direction === 'prev' ? '140%' : '-140%';
-    var s = buildSignaturePanel(theme, label);
-    s.panel.style.transform = 'rotate(-6deg) translateX(' + startX + ')';
+  function scramble(el, target, onDone) {
+    var frame = 0;
+    var timer = setInterval(function () {
+      frame++;
+      var revealCount = Math.floor((frame / DECRYPT_SCRAMBLE_FRAMES) * target.length);
+      var out = '';
+      for (var i = 0; i < target.length; i++) {
+        if (i < revealCount || target[i] === ' ') out += target[i];
+        else out += CASCADE_GLYPHS[(Math.random() * CASCADE_GLYPHS.length) | 0];
+      }
+      el.textContent = out;
+      if (frame >= DECRYPT_SCRAMBLE_FRAMES) {
+        clearInterval(timer);
+        el.textContent = target;
+        if (onDone) onDone();
+      }
+    }, DECRYPT_FRAME_MS);
+    return timer;
+  }
+
+  function playDecryptExit(theme, label, href) {
+    var s = buildDecryptPanel(theme, label, false);
+
     requestAnimationFrame(function () {
-      ease(s.panel, SIGNATURE_COVER_MS);
-      s.panel.style.transform = 'rotate(-6deg) translateX(0%)';
+      s.panel.style.transition = 'opacity 140ms ease';
+      s.bandTop.style.transition = 'transform 420ms cubic-bezier(.6,0,.4,1)';
+      s.bandBottom.style.transition = 'transform 420ms cubic-bezier(.6,0,.4,1) 40ms';
+      s.text.style.transition = 'opacity 140ms ease';
+      s.panel.style.opacity = '1';
+      s.bandTop.style.transform = 'translateY(0)';
+      s.bandBottom.style.transform = 'translateY(0)';
+      s.text.style.opacity = '1';
     });
-    setTimeout(function () { window.location.href = href; }, SIGNATURE_COVER_MS);
+
+    var timer;
+    setTimeout(function () {
+      timer = scramble(s.text, label);
+    }, DECRYPT_SCRAMBLE_DELAY_MS);
+
+    setTimeout(function () {
+      clearInterval(timer);
+      window.location.href = href;
+    }, DECRYPT_HOLD_MS);
   }
 
-  function playSignatureEntrance(theme, label, direction) {
-    var s = buildSignaturePanel(theme, label);
-    s.panel.style.transform = 'rotate(-6deg) translateX(0%)';
+  function playDecryptEntrance(theme, label) {
+    var s = buildDecryptPanel(theme, label, true);
+    s.panel.style.opacity = '1';
+    s.bandTop.style.transform = 'translateY(0)';
+    s.bandBottom.style.transform = 'translateY(0)';
+    s.text.style.opacity = '1';
     void s.wrap.offsetHeight;
-    var exitX = direction === 'prev' ? '-140%' : '140%';
+
     setTimeout(function () {
-      ease(s.panel, SIGNATURE_OPEN_MS);
-      s.panel.style.transform = 'rotate(-6deg) translateX(' + exitX + ')';
-      setTimeout(function () { s.wrap.remove(); }, SIGNATURE_OPEN_MS + 80);
-    }, SIGNATURE_PAUSE_MS);
+      s.panel.style.transition = 'opacity ' + DECRYPT_CLEAR_MS + 'ms ease';
+      s.bandTop.style.transition = 'transform ' + DECRYPT_CLEAR_MS + 'ms cubic-bezier(.6,0,.4,1)';
+      s.bandBottom.style.transition = 'transform ' + DECRYPT_CLEAR_MS + 'ms cubic-bezier(.6,0,.4,1) 40ms';
+      s.text.style.transition = 'opacity ' + (DECRYPT_CLEAR_MS - 100) + 'ms ease';
+      s.panel.style.opacity = '0';
+      s.bandTop.style.transform = 'translateY(-100%)';
+      s.bandBottom.style.transform = 'translateY(100%)';
+      s.text.style.opacity = '0';
+      setTimeout(function () { s.wrap.remove(); }, DECRYPT_CLEAR_MS + 60);
+    }, DECRYPT_PAUSE_MS);
   }
 
   /* ---------- PLAN RESOLUTION ---------- */
 
-  function resolvePlan(originName, destName, linkEl) {
+  function resolvePlan(originName, destName) {
     var dest = pageInfo(destName);
-    if (dest.type === 'case') {
-      var direction = linkEl && linkEl.classList.contains('prev') ? 'prev' : 'next';
-      return { type: 'signature', direction: direction };
-    }
-    return { type: 'shutter', direction: null };
+    return { type: dest.type === 'case' ? 'decrypt' : 'cascade' };
   }
 
   function playExit(plan, destTheme, destName, href) {
-    if (plan.type === 'signature') {
-      playSignatureExit(destTheme, pageInfo(destName).name, plan.direction, href);
+    if (plan.type === 'decrypt') {
+      playDecryptExit(destTheme, pageInfo(destName).name, href);
     } else {
-      playShutterExit(destTheme, href);
+      playCascadeExit(destTheme, href);
     }
   }
 
   function playEntrance(state) {
     var ownName = filename(location.pathname);
     var theme = pageInfo(ownName);
-    if (state.type === 'signature') {
-      playSignatureEntrance(theme, theme.name, state.direction);
+    if (state.type === 'decrypt') {
+      playDecryptEntrance(theme, theme.name);
     } else {
-      playShutterEntrance(theme);
+      playCascadeEntrance(theme);
     }
   }
 
@@ -309,9 +462,9 @@
     if (!PAGES[destName] || destName === originName) return;
 
     e.preventDefault();
-    var plan = resolvePlan(originName, destName, a);
+    var plan = resolvePlan(originName, destName);
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ type: plan.type, direction: plan.direction, ts: Date.now() }));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ type: plan.type, ts: Date.now() }));
     } catch (err) {}
     playExit(plan, pageInfo(destName), destName, href);
   });
