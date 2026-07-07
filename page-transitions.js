@@ -26,8 +26,9 @@
      closed in a stagger, then lift away in reverse.
    - The covering fill always matches the
      DESTINATION page's own theme colors.
-   - Pacing is snappy (~350-450ms per phase), not
-     theatrical.
+   - Pacing sits between snappy and theatrical
+     (~550-650ms per phase) — deliberate enough to
+     register as a moment, not so slow it drags.
    - Plays unconditionally, on every device and
      regardless of OS/browser motion settings, by
      request — there is no prefers-reduced-motion
@@ -84,17 +85,17 @@
   var STORAGE_KEY = 'mp-page-transition';
   var STALE_MS = 4500;
 
-  // Shutter Slats timing — snappy
+  // Shutter Slats timing — medium (between snappy and theatrical)
   var SHUTTER_BARS = 8;
-  var SHUTTER_STAGGER_MS = 22;
-  var SHUTTER_CLOSE_MS = 360;
-  var SHUTTER_PAUSE_MS = 90;
-  var SHUTTER_OPEN_MS = 380;
+  var SHUTTER_STAGGER_MS = 32;
+  var SHUTTER_CLOSE_MS = 560;
+  var SHUTTER_PAUSE_MS = 130;
+  var SHUTTER_OPEN_MS = 580;
 
-  // Signature Stroke timing — snappy
-  var SIGNATURE_COVER_MS = 420;
-  var SIGNATURE_PAUSE_MS = 90;
-  var SIGNATURE_OPEN_MS = 440;
+  // Signature Stroke timing — medium (between snappy and theatrical)
+  var SIGNATURE_COVER_MS = 620;
+  var SIGNATURE_PAUSE_MS = 130;
+  var SIGNATURE_OPEN_MS = 640;
 
   function filename(pathOrHref) {
     var clean = pathOrHref.replace(/[?#].*$/, '');
