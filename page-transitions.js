@@ -100,16 +100,19 @@
   var CASCADE_CLOSE_MS = 560;
   var CASCADE_PAUSE_MS = 130;
   var CASCADE_OPEN_MS = 580;
-  var CASCADE_GLYPHS = '01アイウエオカキクケコ.:/_'.split('');
+  // Hex/terminal glyph pool — reads as a real cipher resolving rather than
+  // a font showcase. Feeds both the Data Cascade rain and the Decrypt
+  // Flicker scramble below, so the two effects stay visually consistent.
+  var CASCADE_GLYPHS = '0123456789ABCDEF#$%&*+=/\\<>'.split('');
   var CASCADE_FONT_SIZE = 12;   // px, size of each falling glyph
-  var CASCADE_FALL_SPEED = 0.9; // rows per animation step
+  var CASCADE_FALL_SPEED = 0.55; // rows per animation step (slowed from 0.9)
   var CASCADE_SPARKLE_RATIO = 0.12; // fraction of glyphs drawn in the lightened "sparkle" tint
 
   // Decrypt Flicker timing — medium (between snappy and theatrical)
   var DECRYPT_SCRAMBLE_DELAY_MS = 160; // gap before the scramble starts, after the cover fades in
   var DECRYPT_SCRAMBLE_FRAMES = 24;
-  var DECRYPT_FRAME_MS = 27;
-  var DECRYPT_HOLD_MS = 800;   // exit: total time covered before navigating (delay + scramble + hold)
+  var DECRYPT_FRAME_MS = 46;
+  var DECRYPT_HOLD_MS = 1320;  // exit: total time covered before navigating (delay + scramble + hold)
   var DECRYPT_PAUSE_MS = 150;  // entrance: how long the resolved name holds before clearing away
   var DECRYPT_CLEAR_MS = 460;  // how long the cover takes to fade + bands sweep away
 
@@ -336,24 +339,43 @@
     return { wrap: wrap, panel: panel, bandTop: bandTop, bandBottom: bandBottom, text: text };
   }
 
+  // Paced off requestAnimationFrame (elapsed time per frame) rather than
+  // setInterval. Data Cascade's rain already runs on rAF; a setInterval
+  // ticking independently on top of that was the actual smoothness bug —
+  // two uncoordinated timer types competing for the same paint budget shows
+  // up as stutter under load, especially on busier desktop tabs. Returns a
+  // cancel function in place of the old setInterval id.
   function scramble(el, target, onDone) {
-    var frame = 0;
-    var timer = setInterval(function () {
-      frame++;
-      var revealCount = Math.floor((frame / DECRYPT_SCRAMBLE_FRAMES) * target.length);
-      var out = '';
-      for (var i = 0; i < target.length; i++) {
-        if (i < revealCount || target[i] === ' ') out += target[i];
-        else out += CASCADE_GLYPHS[(Math.random() * CASCADE_GLYPHS.length) | 0];
+    var start = null;
+    var cancelled = false;
+    var lastFrame = -1;
+
+    function tick(ts) {
+      if (cancelled) return;
+      if (start === null) start = ts;
+      var frame = Math.min(DECRYPT_SCRAMBLE_FRAMES, Math.floor((ts - start) / DECRYPT_FRAME_MS));
+
+      if (frame !== lastFrame) {
+        lastFrame = frame;
+        var revealCount = Math.floor((frame / DECRYPT_SCRAMBLE_FRAMES) * target.length);
+        var out = '';
+        for (var i = 0; i < target.length; i++) {
+          if (i < revealCount || target[i] === ' ') out += target[i];
+          else out += CASCADE_GLYPHS[(Math.random() * CASCADE_GLYPHS.length) | 0];
+        }
+        el.textContent = out;
       }
-      el.textContent = out;
+
       if (frame >= DECRYPT_SCRAMBLE_FRAMES) {
-        clearInterval(timer);
         el.textContent = target;
         if (onDone) onDone();
+        return;
       }
-    }, DECRYPT_FRAME_MS);
-    return timer;
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+    return function cancel() { cancelled = true; };
   }
 
   function playDecryptExit(theme, label, href) {
@@ -370,13 +392,13 @@
       s.text.style.opacity = '1';
     });
 
-    var timer;
+    var cancelScramble = function () {};
     setTimeout(function () {
-      timer = scramble(s.text, label);
+      cancelScramble = scramble(s.text, label);
     }, DECRYPT_SCRAMBLE_DELAY_MS);
 
     setTimeout(function () {
-      clearInterval(timer);
+      cancelScramble();
       window.location.href = href;
     }, DECRYPT_HOLD_MS);
   }
