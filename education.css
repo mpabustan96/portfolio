@@ -103,7 +103,7 @@ body {
   position: relative;
 }
 
-a { color: var(--chalk); text-decoration: none; }
+a { color: var(--chalk); text-decoration: none; cursor: pointer; }
 
 img { max-width: 100%; display: block; }
 

@@ -81,7 +81,7 @@ body {
   overflow-x: hidden;
 }
 
-a { color: var(--teal); text-decoration: none; }
+a { color: var(--teal); text-decoration: none; cursor: pointer; }
 
 a:focus-visible,
 button:focus-visible {

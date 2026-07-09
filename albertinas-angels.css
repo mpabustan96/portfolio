@@ -58,7 +58,7 @@ body {
   position: relative;
 }
 
-a { color: var(--wing); text-decoration: none; }
+a { color: var(--wing); text-decoration: none; cursor: pointer; }
 
 a:focus-visible,
 button:focus-visible {

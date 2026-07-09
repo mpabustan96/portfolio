@@ -77,7 +77,7 @@ body {
   position: relative;
 }
 
-a { color: var(--bronze-bright); text-decoration: none; }
+a { color: var(--bronze-bright); text-decoration: none; cursor: pointer; }
 
 a:focus-visible,
 button:focus-visible {

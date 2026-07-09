@@ -106,7 +106,7 @@ body {
   display: block;
 }
 
-a { color: var(--blue-bright); text-decoration: none; }
+a { color: var(--blue-bright); text-decoration: none; cursor: pointer; }
 
 img { max-width: 100%; display: block; }
 
@@ -609,7 +609,12 @@ button:focus-visible {
   letter-spacing: 0.01em;
 }
 
-.skill-pill--blue,
+.skill-pill--blue {
+  color: var(--blue-light);
+  background: var(--blue-soft);
+  border: 1px solid rgba(0, 82, 214, 0.35);
+}
+
 .skill-pill--gold {
   color: var(--gold);
   background: var(--gold-soft);
