@@ -37,13 +37,11 @@
 
 html { scroll-behavior: smooth; font-size: 16px; }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+/* No prefers-reduced-motion override here, by design: every animation
+   on this page (the pulse on "invisible," the Portal Warp scene, the
+   scroll hint) is meant to always run, on every device, regardless of
+   OS motion settings — matching the same call matrix-bg.js already
+   makes elsewhere on this site. */
 
 /* =============================================
    ENTRANCE ANIMATIONS
@@ -996,6 +994,7 @@ footer {
 .pw-h1 em {
   font-style: italic;
   color: var(--periwinkle);
+  animation: pulse-fade-dyn 6s ease-in-out infinite;
 }
 
 .pw-lede {
