@@ -92,12 +92,10 @@ body {
 }
 
 /* =============================================
-   MATRIX BACKGROUND
-   Full-page, fixed, always running. Sits behind
-   every section (they're transparent over body)
-   and behind the decorative .glow blobs too.
-   Deliberately not paused for prefers-reduced-motion
-   per design direction — kept slow instead.
+   MATRIX BACKGROUND (legacy — no longer mounted on
+   index.html; the effect now lives inside the Portal
+   Warp scene itself, see the PORTAL WARP block below.
+   Rule kept for any other page that still uses it.)
 ============================================= */
 #matrix-bg {
   position: fixed;
@@ -153,9 +151,9 @@ button:focus-visible {
 .skip-link:focus { left: 1rem; top: 1rem; }
 
 /* =============================================
-   AMBIENT GLOW LAYER
-   Fixed, decorative, behind all content — never
-   positioned where text sits directly on top.
+   AMBIENT GLOW LAYER (legacy — unused on index.html
+   now that the hero lives inside the Portal Warp
+   scene, kept for reference/other pages)
 ============================================= */
 .glow {
   position: absolute;
@@ -306,7 +304,10 @@ button:focus-visible {
 }
 
 /* =============================================
-   HERO — editorial, asymmetric, moderate scale
+   HERO — legacy flat hero (no longer used on
+   index.html; the hero is now pw-beat-0 inside
+   the Portal Warp scene). Kept for other pages
+   that may still reference these classes.
 ============================================= */
 .hero {
   position: relative;
@@ -370,8 +371,6 @@ button:focus-visible {
   100%{ opacity: 1;}
 }
 
-/* Thin rule replacing the old pull-quote — the only ornament in an
-   otherwise quiet, centered hero */
 .hero-rule {
   width: 48px;
   height: 2px;
@@ -424,7 +423,9 @@ button:focus-visible {
 .btn-ghost:hover svg { transform: translateX(3px); }
 
 /* =============================================
-   SECTION SHARED
+   SECTION SHARED (legacy — retained for other
+   pages/possible reuse; not referenced by the new
+   index.html markup)
 ============================================= */
 .section {
   position: relative;
@@ -457,7 +458,7 @@ button:focus-visible {
 }
 
 /* =============================================
-   WORK — asymmetric alternating spreads
+   WORK — legacy asymmetric alternating spreads
 ============================================= */
 .work-spread {
   display: grid;
@@ -504,8 +505,6 @@ button:focus-visible {
   z-index: 0;
 }
 
-/* Logo marks (not photos) get contain + padding so the full mark
-   shows without cropping, instead of object-fit: cover */
 .work-visual--angels .work-thumb {
   object-fit: contain;
   padding: 6%;
@@ -579,7 +578,8 @@ button:focus-visible {
 .work-link svg { transition: opacity 0.2s ease; }
 
 /* =============================================
-   ABOUT — multi-column, varied widths
+   ABOUT — legacy multi-column (kept for other
+   pages; not used by the new index.html)
 ============================================= */
 .about-columns {
   display: grid;
@@ -694,7 +694,8 @@ button:focus-visible {
 }
 
 /* =============================================
-   CONTACT
+   CONTACT — legacy (kept for other pages; not
+   used by the new index.html, see pw-beat-4)
 ============================================= */
 .contact-section {
   padding: 6rem 0 7rem;
@@ -751,6 +752,8 @@ footer {
   gap: 1rem;
   max-width: var(--measure-wide);
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-logo {
@@ -767,10 +770,7 @@ footer {
 }
 
 /* =============================================
-   RESPONSIVE — TABLET (1024px down to 769px)
-   Editorial asymmetry softens but doesn't fully
-   collapse — narrower columns, smaller gutters,
-   work spreads stay side-by-side.
+   RESPONSIVE — legacy sections above (1024/900/640/400)
 ============================================= */
 @media (max-width: 1024px) {
   .page { padding: 0 2.25rem; }
@@ -787,12 +787,6 @@ footer {
   }
 }
 
-/* =============================================
-   RESPONSIVE — NARROW TABLET / LARGE PHONE (900px)
-   Asymmetric grids collapse to a single column;
-   nav still shows full links (room permits it
-   down to 640px).
-============================================= */
 @media (max-width: 900px) {
   .nav { padding: 1.1rem 1.75rem; }
   .nav-links { gap: 1.5rem; }
@@ -815,10 +809,6 @@ footer {
   footer { padding: 1.75rem; }
 }
 
-/* =============================================
-   SUB-PAGE HEADER (education.html and similar
-   pages that aren't full case studies)
-============================================= */
 .subpage-back {
   display: inline-flex;
   align-items: center;
@@ -870,15 +860,12 @@ footer {
   font-size: 0.92rem;
 }
 
-
 @media (max-width: 640px) {
   .nav-links { display: none; }
   .nav-toggle { display: flex; order: -1; }
   .nav-logo { order: 1; }
   .nav { z-index: 101; }
 
-  /* Pinned mobile dropdown — stays fixed directly under the sticky
-     nav as the page scrolls, instead of scrolling away with content. */
   .nav-links-mobile.is-open {
     position: fixed;
     top: var(--mobile-nav-offset, 64px);
@@ -916,10 +903,273 @@ footer {
   .glow { display: none; }
 }
 
-/* =============================================
-   RESPONSIVE — 400px
-============================================= */
 @media (max-width: 400px) {
   .hero h1 { font-size: clamp(1.9rem, 10vw, 2.4rem); }
   .work-text h3 { font-size: 1.15rem; }
+}
+
+/* ============================================================
+   PORTAL WARP — 3D homepage scene (index.html only)
+   All rules below are pw-scoped and additive: nothing above
+   this line was removed, so any other page still linking
+   index.css is unaffected. matrix-bg.js/#matrix-bg is not
+   used on index.html anymore — see index-3d.js instead.
+
+   By design, none of this is gated behind
+   prefers-reduced-motion: the scene always animates, on every
+   device, matching the "always running" precedent matrix-bg.js
+   already set on this site.
+   ============================================================ */
+
+.pw-body { overflow-x: hidden; }
+
+#pw-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+}
+
+.pw-track {
+  position: relative;
+  height: 620vh;
+  z-index: 1;
+}
+
+.pw-beat {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 1.5rem;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  pointer-events: none;
+}
+
+.pw-beat.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pw-beat-inner {
+  max-width: 620px;
+  width: 100%;
+}
+
+.pw-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--periwinkle);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.pw-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lime);
+  flex-shrink: 0;
+}
+
+.pw-h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2rem, 4.8vw, 3.5rem);
+  line-height: 1.16;
+  color: var(--paper);
+  margin: 0 auto;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.85);
+}
+
+.pw-h1 em {
+  font-style: italic;
+  color: var(--periwinkle);
+}
+
+.pw-lede {
+  font-size: clamp(0.98rem, 1.6vw, 1.1rem);
+  color: var(--ink-quiet);
+  max-width: 42ch;
+  margin: 1.25rem auto 0;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.9);
+}
+
+.pw-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.25rem;
+  flex-wrap: wrap;
+}
+
+.pw-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--midnight);
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: var(--periwinkle);
+  padding: 0.85rem 1.6rem;
+  border-radius: 10px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.pw-btn-primary:hover { background: var(--periwinkle-soft); transform: translateY(-1px); }
+
+.pw-btn-ghost {
+  font-size: 0.92rem;
+  color: var(--ink-quiet);
+  font-weight: 500;
+  border-bottom: 1.5px solid var(--line-strong);
+  padding-bottom: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.pw-btn-ghost:hover { color: var(--paper); border-color: var(--ink-quiet); }
+.pw-btn-ghost svg { transition: transform 0.2s ease; }
+.pw-btn-ghost:hover svg { transform: translateX(3px); }
+
+/* Glass plaque in front of each portal preview — guarantees the
+   project title/description read clearly no matter what the
+   screenshot behind them looks like. The texture itself is also
+   darkened before it's ever rendered (see buildCardTexture in
+   index-3d.js), so legibility doesn't depend on this alone. */
+.pw-panel {
+  background: rgba(8, 10, 18, 0.62);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 20px;
+  padding: 2.25rem 2.5rem;
+  box-shadow: 0 24px 64px -20px rgba(0,0,0,0.6);
+}
+
+.pw-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-quiet);
+  margin-bottom: 1rem;
+}
+
+.pw-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--periwinkle);
+}
+
+.pw-status--progress .pw-live-dot { background: var(--line-strong); }
+
+.pw-h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  margin: 0 0 0.85rem;
+  letter-spacing: -0.01em;
+}
+
+.pw-body-text {
+  font-size: 0.96rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0 auto 1.4rem;
+  max-width: 46ch;
+}
+
+.pw-portal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.pw-portal-link svg { transition: transform 0.2s ease; }
+.pw-portal-link:hover svg { transform: translateX(3px); }
+
+#pw-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--periwinkle);
+  z-index: 60;
+  width: 0%;
+  box-shadow: 0 0 14px var(--periwinkle);
+}
+
+#pw-hint {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 55;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-quiet);
+  background: rgba(10,12,18,0.7);
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  backdrop-filter: blur(6px);
+  transition: opacity 0.5s ease;
+  animation: pw-hint-float 2.4s ease-in-out infinite;
+}
+
+#pw-hint.is-hidden { opacity: 0; }
+
+@keyframes pw-hint-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.pw-btn-primary:focus-visible,
+.pw-btn-ghost:focus-visible,
+.pw-portal-link:focus-visible,
+.pw-beat a:focus-visible {
+  outline: 2px solid var(--periwinkle);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- RESPONSIVE ----------
+   Only render cost changes by breakpoint (handled in
+   index-3d.js: particle count, antialiasing, pixel ratio,
+   ring segment count). The scroll-driven behavior itself —
+   camera dolly math and beat activation — is identical on
+   every screen size. */
+@media (max-width: 900px) {
+  .pw-track { height: 560vh; }
+  .pw-panel { padding: 1.75rem 1.5rem; border-radius: 16px; }
+}
+
+@media (max-width: 640px) {
+  .pw-track { height: 520vh; }
+  .pw-beat { padding: 0 1.1rem; }
+  .pw-panel { padding: 1.5rem 1.25rem; }
+  .pw-hero-actions { flex-direction: column; gap: 1rem; }
+  .pw-btn-primary, .pw-btn-ghost { width: 100%; justify-content: center; }
+  #pw-hint { right: 12px; bottom: 12px; font-size: 0.66rem; padding: 6px 11px; }
 }

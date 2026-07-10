@@ -12,7 +12,14 @@
    - index.html, about.html, education.html are
      "hub" pages; the other five are case studies.
      The effect is chosen by the DESTINATION alone:
-   - Landing on a HUB page (from anywhere) plays
+   - Landing on index.html specifically plays NO
+     cover at all — the homepage's own Portal Warp
+     scene (index-3d.js) is the entrance now, and a
+     Data Cascade cover flashing in front of it would
+     just duplicate/clash with that scene's own
+     opening beat. This is the one exception below.
+   - Landing on another HUB page (about.html,
+     education.html, from anywhere) plays
      DATA CASCADE: a bank of vertical bars sweeps
      closed in a stagger, then lifts away in reverse,
      same structure the old Shutter Slats used — but
@@ -32,6 +39,9 @@
      Signature Stroke — same personalization (font +
      color pulled from the destination), different
      mechanic (decrypt instead of a sweeping panel).
+     This still plays when leaving index.html for a
+     case study — only entering index.html itself is
+     the exception.
    - The covering fill always matches the
      DESTINATION page's own theme colors (and, for
      Decrypt Flicker, its own typeface).
@@ -424,14 +434,21 @@
     }, DECRYPT_PAUSE_MS);
   }
 
-  /* ---------- PLAN RESOLUTION ---------- */
+  /* ---------- PLAN RESOLUTION ----------
+     'none' is new: landing on index.html plays no cover at all,
+     since the Portal Warp scene is now the entrance itself. */
 
   function resolvePlan(originName, destName) {
+    if (destName === 'index.html') return { type: 'none' };
     var dest = pageInfo(destName);
     return { type: dest.type === 'case' ? 'decrypt' : 'cascade' };
   }
 
   function playExit(plan, destTheme, destName, href) {
+    if (plan.type === 'none') {
+      window.location.href = href;
+      return;
+    }
     if (plan.type === 'decrypt') {
       playDecryptExit(destTheme, pageInfo(destName).name, href);
     } else {
@@ -485,9 +502,11 @@
 
     e.preventDefault();
     var plan = resolvePlan(originName, destName);
-    try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ type: plan.type, ts: Date.now() }));
-    } catch (err) {}
+    if (plan.type !== 'none') {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ type: plan.type, ts: Date.now() }));
+      } catch (err) {}
+    }
     playExit(plan, pageInfo(destName), destName, href);
   });
 })();
