@@ -256,19 +256,12 @@
   var beats = document.querySelectorAll('.pw-beat');
   var progressBar = document.getElementById('pw-progress');
   var track = document.querySelector('.pw-track');
-  var hint = document.getElementById('pw-hint');
-  var hasScrolled = false;
 
   function updateScroll() {
     var scrollTop = window.scrollY;
     var trackHeight = track.offsetHeight - window.innerHeight;
     var progress = Math.min(1, Math.max(0, trackHeight > 0 ? scrollTop / trackHeight : 0));
     progressBar.style.width = (progress * 100) + '%';
-
-    if (!hasScrolled && scrollTop > 40) {
-      hasScrolled = true;
-      if (hint) hint.classList.add('is-hidden');
-    }
 
     camera.position.z = 12 - progress * 86;
     camera.rotation.z = Math.sin(progress * Math.PI * 3) * 0.045;
