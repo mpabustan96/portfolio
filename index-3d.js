@@ -1,12 +1,11 @@
 /* =============================================
    INDEX 3D — Portal Warp homepage scene
-   Replaces the flat hero/work/contact layout with
-   a scroll-driven Three.js tunnel. Each ring frames
-   a real project screenshot; falling glyph-styled
-   particles fold the old matrix-bg.js effect into
-   the 3D scene instead of running as a separate
-   2D canvas behind it — matrix-bg.js is no longer
-   loaded on this page.
+   Scroll-driven Three.js tunnel. Each ring frames a
+   real project screenshot. The falling-glyph matrix
+   effect used to live inside this scene as 3D
+   streak points; it's now index-matrix.js, a flat
+   2D layer behind this canvas — fully independent of
+   scroll, camera, and the rotation below.
 
    Requires index.html to load three.js (r128) before
    this file, and to define:
@@ -17,6 +16,31 @@
    No prefers-reduced-motion branch, by design — the
    scene always animates, the same "always running"
    call this site already makes for matrix-bg.js.
+
+   ROTATION — only the cards and their rings turn.
+   Each portal (2 torus rings + card plane + frame
+   line) lives in its own THREE.Group, spun locally
+   around its own z-axis. Nothing else — not the
+   camera, not the glow sprites, not the matrix layer
+   behind this canvas — rotates. (Glow/haze sprites
+   are Three.js Sprites, which always face the camera
+   regardless of object rotation, so keeping them
+   outside the group wouldn't change their look even
+   if they were inside it — they're kept outside for
+   clarity about what's actually spinning.)
+
+   SCROLL SNAP — the tunnel no longer free-scrolls.
+   Each wheel notch, swipe, or arrow/page key press
+   advances exactly one beat (hero -> case study 1 ->
+   case study 2 -> case study 3 -> contact), animated
+   with easing. Input is locked out while a transition
+   is in flight, so a fast scroll or flick can't skip
+   past a case study — the camera dolly and progress
+   bar are driven by the same animated position, so
+   the "flying through the tunnel" motion from the
+   original scroll-driven version is preserved, it's
+   just triggered one step at a time instead of by
+   raw scrollTop.
 ============================================= */
 (function () {
   var canvas = document.getElementById('pw-canvas');
@@ -40,7 +64,6 @@
 
   /* ---------- Palette, pulled from index.css tokens ---------- */
   var PERIWINKLE = 0x7A9CFF;
-  var LIME = 0x00FF00;
 
   /* ---------- Project data: real case studies, real screenshots ----------
      fit: 'cover' for photo screenshots, 'contain' for the Angels logo mark
@@ -54,6 +77,10 @@
   ];
 
   var ringZ = [-2, -20, -38, -56, -74];
+
+  // How fast each portal's card + rings spin, in radians/frame.
+  // 0.003 = "Fast" — a full local turn roughly every 35 sec at 60fps.
+  var ROTATION_SPEED = 0.003;
 
   /* ---------- Glow sprite: rim-light only, transparent center ---------- */
   function makeGlowSprite(color, size, intensity) {
@@ -136,6 +163,11 @@
     callback(new THREE.CanvasTexture(c));
   }
 
+  // Each portal's rings + card + frame live in their own THREE.Group so
+  // they can spin locally. Glow/haze sprites are added straight to the
+  // scene, outside any group — see the ROTATION note at the top of file.
+  var rotatingGroups = [];
+
   function buildPortal(i, z, project) {
     if (!project) {
       if (i === ringZ.length - 1) {
@@ -150,19 +182,24 @@
       return;
     }
 
+    var group = new THREE.Group();
+    group.position.z = z;
+    scene.add(group);
+    rotatingGroups.push(group);
+
     var torusGeo = new THREE.TorusGeometry(3.2, 0.045, 16, 64);
     var torusMat = new THREE.MeshBasicMaterial({ color: project.accent, transparent: true, opacity: 0.92 });
     var torus = new THREE.Mesh(torusGeo, torusMat);
-    torus.position.z = z;
-    scene.add(torus);
+    group.add(torus);
 
     var torus2 = new THREE.Mesh(
       new THREE.TorusGeometry(4.35, 0.015, 12, isMobile ? 40 : 64),
       new THREE.MeshBasicMaterial({ color: project.accent, transparent: true, opacity: 0.22 })
     );
-    torus2.position.z = z;
-    scene.add(torus2);
+    group.add(torus2);
 
+    // Glow stays centered on the portal but lives outside the rotating
+    // group — see the ROTATION note at the top of this file.
     var glow = makeGlowSprite(project.accent, 10.5, 0.42);
     glow.position.z = z;
     scene.add(glow);
@@ -186,113 +223,169 @@
       buildCardTexture(loadedImg, project.accent, project.fit, function (tex) {
         var planeMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
         var plane = new THREE.Mesh(planeGeo, planeMat);
-        plane.position.z = z;
-        scene.add(plane);
+        group.add(plane);
       });
     }
 
     var frameGeo = new THREE.EdgesGeometry(planeGeo);
     var frame = new THREE.LineSegments(frameGeo, new THREE.LineBasicMaterial({ color: project.accent, transparent: true, opacity: 0.5 }));
-    frame.position.z = z;
-    scene.add(frame);
+    group.add(frame);
   }
 
   ringZ.forEach(function (z, i) { buildPortal(i, z, PROJECTS[i]); });
 
-  /* ---------- Matrix rain, folded into the tunnel ----------
-     Same charset and color logic as matrix-bg.js (periwinkle,
-     ~10% rare lime), but reskinned as points streaming down the
-     tunnel toward the camera instead of a flat 2D backdrop. This
-     replaces matrix-bg.js entirely on this page — the falling
-     glyphs are now part of the 3D scene, not a separate canvas
-     sitting behind it. */
-  var GLYPHS = '01アイウエオカキクケコ.:#$%&'.split('');
-
-  function makeGlyphTexture() {
-    var c = document.createElement('canvas'); c.width = 64; c.height = 64;
-    var ctx = c.getContext('2d');
-    ctx.font = '700 44px monospace';
-    ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(GLYPHS[(Math.random() * GLYPHS.length) | 0], 32, 34);
-    return new THREE.CanvasTexture(c);
-  }
-
-  var streakCount = isMobile ? 180 : 520;
-  var streakGeo = new THREE.BufferGeometry();
-  var streakPos = new Float32Array(streakCount * 3);
-  var streakCol = new Float32Array(streakCount * 3);
-  var periColor = new THREE.Color(PERIWINKLE);
-  var limeColor = new THREE.Color(LIME);
-
-  for (var i = 0; i < streakCount; i++) {
-    streakPos[i * 3] = (Math.random() - 0.5) * 18;
-    streakPos[i * 3 + 1] = (Math.random() - 0.5) * 11;
-    streakPos[i * 3 + 2] = -Math.random() * 90;
-    var c3 = Math.random() < 0.1 ? limeColor : periColor;
-    streakCol[i * 3] = c3.r; streakCol[i * 3 + 1] = c3.g; streakCol[i * 3 + 2] = c3.b;
-  }
-  streakGeo.setAttribute('position', new THREE.BufferAttribute(streakPos, 3));
-  streakGeo.setAttribute('color', new THREE.BufferAttribute(streakCol, 3));
-
-  var streakMat = new THREE.PointsMaterial({
-    map: makeGlyphTexture(),
-    size: isMobile ? 0.34 : 0.4,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.7,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  });
-  var streaks = new THREE.Points(streakGeo, streakMat);
-  scene.add(streaks);
-
-  /* ---------- Scroll-driven camera dolly ----------
-     Same mechanism on every device: progress -> camera.position.z
-     and beat activation. Only render cost (particle count, AA,
-     pixel ratio, secondary ring segments) is reduced on mobile
-     above — the scroll behavior itself never branches by device. */
+  /* ---------- SCROLL SNAP NAVIGATION ----------
+     Replaces free scrolling with one-beat-at-a-time steps. The
+     camera dolly formula (progress -> camera.position.z / rotation.z)
+     and the progress bar are untouched from the original — they're
+     just driven by an animated position instead of raw scrollTop, so
+     a step still plays as a smooth flythrough, not a jump cut. */
   var beats = document.querySelectorAll('.pw-beat');
   var progressBar = document.getElementById('pw-progress');
   var track = document.querySelector('.pw-track');
 
-  function updateScroll() {
-    var scrollTop = window.scrollY;
-    var trackHeight = track.offsetHeight - window.innerHeight;
-    var progress = Math.min(1, Math.max(0, trackHeight > 0 ? scrollTop / trackHeight : 0));
+  var isAnimating = false;
+  var currentIndex = 0;
+
+  function trackScrollHeight() {
+    return Math.max(0, track.offsetHeight - window.innerHeight);
+  }
+
+  function beatScrollY(index) {
+    var trackHeight = trackScrollHeight();
+    if (beats.length <= 1 || trackHeight === 0) return 0;
+    return (index / (beats.length - 1)) * trackHeight;
+  }
+
+  function renderAtScrollY(y) {
+    var trackHeight = trackScrollHeight();
+    var progress = trackHeight > 0 ? Math.min(1, Math.max(0, y / trackHeight)) : 0;
     progressBar.style.width = (progress * 100) + '%';
 
     camera.position.z = 12 - progress * 86;
     camera.rotation.z = Math.sin(progress * Math.PI * 3) * 0.045;
 
-    var beatProgress = progress * (beats.length - 1);
-    var activeIndex = Math.round(beatProgress);
+    var activeIndex = Math.round(progress * (beats.length - 1));
     beats.forEach(function (b, i) { b.classList.toggle('is-active', i === activeIndex); });
   }
-  window.addEventListener('scroll', updateScroll, { passive: true });
-  updateScroll();
 
-  /* Recycle streak particles as they pass the camera so the rain
-     keeps flowing the whole way down the tunnel instead of thinning
-     out near the end of the scroll. */
-  function recycleStreaks() {
-    var pos = streakGeo.attributes.position.array;
-    var camZ = camera.position.z;
-    for (var j = 0; j < streakCount; j++) {
-      if (pos[j * 3 + 2] > camZ + 6) {
-        pos[j * 3] = (Math.random() - 0.5) * 18;
-        pos[j * 3 + 1] = (Math.random() - 0.5) * 11;
-        pos[j * 3 + 2] = camZ - 90 - Math.random() * 10;
-      }
-    }
-    streakGeo.attributes.position.needsUpdate = true;
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
 
+  function animateScrollTo(targetY, duration) {
+    isAnimating = true;
+    var startY = window.scrollY;
+    var startTime = null;
+
+    function step(ts) {
+      if (startTime === null) startTime = ts;
+      var elapsed = ts - startTime;
+      var t = Math.min(1, elapsed / duration);
+      var eased = easeInOutCubic(t);
+      var y = startY + (targetY - startY) * eased;
+
+      window.scrollTo({ top: y, left: 0, behavior: 'auto' });
+      renderAtScrollY(y);
+
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        isAnimating = false;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function goToBeat(index) {
+    index = Math.max(0, Math.min(beats.length - 1, index));
+    if (isAnimating) return;
+    if (index === currentIndex && Math.abs(window.scrollY - beatScrollY(index)) < 1) return;
+    currentIndex = index;
+    animateScrollTo(beatScrollY(index), 800);
+  }
+
+  // Wheel — one notch/flick = one beat, regardless of scroll speed.
+  window.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    if (isAnimating) return;
+    goToBeat(currentIndex + (e.deltaY > 0 ? 1 : -1));
+  }, { passive: false });
+
+  // Touch — one swipe past a small threshold = one beat.
+  var touchStartY = null;
+  window.addEventListener('touchstart', function (e) {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+  }, { passive: false });
+
+  window.addEventListener('touchend', function (e) {
+    if (touchStartY === null || isAnimating) { touchStartY = null; return; }
+    var deltaY = touchStartY - e.changedTouches[0].clientY;
+    touchStartY = null;
+    if (Math.abs(deltaY) < 40) return;
+    goToBeat(currentIndex + (deltaY > 0 ? 1 : -1));
+  }, { passive: true });
+
+  // Keyboard — arrows/page keys/space step one beat, Home/End jump to ends.
+  window.addEventListener('keydown', function (e) {
+    var navKeys = ['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' '];
+    if (navKeys.indexOf(e.key) === -1) return;
+    e.preventDefault();
+    if (isAnimating) return;
+    switch (e.key) {
+      case 'ArrowDown': case 'PageDown': case ' ':
+        goToBeat(currentIndex + 1); break;
+      case 'ArrowUp': case 'PageUp':
+        goToBeat(currentIndex - 1); break;
+      case 'Home':
+        goToBeat(0); break;
+      case 'End':
+        goToBeat(beats.length - 1); break;
+    }
+  });
+
+  // In-page links (nav "Work"/"Let's talk", hero "See the work") jump to
+  // a specific beat by id — route them through the same animated step
+  // instead of an instant native anchor jump, so the tunnel flythrough
+  // still plays even for a direct link.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#pw-beat-"]');
+    if (!a) return;
+    var target = document.getElementById(a.getAttribute('href').slice(1));
+    if (!target) return;
+    e.preventDefault();
+    var idx = Array.prototype.indexOf.call(beats, target);
+    if (idx > -1) goToBeat(idx);
+  });
+
+  window.addEventListener('resize', function () {
+    // Re-sync the visual position (bar/camera/active beat) to the
+    // current index on resize, since trackHeight can change.
+    renderAtScrollY(beatScrollY(currentIndex));
+  });
+
+  // Initial paint: figure out which beat we're on (e.g. a reload mid-
+  // scroll or a deep link) and snap cleanly to it without animating.
+  (function initScrollPosition() {
+    var trackHeight = trackScrollHeight();
+    var progress = trackHeight > 0 ? window.scrollY / trackHeight : 0;
+    currentIndex = Math.round(progress * (beats.length - 1));
+    var y = beatScrollY(currentIndex);
+    window.scrollTo({ top: y, left: 0, behavior: 'auto' });
+    renderAtScrollY(y);
+  })();
+
+  /* ---------- Render loop ----------
+     Only the per-portal groups (cards + rings) rotate. Camera,
+     glow/haze sprites, and the matrix layer behind this canvas are
+     untouched here. */
   function animate() {
     requestAnimationFrame(animate);
-    scene.rotation.z += 0.0005;
-    recycleStreaks();
+    rotatingGroups.forEach(function (g) { g.rotation.z += ROTATION_SPEED; });
     renderer.render(scene, camera);
   }
   animate();

@@ -917,23 +917,40 @@ footer {
    prefers-reduced-motion: the scene always animates, on every
    device, matching the "always running" precedent matrix-bg.js
    already set on this site.
+
+   Stacking note: #pw-matrix-bg (index-matrix.js) sits behind
+   #pw-canvas, which sits behind .pw-track. None of these can use
+   negative z-index here, because body has an opaque background
+   (see BASE above) — a negative-z-index box would paint *behind*
+   that opaque background and never be visible. So the layers are
+   ordered 0 / 1 / 2 instead, in DOM order, all >= 0.
    ============================================================ */
 
 .pw-body { overflow-x: hidden; }
+
+#pw-matrix-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
 
 #pw-canvas {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 0;
+  z-index: 1;
   display: block;
 }
 
 .pw-track {
   position: relative;
   height: 620vh;
-  z-index: 1;
+  z-index: 2;
 }
 
 .pw-beat {

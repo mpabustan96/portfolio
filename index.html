@@ -58,8 +58,14 @@
     </ul>
   </header>
 
-  <!-- 3D PORTAL WARP SCENE — replaces matrix-bg.js on this page; the
-       falling glyphs now live inside the tunnel itself (see index-3d.js) -->
+  <!-- BINARY MATRIX BACKGROUND — dedicated to this page, ported from
+       matrix-bg.js's own trail/fade/step technique but with a binary
+       (0/1) charset and its own script (index-matrix.js) so the shared
+       matrix-bg.js used on other pages is untouched. Sits behind the
+       3D canvas; independent of scroll/camera/rotation. -->
+  <canvas id="pw-matrix-bg" aria-hidden="true"></canvas>
+
+  <!-- 3D PORTAL WARP SCENE -->
   <canvas id="pw-canvas" aria-hidden="true"></canvas>
   <div id="pw-progress" aria-hidden="true"></div>
 
@@ -154,6 +160,7 @@
     <span class="footer-copy">© 2026 Mark Pabustan, UI/UX Designer</span>
   </footer>
 
+  <script src="index-matrix.js"></script>
   <script src="index-3d.js"></script>
 
   <script>
