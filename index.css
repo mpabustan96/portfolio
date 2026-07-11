@@ -1011,6 +1011,12 @@ footer {
 .pw-h1 em {
   font-style: italic;
   color: var(--periwinkle);
+}
+
+/* Pulse animation is intentionally scoped to the hero beat only —
+   "invisible" pulses to reinforce the line's meaning; "something good."
+   in the closing beat (#pw-beat-4) is styled the same but stays static. */
+#pw-beat-0 .pw-h1 em {
   animation: pulse-fade-dyn 6s ease-in-out infinite;
 }
 
