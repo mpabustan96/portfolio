@@ -76,7 +76,16 @@
     null
   ];
 
-  var ringZ = [-2, -20, -38, -56, -74];
+  // Ring z-positions for the 3 case-study portals + hero glow (index 0)
+  // and closing haze (index 4). The 3 case-study rings are spaced 21.5
+  // units apart — matching the camera's actual per-beat step (86 / 4
+  // beats = 21.5) — not the 18-unit spacing this array used to have.
+  // That mismatch used to compound every beat (camera outpacing the
+  // rings by 3.5 units each time), so by beat 3 (Bootcamp) the camera
+  // ended up only ~3.5 units from the ring instead of the ~10.5 units
+  // Counseling gets — a hard zoom that had nothing to do with Bootcamp
+  // itself. All 3 case-study rings now sit at the same camera distance.
+  var ringZ = [-2, -20, -41.5, -63, -74];
 
   // How fast each portal's card + rings spin, in radians/frame.
   // 0.003 = "Fast" — a full local turn roughly every 35 sec at 60fps.
