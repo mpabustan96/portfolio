@@ -997,3 +997,379 @@ img { max-width: 100%; display: block; }
   .merge-card { padding: var(--space-3); }
   .note, .placeholder { padding: var(--space-2); }
 }
+
+/* ============================================================
+   PROWL RIDE: 3D scroll scene addition (big-cat-rescue.html only)
+   Everything above this line is unchanged from the original
+   flat layout and is retained rather than deleted: the tokens,
+   fonts, header, .note/.note-label, .merge-block/.merge-card/
+   .merge-resolution, .subsection, .stat-grid, .findings-list,
+   .reflection-card/.closure-note, and .meta-item label/value
+   styles are all REUSED below instead of being reinvented, so
+   the ride reads as the same design system, just staged
+   differently. Rules below this line are additive and scoped
+   to the new ride-* classes; nothing above this line was
+   removed.
+
+   .seam-spine and its JS (updateSeam) are no longer used by
+   this page — the ride has no on-screen "where am I" progress
+   bar, matching the precedent counseling.css already set
+   (its old .section-rail was removed outright for the same
+   reason). The rule and markup are left in place rather than
+   deleted, since removing them is outside the scope of this
+   change; they simply have nothing to drive them once the
+   scroll listener below takes over.
+
+   By design, none of this is gated behind
+   prefers-reduced-motion: the scene always animates, matching
+   the same "always running" precedent matrix-bg.js and the
+   homepage's Portal Warp scene already set on this site.
+   ============================================================ */
+
+#ride-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+  touch-action: pan-y;
+}
+
+/* Site header/nav stay flat, normal DOM, above the canvas, same
+   relationship counseling's sticky nav has to its canvas. */
+.site-header { position: sticky; z-index: 80; }
+
+.ride-track {
+  position: relative;
+  /* Pre-JS fallback height for the desktop scene count. As in
+     counseling.css, big-cat-rescue-3d.js recalculates this in
+     real pixels from the actual visible scene count on load
+     (see syncTrackHeight), which is the real source of truth;
+     this value only matters for the instant before that runs. */
+  height: 1700vh;
+  z-index: 1;
+}
+
+/* ---------- Device-specific scene variants ----------
+   Research & Discovery, Define & Ideate, and Design Decisions
+   are dense enough that a single scroll stop can run long,
+   especially on a short phone screen. Each of those exists
+   twice in the DOM: once as a single desktop-width stop
+   (data-device="desktop") and once split into shorter mobile
+   stops (data-device="mobile") carrying the same text, just
+   divided. Only one variant is ever visible at a time;
+   big-cat-rescue-3d.js filters which one it treats as part of
+   the ride based on the same 760px breakpoint used throughout
+   this file. Shared stops (hero, meta, hook, problem, testing,
+   reflection intro, and the carousel) have no data-device
+   attribute and are simply always shown. */
+.ride-scene[data-device="mobile"] { display: none; }
+
+@media (max-width: 760px) {
+  .ride-scene[data-device="desktop"] { display: none; }
+  .ride-scene[data-device="mobile"] { display: flex; }
+
+  .ride-track {
+    /* Mobile has more stops than desktop (the dense stops above
+       are split). Same pre-JS-fallback caveat as the base rule. */
+    height: 2200vh;
+  }
+}
+
+.ride-scene {
+  /* Plain relative block, not sticky — see counseling.css's
+     identical rule for the full WebKit-reverse-scroll-defect
+     rationale; the opacity crossfade + scroll-snap + JS camera
+     dolly do all the real work already, so a sticky pin window
+     here would never actually hold. */
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 var(--space-3);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  scroll-snap-align: start;
+}
+
+.ride-scene.is-active {
+  opacity: 1;
+  /* pointer-events: auto intentionally left off here — see the
+     scoped rule below. Same empty-hit-area reasoning as
+     counseling.css: a flex box with pointer-events:auto is
+     hit-testable over its entire area, not just where visible
+     content sits, which would swallow taps meant for the 3D
+     carousel underneath. */
+}
+
+.ride-scene.is-active .ride-panel {
+  pointer-events: auto;
+}
+
+.ride-scene[data-carousel] {
+  align-items: flex-start;
+  padding-top: 6.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+.ride-panel {
+  max-width: 620px;
+  width: 100%;
+  background: rgba(58, 58, 38, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--olive);
+  border-radius: 18px;
+  padding: var(--space-4);
+  box-shadow: 0 30px 70px -30px rgba(20, 20, 12, 0.6);
+}
+
+.ride-panel.compact {
+  padding: var(--space-3) var(--space-4);
+  max-width: 460px;
+}
+
+.ride-panel p {
+  text-align: left;
+}
+
+.ride-panel p:last-child {
+  margin-bottom: 0;
+}
+
+.ride-panel .note,
+.ride-panel .placeholder {
+  text-align: left;
+  margin: var(--space-2) 0;
+}
+
+.ride-panel .subsection {
+  text-align: left;
+}
+
+.ride-panel .hook-line {
+  margin: 0;
+}
+
+.ride-panel .merge-block:first-child { margin-top: 0; }
+.ride-panel .merge-split::after { display: none; }
+.ride-panel .merge-resolution { margin-top: var(--space-2); }
+
+.ride-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mango);
+  margin-bottom: var(--space-2);
+}
+
+.ride-panel.compact .ride-eyebrow {
+  margin-bottom: 0.3rem;
+}
+
+.ride-hint {
+  margin-top: var(--space-2);
+  font-size: 0.78rem;
+  color: var(--silver-dim);
+  letter-spacing: 0.02em;
+  text-align: left;
+}
+
+.ride-panel.compact .ride-hint {
+  margin-top: 0.35rem;
+}
+
+.ride-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3) var(--space-4);
+  text-align: left;
+}
+
+/* ---------- carousel UI: front-and-center, always readable ---------- */
+.carousel-ui {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ride-scene[data-carousel].is-active .carousel-ui {
+  display: flex;
+}
+
+.carousel-caption {
+  background: rgba(58, 58, 38, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--olive);
+  border-radius: 12px;
+  padding: 0.85rem 1.4rem;
+  font-size: 0.85rem;
+  color: var(--silver);
+  max-width: min(90vw, 440px);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.carousel-caption strong {
+  color: var(--sand);
+  display: block;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.carousel-caption-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.carousel-back {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--mango);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: none;
+}
+
+.carousel-back.is-visible {
+  display: inline-block;
+}
+
+.carousel-expand {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--mango);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.carousel-expand:hover,
+.carousel-expand:focus-visible,
+.carousel-back:hover,
+.carousel-back:focus-visible {
+  color: var(--sand);
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  pointer-events: auto;
+}
+
+.carousel-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--mango);
+  background: rgba(58, 58, 38, 0.9);
+  color: var(--mango);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--olive-soft);
+  transform: scale(1.06);
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--olive);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.carousel-dot.is-active {
+  background: var(--mango);
+  width: 22px;
+  border-radius: 5px;
+  transition: width 0.2s ease;
+}
+
+/* project-nav and site-footer sit as normal flowing DOM directly
+   after .ride-track, the same relationship counseling's footer
+   has to its .ride-track: they simply appear once the last
+   sticky ride scene releases at the end of the scroll. Both
+   already carry position:relative + z-index in the base rules
+   above this block, so no changes are needed here. */
+
+/* ============================================================
+   RESPONSIVE : Prowl Ride
+   ============================================================ */
+@media (max-width: 760px) {
+  .ride-panel { padding: var(--space-3); border-radius: 14px; }
+  .ride-panel.compact { padding: var(--space-2) var(--space-3); }
+  .ride-meta-grid { grid-template-columns: 1fr; gap: var(--space-2); }
+  .carousel-controls { gap: var(--space-2); }
+  .carousel-arrow { width: 40px; height: 40px; }
+}
+
+@media (max-width: 480px) {
+  .ride-scene { padding: 0 var(--space-2); }
+  .ride-scene[data-carousel] { padding-top: 5.5rem; }
+  .ride-panel h1 { font-size: clamp(1.6rem, 9vw, 2.1rem); }
+  .carousel-caption { padding: 0.65rem 1rem; font-size: 0.8rem; }
+}
+
+/* ---------- Short / landscape mobile viewports ----------
+   Same reasoning as counseling.css's identical rule: each
+   .ride-scene is a fixed 100vh slot, and the text-heavier
+   panels can run taller than a landscape phone viewport. This
+   caps the panel to the viewport and turns on its own internal
+   scroll instead, so a touch drag inside a tall panel scrolls
+   its text first before falling through to the outer ride
+   scroll. touch-action is scoped to the panel only, so it
+   doesn't interfere with the carousel's own swipe handling. */
+@media (max-height: 500px) {
+  .ride-panel {
+    max-height: 92vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+  .ride-scene { align-items: center; }
+  .ride-scene[data-carousel] { padding-top: 1rem; }
+  .ride-panel h1 { font-size: clamp(1.4rem, 5vw, 1.8rem); }
+}
