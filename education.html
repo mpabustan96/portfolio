@@ -6,7 +6,7 @@
   <title>Bootcamp Projects, Mark Pabustan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Cabin:wght@400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="education.css" />
 
   <!-- Favicon (theme-adaptive) -->
@@ -33,9 +33,6 @@
 
   <a href="#main" class="skip-link">Skip to main content</a>
 
-  <div class="chalkboard-frame">
-
-  <!-- NAV -->
   <header>
     <nav class="nav" aria-label="Primary">
       <a href="index.html" class="nav-logo"><img src="images/logo-white.png" alt="Mark Pabustan, home" width="194" height="114"></a>
@@ -59,89 +56,113 @@
 
   <main id="main" class="page">
 
-    <a href="index.html" class="subpage-back load-in" style="--d: 0.05s">
+    <a href="index.html" class="subpage-back">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.5 7h-9M5 2.5L0.5 7 5 11.5"/></svg>
       All work
     </a>
 
-    <!-- SUB-PAGE HERO -->
-    <section class="subpage-hero" aria-labelledby="edu-heading">
-      <div class="glow glow-hero" aria-hidden="true"></div>
-      <p class="subpage-eyebrow load-in" style="--d: 0.1s">Bootcamp &amp; coursework</p>
-      <h1 id="edu-heading" class="load-in" style="--d: 0.2s">Every skill has a <em>first draft.</em></h1>
-      <p class="subpage-lede load-in" style="--d: 0.3s">Projects from the Google UX Design Certificate and Columbia Engineering's UI/UX Bootcamp. Design isn't learned by studying it. It's learned by doing it badly, then understanding why.</p>
+    <section class="bp-intro">
+      <p class="bp-eyebrow">Bootcamp &amp; coursework</p>
+      <h1>Every skill has a <em>first draft.</em></h1>
+      <p>Three projects from the Google UX Design Certificate and Columbia Engineering's UI/UX Bootcamp, laid out like drafting sheets. Scroll through them below.</p>
+      <p class="bp-hint">scroll inside the box below to move through the sheets <span class="arrow">→</span></p>
     </section>
 
-    <!-- PROJECT GRID -->
-    <section aria-label="Bootcamp projects">
-      <div class="edu-grid">
+    <section class="bp-viewport" id="bpViewport" aria-label="Bootcamp project sheets">
+      <div class="bp-float a" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="#6FE3FF" stroke-width="1.2"><circle cx="20" cy="20" r="17"/><path d="M20 3v6M20 31v6M3 20h6M31 20h6"/></svg></div>
+      <div class="bp-float b" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="#FFB454" stroke-width="1.2"><rect x="6" y="6" width="28" height="28" rx="2"/><path d="M6 6l28 28M34 6L6 34"/></svg></div>
+      <div class="bp-float c" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="#6FE3FF" stroke-width="1.4"><path d="M20 4l16 28H4z"/></svg></div>
+      <div class="bp-scan" aria-hidden="true"></div>
 
-        <a href="big-cat-rescue.html" class="edu-card reveal">
-          <div class="edu-card-image has-image">
-            <img src="images/big-cat-rescue-hifi.png" alt="High-fidelity desktop mockup of the Big Cat Rescue homepage redesign, with a forest-and-tiger hero image and styled mission section">
-          </div>
-          <div class="edu-card-text">
-            <span class="edu-program">Team Project, Bootcamp</span>
-            <h3>Big Cat Rescue</h3>
-            <p>A four-person redesign of a sanctuary's donor website: full site map, research-backed donation flow, and a hard-won lesson in compromise.</p>
-            <span class="work-link">
-              View case study
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </div>
-        </a>
+      <div class="bp-scroll" id="bpScroll">
+        <div class="bp-track" id="bpTrack">
+          <div class="bp-stage">
+            <div class="bp-rail" id="bpRail">
 
-        <a href="ui-ux-nest.html" class="edu-card reveal">
-          <div class="edu-card-image has-image">
-            <img src="images/ui-ux-nest-card.png" alt="UI/UX Nest homepage showing the UIX Nest logo, a hero graphic with colorful directional arrows and the letters UI/UX, and a blue Who We Are section below">
-          </div>
-          <div class="edu-card-text">
-            <span class="edu-program">Final Team Project, Bootcamp</span>
-            <h3>UI/UX Nest</h3>
-            <p>A learning platform for aspiring UI/UX designers built by a four-person team, where the design challenge was scope, not screens.</p>
-            <span class="work-link">
-              View case study
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </div>
-        </a>
+              <article class="bp-sheet" data-index="0">
+                <span class="reg-mark tl"></span><span class="reg-mark tr"></span><span class="reg-mark bl"></span><span class="reg-mark br"></span>
+                <div class="bp-sheet-head">
+                  <span class="bp-dwg-no">DWG NO. <b>001</b></span>
+                  <span class="bp-scale">SCALE 1:1</span>
+                </div>
+                <h3>Big Cat Rescue</h3>
+                <div class="bp-frame">
+                  <img src="images/big-cat-rescue-hifi.png" alt="High-fidelity desktop mockup of the Big Cat Rescue homepage redesign, with a forest-and-tiger hero image and styled mission section" loading="lazy">
+                </div>
+                <p class="bp-desc">A four-person redesign of a sanctuary's donor website: full site map, research-backed donation flow, and a hard-won lesson in compromise.</p>
+                <div class="bp-specs">
+                  <div><span class="k">Role</span><span class="v">1 of 4</span></div>
+                  <div><span class="k">Team</span><span class="v">4</span></div>
+                  <div><span class="k">Status</span><span class="v">Prototype</span></div>
+                </div>
+                <a href="big-cat-rescue.html" class="bp-open">Open case study →</a>
+              </article>
 
-        <a href="chiron.html" class="edu-card reveal">
-          <div class="edu-card-image has-image">
-            <img src="images/chiron-card.svg" alt="Chiron fitness app — dark navy card with the italic Chiron wordmark and a bronze target reticle graphic, representing the app's 'Take Aim And Shoot For Your Goals' identity">
-          </div>
-          <div class="edu-card-text">
-            <span class="edu-program">First Team Project, Bootcamp</span>
-            <h3>Chiron</h3>
-            <p>A fitness app that pairs workout tracking with diet planning, built by a four-person team on their first project — and the quieter story of mentoring three teammates through a process while building one.</p>
-            <span class="work-link">
-              View case study
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
-          </div>
-        </a>
+              <article class="bp-sheet" data-index="1">
+                <span class="reg-mark tl"></span><span class="reg-mark tr"></span><span class="reg-mark bl"></span><span class="reg-mark br"></span>
+                <div class="bp-sheet-head">
+                  <span class="bp-dwg-no">DWG NO. <b>002</b></span>
+                  <span class="bp-scale">SCALE 1:1</span>
+                </div>
+                <h3>UI/UX Nest</h3>
+                <div class="bp-frame">
+                  <img src="images/ui-ux-nest-card.png" alt="UI/UX Nest homepage showing the UIX Nest logo, a hero graphic with colorful directional arrows and the letters UI/UX, and a blue Who We Are section below" loading="lazy">
+                </div>
+                <p class="bp-desc">A learning platform for aspiring UI/UX designers built by a four-person team, where the design challenge was scope, not screens.</p>
+                <div class="bp-specs">
+                  <div><span class="k">Role</span><span class="v">Team lead</span></div>
+                  <div><span class="k">Team</span><span class="v">4</span></div>
+                  <div><span class="k">Status</span><span class="v">Coded</span></div>
+                </div>
+                <a href="ui-ux-nest.html" class="bp-open">Open case study →</a>
+              </article>
 
+              <article class="bp-sheet" data-index="2">
+                <span class="reg-mark tl"></span><span class="reg-mark tr"></span><span class="reg-mark bl"></span><span class="reg-mark br"></span>
+                <div class="bp-sheet-head">
+                  <span class="bp-dwg-no">DWG NO. <b>003</b></span>
+                  <span class="bp-scale">SCALE 1:1</span>
+                </div>
+                <h3>Chiron</h3>
+                <div class="bp-frame contain">
+                  <img src="images/chiron-card.svg" alt="Chiron fitness app — dark navy card with the italic Chiron wordmark and a bronze target reticle graphic, representing the app's 'Take Aim And Shoot For Your Goals' identity" loading="lazy">
+                </div>
+                <p class="bp-desc">A fitness app that pairs workout tracking with diet planning, built by a four-person team on their first project.</p>
+                <div class="bp-specs">
+                  <div><span class="k">Role</span><span class="v">1 of 4</span></div>
+                  <div><span class="k">Team</span><span class="v">4</span></div>
+                  <div><span class="k">Status</span><span class="v">Prototype</span></div>
+                </div>
+                <a href="chiron.html" class="bp-open">Open case study →</a>
+              </article>
+
+            </div>
+          </div>
+          <div class="bp-snap-cell" aria-hidden="true"></div>
+          <div class="bp-snap-cell" aria-hidden="true"></div>
+        </div>
       </div>
     </section>
 
+    <div class="bp-progress-row">
+      <span class="bp-counter" id="bpCounter">SHEET <b>01</b> / 03</span>
+      <div class="bp-progress-track"><div class="bp-progress-fill" id="bpFill"></div></div>
+    </div>
+
   </main>
 
-  <!-- FOOTER -->
   <footer>
     <span class="footer-logo">Mark<span>.</span></span>
     <span class="footer-copy">© 2026 Mark Pabustan, UI/UX Designer</span>
   </footer>
 
-  </div>
-
   <script>
+    /* ── Mobile nav toggle ── */
     const navToggle = document.getElementById('nav-toggle');
     const mobileNav = document.getElementById('nav-links-mobile');
 
-    // Keep the mobile dropdown pinned directly under the sticky nav,
-    // measuring its real height since it can wrap on small screens.
     function updateMobileNavOffset() {
-      const headerEl = document.querySelector('.nav') || document.querySelector('.site-header');
+      const headerEl = document.querySelector('.nav');
       if (headerEl) {
         document.documentElement.style.setProperty('--mobile-nav-offset', headerEl.offsetHeight + 'px');
       }
@@ -165,25 +186,68 @@
       });
     });
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* ============================================================
+       SPEC SHEET COVERFLOW — self-contained 3D module. All math
+       below is driven by real, measured pixel values from the
+       scroll box itself (scrollEl.clientHeight / scrollTop), never
+       window.innerHeight or vh, so it can't be thrown off by
+       whatever height the surrounding page renders at.
 
-    if (!prefersReducedMotion) {
-      const revealEls = document.querySelectorAll('.reveal');
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            revealObserver.unobserve(entry.target);
-          }
+       Native CSS scroll-snap (see education.css: .bp-scroll,
+       .bp-stage, .bp-snap-cell) handles settling on each sheet;
+       this script only drives the continuous 3D transform and the
+       progress readout in between snap points.
+    ============================================================ */
+    (function () {
+      const scrollEl = document.getElementById('bpScroll');
+      const snapCells = Array.from(document.querySelectorAll('.bp-snap-cell'));
+      const sheets = Array.from(document.querySelectorAll('.bp-sheet'));
+      const fill = document.getElementById('bpFill');
+      const counter = document.getElementById('bpCounter');
+      const N = sheets.length;
+      const SPACING = 440; // px between sheet centers, fixed constant — no DOM measurement needed
+
+      let sectionHeight = 640;
+      function sizeSections() {
+        sectionHeight = scrollEl.clientHeight || 640;
+        snapCells.forEach(cell => { cell.style.height = sectionHeight + 'px'; });
+      }
+      sizeSections();
+      window.addEventListener('resize', sizeSections);
+
+      function render() {
+        const activeFloat = Math.min(N - 1, Math.max(0, scrollEl.scrollTop / sectionHeight));
+        const progress = N > 1 ? activeFloat / (N - 1) : 0;
+
+        sheets.forEach((sheet, i) => {
+          const delta = i - activeFloat;
+          const rot = Math.max(-42, Math.min(42, delta * -34));
+          const z = -Math.abs(delta) * 150;
+          const x = delta * SPACING * 0.62;
+          const scale = Math.max(0.72, 1 - Math.abs(delta) * 0.16);
+          const opacity = Math.max(0.22, 1 - Math.abs(delta) * 0.45);
+          sheet.style.transform = 'translateX(' + x + 'px) rotateY(' + rot + 'deg) translateZ(' + z + 'px) scale(' + scale + ')';
+          sheet.style.opacity = opacity;
+          sheet.style.zIndex = String(1000 - Math.round(Math.abs(delta) * 10));
+          sheet.style.pointerEvents = Math.abs(delta) < 0.5 ? 'auto' : 'none';
         });
-      }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
 
-      revealEls.forEach(el => revealObserver.observe(el));
-    } else {
-      document.querySelectorAll('.reveal, .load-in').forEach(el => {
-        el.classList.add('is-visible');
-      });
-    }
+        fill.style.width = (progress * 100) + '%';
+        const activeIndex = Math.min(N - 1, Math.round(activeFloat));
+        counter.innerHTML = 'SHEET <b>' + String(activeIndex + 1).padStart(2, '0') + '</b> / ' + String(N).padStart(2, '0');
+      }
+
+      scrollEl.addEventListener('scroll', render, { passive: true });
+      window.addEventListener('resize', render);
+      render();
+
+      /* mouse wheel anywhere over the viewport scrolls the box, even if the
+         cursor is over a sheet rather than the scrollbar itself. Native
+         scroll-snap still takes over once the wheel gesture settles. */
+      document.getElementById('bpViewport').addEventListener('wheel', function (e) {
+        scrollEl.scrollTop += e.deltaY;
+      }, { passive: true });
+    })();
   </script>
 
 </body>
