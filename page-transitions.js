@@ -20,9 +20,19 @@
      open back out again as the panel clears, handing
      off directly into the Portal Warp scene's own
      opening beat instead of clashing with it. This is
-     the one exception below.
-   - Landing on another HUB page (about.html,
-     education.html, from anywhere) plays
+     one of two exceptions below.
+   - Landing on education.html specifically plays
+     GRID WIPE: a single blueprint-grid panel slides
+     in from the left to cover the page you're leaving,
+     holds briefly once fully covered, then continues
+     sliding in the SAME direction — off to the right —
+     as the new page loads. Exit and entrance share one
+     duration and easing curve, so it reads as one
+     continuous left-to-right sweep across the real
+     navigation, not a close-then-reopen. This is the
+     second exception.
+   - Landing on the remaining HUB page (about.html,
+     from anywhere) plays
      DATA CASCADE: a bank of vertical bars sweeps
      closed in a stagger, then lifts away in reverse,
      same structure the old Shutter Slats used — but
@@ -43,8 +53,8 @@
      color pulled from the destination), different
      mechanic (decrypt instead of a sweeping panel).
      This still plays when leaving index.html for a
-     case study — only entering index.html itself is
-     the exception.
+     case study — only entering index.html or
+     education.html is an exception.
    - The covering fill always matches the
      DESTINATION page's own theme colors (and, for
      Decrypt Flicker, its own typeface).
@@ -75,7 +85,10 @@
   var PAGES = {
     'index.html':     { type: 'hub', bg: '#0A0C12', accent: '#7A9CFF', name: 'Home' },
     'about.html':     { type: 'hub', bg: '#080E1C', accent: '#0052D6', name: 'About' },
-    'education.html': { type: 'hub', bg: '#1E3A2D', accent: '#F2EFE3', name: 'Bootcamp Projects' },
+    // Placeholder blueprint palette for the education page rebuild —
+    // navy + cyan, matching the Grid Wipe previews. Swap these for the
+    // page's real tokens once education.html is built.
+    'education.html': { type: 'hub', bg: '#0A2440', accent: '#8ECFFF', name: 'Bootcamp Projects' },
 
     'chiron.html': {
       type: 'case', bg: '#14171F', accent: '#C58A3F', name: 'Chiron',
@@ -140,6 +153,18 @@
   // the "percentage/viewport based" rule the rest of this file follows.
   var IRIS_RING1_VMIN = 34;
   var IRIS_RING2_VMIN = 46;
+
+  // Grid Wipe timing — exit and entrance intentionally share the SAME
+  // duration and easing (GRID_SWEEP_MS), because this effect is one
+  // continuous slide rather than a symmetric close/open. GRID_PAUSE_MS
+  // is the only stop in the whole motion — the brief hold once the wipe
+  // has fully covered the leaving page, right as the new page loads
+  // in behind it, before the sweep continues off to the right.
+  var GRID_SWEEP_MS = 620;
+  var GRID_PAUSE_MS = 140;
+  // Grid cell size in vmin (not px), for the same mobile/desktop
+  // parity reason as the iris rings above.
+  var GRID_CELL_VMIN = 4;
 
   function filename(pathOrHref) {
     var clean = pathOrHref.replace(/[?#].*$/, '');
@@ -385,6 +410,73 @@
     }, IRIS_PAUSE_MS);
   }
 
+  /* ---------- GRID WIPE ----------
+     education.html's own exception, and the one effect in this file
+     that is NOT a symmetric close/open. A single blueprint-grid panel
+     starts off-screen to the left, slides to translateX(0) to cover
+     the page you're leaving (exit), then — after one short pause —
+     continues in the SAME direction to translateX(100%), sliding
+     fully off-screen to the right (entrance). Same duration, same
+     easing curve, both phases: the two halves compose into one
+     continuous sweep across the real navigation instead of reading
+     as two separate animations. Bright edges on both sides of the
+     panel act as the scan line, whichever edge is actively leading
+     at that moment. */
+
+  function buildGridPanel(theme) {
+    var wrap = overlayShell();
+
+    var panel = document.createElement('div');
+    panel.style.cssText =
+      'position:absolute; inset:0; background:' + theme.bg + ';' +
+      'background-image:' +
+        'linear-gradient(' + theme.accent + '55 1px, transparent 1px),' +
+        'linear-gradient(90deg, ' + theme.accent + '55 1px, transparent 1px);' +
+      'background-size:' + GRID_CELL_VMIN + 'vmin ' + GRID_CELL_VMIN + 'vmin;' +
+      'transform:translateX(-100%);';
+
+    var edgeL = document.createElement('div');
+    edgeL.style.cssText =
+      'position:absolute; top:0; bottom:0; left:0; width:2px;' +
+      'background:linear-gradient(' + theme.accent + ', #FFFFFF);' +
+      'box-shadow:0 0 12px 2px ' + theme.accent + ';';
+
+    var edgeR = document.createElement('div');
+    edgeR.style.cssText =
+      'position:absolute; top:0; bottom:0; right:0; width:2px;' +
+      'background:linear-gradient(' + theme.accent + ', #FFFFFF);' +
+      'box-shadow:0 0 12px 2px ' + theme.accent + ';';
+
+    panel.appendChild(edgeL);
+    panel.appendChild(edgeR);
+    wrap.appendChild(panel);
+
+    return { wrap: wrap, panel: panel };
+  }
+
+  function playGridExit(theme, href) {
+    var s = buildGridPanel(theme);
+
+    requestAnimationFrame(function () {
+      ease(s.panel, GRID_SWEEP_MS);
+      s.panel.style.transform = 'translateX(0)';
+    });
+
+    setTimeout(function () { window.location.href = href; }, GRID_SWEEP_MS);
+  }
+
+  function playGridEntrance(theme) {
+    var s = buildGridPanel(theme);
+    s.panel.style.transform = 'translateX(0)';
+    void s.wrap.offsetHeight;
+
+    setTimeout(function () {
+      ease(s.panel, GRID_SWEEP_MS);
+      s.panel.style.transform = 'translateX(100%)';
+      setTimeout(function () { s.wrap.remove(); }, GRID_SWEEP_MS + 60);
+    }, GRID_PAUSE_MS);
+  }
+
   /* ---------- DECRYPT FLICKER ----------
      Replaces the old diagonal Signature Stroke. A full-cover
      panel in the DESTINATION'S own background fades in, a
@@ -520,13 +612,14 @@
   }
 
   /* ---------- PLAN RESOLUTION ----------
-     'iris' is the homepage's own exception: landing on index.html
-     plays Portal Iris Close instead of Data Cascade or Decrypt
-     Flicker, so the cover directly foreshadows the Portal Warp
-     scene's own rings rather than clashing with them. */
+     'iris' and 'grid' are the two homepage-style exceptions:
+     index.html plays Portal Iris Close, education.html plays Grid
+     Wipe. Every other hub page and every case study still resolve by
+     type alone. */
 
   function resolvePlan(originName, destName) {
     if (destName === 'index.html') return { type: 'iris' };
+    if (destName === 'education.html') return { type: 'grid' };
     var dest = pageInfo(destName);
     return { type: dest.type === 'case' ? 'decrypt' : 'cascade' };
   }
@@ -534,6 +627,8 @@
   function playExit(plan, destTheme, destName, href) {
     if (plan.type === 'iris') {
       playIrisExit(destTheme, href);
+    } else if (plan.type === 'grid') {
+      playGridExit(destTheme, href);
     } else if (plan.type === 'decrypt') {
       playDecryptExit(destTheme, pageInfo(destName).name, href);
     } else {
@@ -548,6 +643,8 @@
       playDecryptEntrance(theme, theme.name);
     } else if (state.type === 'iris') {
       playIrisEntrance(theme);
+    } else if (state.type === 'grid') {
+      playGridEntrance(theme);
     } else {
       playCascadeEntrance(theme);
     }
