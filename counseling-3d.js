@@ -234,6 +234,57 @@
   if (nextBtn) nextBtn.addEventListener('click', nextShot);
   if (backBtn) backBtn.addEventListener('click', function () { zoomed = false; updateCaption(); });
 
+  /* ---------- lightbox: real full-resolution view ----------
+     Distinct from the 3D "zoomed" state above, which just enlarges
+     the centered screen in place within the Harbor Ride scene. This
+     opens an actual DOM overlay with the untouched source image
+     (same file the carousel already loaded for its texture, see the
+     shots array), a dimmed backdrop, and a close button — reusing
+     the .lightbox styles already defined in counseling.css. Page
+     scroll is frozen while it's open, both because the scene's
+     scroll-driven camera has no business moving behind an open
+     overlay, and to stop the mandatory CSS snap from fighting the
+     frozen background. */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxClose = document.getElementById('lightboxClose');
+  var expandBtn = document.getElementById('carouselExpand');
+  var lightboxOpen = false;
+  var scrollLockY = 0;
+
+  function openLightbox() {
+    if (!lightbox || !lightboxImg) return;
+    var s = shots[centerIndex];
+    lightboxImg.src = s.file;
+    lightboxImg.alt = s.label + ' — full-size screenshot';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    lightboxOpen = true;
+    scrollLockY = window.scrollY;
+    document.documentElement.style.overflow = 'hidden';
+    if (lightboxClose) lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxOpen = false;
+    document.documentElement.style.overflow = '';
+    window.scrollTo(0, scrollLockY);
+    if (expandBtn) expandBtn.focus();
+  }
+
+  if (expandBtn) expandBtn.addEventListener('click', openLightbox);
+  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+  if (lightbox) {
+    // Click on the dimmed backdrop closes it; click on the image
+    // itself (a child of .lightbox) does not, via the target check.
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+  }
+
   /* ---------- scroll -> camera dolly + active-scene toggling ----------
      Same mechanism as the homepage's pw-beat activation: progress maps
      to camera.position.z, and the nearest scene's DOM panel gets
@@ -252,8 +303,12 @@
      itself produces) picks it up through the normal path. */
   var railItems = Array.prototype.slice.call(document.querySelectorAll('.rail-item'));
   function updateRail(idx) {
-    railItems.forEach(function (li, i) {
-      var isActive = i === idx;
+    // Matched by data-index rather than array position — kept this
+    // way (rather than reverting to the old i === idx match) since
+    // it's equally correct with a single rail list and one less thing
+    // to break if a second nav element gets added again later.
+    railItems.forEach(function (li) {
+      var isActive = parseInt(li.getAttribute('data-index'), 10) === idx;
       li.classList.toggle('is-active', isActive);
       var btn = li.querySelector('.rail-btn');
       if (btn) btn.setAttribute('aria-current', isActive ? 'true' : 'false');
@@ -294,6 +349,20 @@
   window.addEventListener('scroll', updateScroll, { passive: true });
   camera.userData.targetZ = sceneZ[0];
 
+  /* ---------- snap-to-nearest-scene on scroll settle ----------
+     Runs at every screen size now, matching the mandatory CSS snap
+     in counseling.css. Once scrolling stops for a beat, animate to
+     the exact scrollY goToScene(idx) would use for the nearest
+     scene — the same position the rail's own click-to-jump already
+     lands on — so the page always settles fully centered instead of
+     holding mid-scene. */
+  var snapTimer = null;
+  function scheduleSnap() {
+    clearTimeout(snapTimer);
+    snapTimer = setTimeout(function () { goToScene(activeScene); }, 140);
+  }
+  window.addEventListener('scroll', scheduleSnap, { passive: true });
+
   /* ---------- swipe (touch only) + tap-to-zoom on the carousel ----------
      A touch drag that's clearly horizontal (more horizontal movement
      than vertical) cycles the carousel, same as the arrow buttons. A
@@ -315,7 +384,7 @@
 
   var dragStartX = 0, dragStartY = 0, dragging = false, dragDist = 0, dragIsTouch = false, activePointerId = null;
   canvas.addEventListener('pointerdown', function (e) {
-    if (activeScene !== carouselIndex) return;
+    if (activeScene !== carouselIndex || lightboxOpen) return;
     dragging = true; dragDist = 0;
     dragStartX = e.clientX; dragStartY = e.clientY;
     dragIsTouch = e.pointerType === 'touch';
@@ -340,7 +409,7 @@
     var wasTouch = dragIsTouch;
     var dist = dragDist;
     releasePointer();
-    if (activeScene !== carouselIndex) return;
+    if (activeScene !== carouselIndex || lightboxOpen) return;
     if (wasTouch && Math.abs(dx) > SWIPE_MIN_PX && Math.abs(dx) > Math.abs(dy) * SWIPE_DOMINANCE_RATIO) {
       dx < 0 ? nextShot() : prevShot();
     } else if (dist < TAP_MAX_DRAG_PX) {
@@ -377,7 +446,8 @@
      in view (these keys don't otherwise scroll the page, so this
      never interferes with normal keyboard scrolling elsewhere). */
   document.addEventListener('keydown', function (e) {
-    if (activeScene !== carouselIndex) return;
+    if (e.key === 'Escape' && lightboxOpen) { closeLightbox(); return; }
+    if (activeScene !== carouselIndex || lightboxOpen) return;
     if (e.key === 'ArrowLeft') { prevShot(); }
     else if (e.key === 'ArrowRight') { nextShot(); }
     else if (e.key === 'Enter' || e.key === ' ') {

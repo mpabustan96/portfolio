@@ -209,7 +209,13 @@
           <div class="carousel-caption">
             <strong id="captionTitle"></strong>
             <span id="captionBody"></span>
-            <br><button class="carousel-back" id="carouselBack" type="button">← Zoom out</button>
+            <div class="carousel-caption-actions">
+              <button class="carousel-back" id="carouselBack" type="button">← Zoom out</button>
+              <button class="carousel-expand" id="carouselExpand" type="button">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>
+                View full size
+              </button>
+            </div>
           </div>
           <div class="carousel-controls">
             <button class="carousel-arrow" id="carouselPrev" type="button" aria-label="Previous screen">
@@ -285,6 +291,21 @@
     });
   });
 </script>
+
+  <!-- Carousel image lightbox — full-resolution view of whichever
+       screenshot is centered, opened via the "View full size" button
+       in the carousel caption (see counseling-3d.js). Distinct from
+       the 3D "zoomed" state, which just enlarges the screen in place
+       within the Harbor Ride scene; this is a real overlay with the
+       untouched source image and a dimmed backdrop. Markup/classes
+       (.lightbox/.lightbox-img/.lightbox-close) reuse the styles
+       already defined in counseling.css. -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Full-size screenshot" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close full-size image">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </div>
 
   <!-- Harbor Ride scene: camera dolly, water, mist, buoys, and the
        screenshot carousel. Trust-fill progress and .ride-scene

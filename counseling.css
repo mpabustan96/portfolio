@@ -35,12 +35,14 @@
 
 html {
   scroll-behavior: smooth;
-  /* "proximity" (not "mandatory") on purpose — it nudges the scroll to
-     rest on a scene boundary when you're already close to one, but
-     won't fight fast scroll momentum or force a hard stop every notch.
-     Kept subtle so it doesn't compete with the carousel scene's own
-     touch-swipe handling. */
-  scroll-snap-type: y proximity;
+  /* Mandatory, on every screen size — always locks fully to the
+     nearest .ride-scene rather than just nudging near one. Paired
+     with the JS-driven settle-snap in counseling-3d.js (see
+     scheduleSnap), which actively re-centers after scroll stops,
+     since CSS scroll-snap against position:sticky targets is
+     inconsistent enough across browsers that CSS alone can't be
+     trusted to land dead-center. */
+  scroll-snap-type: y mandatory;
 }
 
 /* No prefers-reduced-motion override here, by design — matching every
@@ -1100,8 +1102,15 @@ img { max-width: 100%; display: block; }
   margin-bottom: 0.2rem;
 }
 
-.carousel-back {
+.carousel-caption-actions {
   margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.carousel-back {
   font-size: 0.76rem;
   font-weight: 700;
   color: var(--current);
@@ -1114,6 +1123,26 @@ img { max-width: 100%; display: block; }
 
 .carousel-back.is-visible {
   display: inline-block;
+}
+
+.carousel-expand {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--current);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.carousel-expand:hover,
+.carousel-expand:focus-visible,
+.carousel-back:hover,
+.carousel-back:focus-visible {
+  color: var(--harbor);
 }
 
 .carousel-controls {
@@ -1181,6 +1210,21 @@ img { max-width: 100%; display: block; }
   .ride-meta-grid { grid-template-columns: 1fr; gap: var(--space-2); }
   .carousel-controls { gap: var(--space-2); }
   .carousel-arrow { width: 40px; height: 40px; }
+
+  /* No progress indicator on mobile at all — the horizontal dot bar
+     that briefly replaced .trust-track/.section-rail here caused its
+     own problems, so mobile now relies on mandatory snap scroll
+     alone (see the base html rule above) with no on-screen "where am
+     I" UI. .trust-track and .section-rail stay hidden below rather
+     than reintroducing the original overlap they caused. */
+  .trust-track { display: none; }
+
+  /* Belt-and-suspenders: counseling-3d.js also actively re-centers
+     the nearest scene after scroll settles, since scroll-snap's
+     behavior against position:sticky targets is inconsistent enough
+     across mobile browsers that CSS alone can't be trusted to land
+     dead-center. See the base html rule above for the snap-type
+     itself, which now applies at every screen size. */
 }
 
 @media (max-width: 480px) {
@@ -1279,26 +1323,12 @@ img { max-width: 100%; display: block; }
 }
 
 @media (max-width: 760px) {
+  /* Was repositioned to the left edge with smaller labels here; the
+     vertical labeled rail was overlapping .ride-panel text on narrow
+     phones. A horizontal dot-bar replacement was tried and caused
+     its own issues, so mobile now has no section-jump nav at all —
+     just hidden here, relying on mandatory snap scroll instead. */
   .section-rail {
-    right: auto;
-    left: var(--space-1);
+    display: none;
   }
-  .rail-btn {
-    /* Flip back to normal row order so the dot sits nearest the
-       left edge on mobile, label reading off to the right. */
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 8px;
-    padding: 5px 8px;
-  }
-  .section-rail ol { gap: 3px; }
-  .rail-dot { width: 8px; height: 8px; }
-  .rail-item.is-active .rail-dot { box-shadow: 0 0 0 4px var(--seafoam-soft); }
-  .rail-label { font-size: 0.72rem; }
-}
-
-@media (max-width: 480px) {
-  .rail-label { font-size: 0.66rem; }
-  .rail-btn { padding: 4px 7px; gap: 7px; }
-  .section-rail ol { gap: 2px; }
 }
