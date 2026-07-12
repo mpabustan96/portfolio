@@ -243,6 +243,36 @@
   var progress = 0;
   var activeScene = 0;
 
+  /* ---------- section rail: alternate nav alongside the scroll ride ----------
+     Dots stay in sync with the same activeScene index updateScroll already
+     computes below; clicking one scrolls the page to that scene's position
+     by inverting the same progress -> scrollY math updateScroll uses. This
+     never touches camera.userData.targetZ directly — it just moves scrollY,
+     so the very next updateScroll() (fired by the scroll event the jump
+     itself produces) picks it up through the normal path. */
+  var railItems = Array.prototype.slice.call(document.querySelectorAll('.rail-item'));
+  function updateRail(idx) {
+    railItems.forEach(function (li, i) {
+      var isActive = i === idx;
+      li.classList.toggle('is-active', isActive);
+      var btn = li.querySelector('.rail-btn');
+      if (btn) btn.setAttribute('aria-current', isActive ? 'true' : 'false');
+    });
+  }
+  function goToScene(idx) {
+    var trackHeight = track.offsetHeight - window.innerHeight;
+    if (trackHeight <= 0) return;
+    var target = (idx / (sceneZ.length - 1)) * trackHeight;
+    window.scrollTo({ top: target, behavior: 'smooth' });
+  }
+  railItems.forEach(function (li) {
+    var btn = li.querySelector('.rail-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      goToScene(parseInt(btn.getAttribute('data-target'), 10));
+    });
+  });
+
   function updateScroll() {
     var trackHeight = track.offsetHeight - window.innerHeight;
     progress = Math.min(1, Math.max(0, trackHeight > 0 ? window.scrollY / trackHeight : 0));
@@ -257,6 +287,7 @@
     }
     activeScene = idx;
     sceneEls.forEach(function (el, i) { el.classList.toggle('is-active', i === idx); });
+    updateRail(idx);
 
     camera.userData.targetZ = sceneZ[0] - progress * (sceneZ[0] - sceneZ[sceneZ.length - 1]);
   }

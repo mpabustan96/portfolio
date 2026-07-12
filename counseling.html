@@ -37,6 +37,28 @@
 
   <canvas id="ride-canvas" aria-hidden="true"></canvas>
 
+  <!-- Section rail: alternate navigation to the Harbor Ride's own scroll
+       drive. Fixed to the right edge on desktop / left edge on mobile
+       (flipped via CSS), always visible with labels on, one row per
+       .ride-scene. Clicking a row scrolls the page to that scene's
+       position in .ride-track; the active row is kept in sync from
+       counseling-3d.js's own updateScroll, the same activeScene index
+       that already drives .is-active on the panels. -->
+  <nav class="section-rail" aria-label="Case study sections">
+    <ol>
+      <li class="rail-item" data-index="0"><button class="rail-btn" type="button" data-target="0"><span class="rail-dot"></span><span class="rail-label">Intro</span></button></li>
+      <li class="rail-item" data-index="1"><button class="rail-btn" type="button" data-target="1"><span class="rail-dot"></span><span class="rail-label">Overview</span></button></li>
+      <li class="rail-item" data-index="2"><button class="rail-btn" type="button" data-target="2"><span class="rail-dot"></span><span class="rail-label">Hook</span></button></li>
+      <li class="rail-item" data-index="3"><button class="rail-btn" type="button" data-target="3"><span class="rail-dot"></span><span class="rail-label">Problem</span></button></li>
+      <li class="rail-item" data-index="4"><button class="rail-btn" type="button" data-target="4"><span class="rail-dot"></span><span class="rail-label">Research</span></button></li>
+      <li class="rail-item" data-index="5"><button class="rail-btn" type="button" data-target="5"><span class="rail-dot"></span><span class="rail-label">Define</span></button></li>
+      <li class="rail-item" data-index="6"><button class="rail-btn" type="button" data-target="6"><span class="rail-dot"></span><span class="rail-label">Process</span></button></li>
+      <li class="rail-item" data-index="7"><button class="rail-btn" type="button" data-target="7"><span class="rail-dot"></span><span class="rail-label">Visuals</span></button></li>
+      <li class="rail-item" data-index="8"><button class="rail-btn" type="button" data-target="8"><span class="rail-dot"></span><span class="rail-label">Screens</span></button></li>
+      <li class="rail-item" data-index="9"><button class="rail-btn" type="button" data-target="9"><span class="rail-dot"></span><span class="rail-label">Results</span></button></li>
+    </ol>
+  </nav>
+
   <header class="site-header">
     <a href="index.html" class="logo"><img src="images/logo-black.png" alt="Mark Pabustan, home" width="195" height="114"></a>
     <nav aria-label="Primary">

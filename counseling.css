@@ -1190,3 +1190,115 @@ img { max-width: 100%; display: block; }
   .ride-panel h1 { font-size: clamp(1.7rem, 9vw, 2.3rem); }
   .carousel-caption { padding: 0.65rem 1rem; font-size: 0.8rem; }
 }
+
+/* ============================================================
+   SECTION RAIL: alternate navigation, alongside the scroll ride
+   Fixed and always visible regardless of which .ride-scene is
+   active — this is a jump-to index, not a replacement for the
+   scroll drive itself. Right edge on desktop, left edge on mobile
+   (the two media queries below swap side + row direction so the
+   dot always sits nearest the screen edge on either layout).
+   Labels stay on permanently rather than needing a hover, sized
+   to read comfortably at a glance. Reuses --harbor/--current/
+   --seafoam/--seafoam-soft/--line/--linen/--ink-quiet straight
+   from the root tokens above, same "same design system, staged
+   differently" rule the ride panels already follow.
+   ============================================================ */
+
+.section-rail {
+  position: fixed;
+  top: 50%;
+  right: var(--space-3);
+  left: auto;
+  transform: translateY(-50%);
+  z-index: 90;
+}
+
+.section-rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rail-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  /* Dot nearest the edge: label first in flow, dot last, so on the
+     right-edge desktop layout the dot naturally lands closest to
+     the screen edge. */
+  flex-direction: row-reverse;
+  gap: 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 7px 12px;
+  border-radius: 20px;
+  transition: background 0.2s ease;
+}
+
+.rail-btn:hover,
+.rail-btn:focus-visible {
+  background: var(--seafoam-soft);
+}
+
+.rail-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+  flex-shrink: 0;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.rail-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-quiet);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.rail-item.is-active .rail-dot {
+  background: var(--harbor);
+  transform: scale(1.3);
+  box-shadow: 0 0 0 5px var(--seafoam-soft);
+}
+
+.rail-item.is-active .rail-label {
+  color: var(--harbor);
+  font-weight: 700;
+}
+
+.rail-item.is-active .rail-btn {
+  background: var(--linen);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+@media (max-width: 760px) {
+  .section-rail {
+    right: auto;
+    left: var(--space-1);
+  }
+  .rail-btn {
+    /* Flip back to normal row order so the dot sits nearest the
+       left edge on mobile, label reading off to the right. */
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 5px 8px;
+  }
+  .section-rail ol { gap: 3px; }
+  .rail-dot { width: 8px; height: 8px; }
+  .rail-item.is-active .rail-dot { box-shadow: 0 0 0 4px var(--seafoam-soft); }
+  .rail-label { font-size: 0.72rem; }
+}
+
+@media (max-width: 480px) {
+  .rail-label { font-size: 0.66rem; }
+  .rail-btn { padding: 4px 7px; gap: 7px; }
+  .section-rail ol { gap: 2px; }
+}
