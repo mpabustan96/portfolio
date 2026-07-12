@@ -81,6 +81,13 @@ img { max-width: 100%; display: block; }
 /* ---------- Trust progress indicator ---------- */
 
 .trust-track {
+  /* Desktop-only by default now: hidden here, then explicitly
+     re-enabled for desktop widths only, in the min-width query near
+     the Harbor Ride responsive rules below. Previously this was only
+     hidden below 760px, so tablet-width viewports (e.g. iPad
+     portrait) still showed it; now anything short of a real desktop
+     viewport hides it. */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -1204,20 +1211,31 @@ img { max-width: 100%; display: block; }
    RESPONSIVE : Harbor Ride
    ============================================================ */
 @media (max-width: 760px) {
-  .ride-track { height: 866.7vh; } /* was 780vh for 9 scenes, scaled for the new 10th scene */
+  /* No height override here anymore — this used to hand-calculate a
+     scaled vh value (866.7vh) that fell out of sync when the 10th
+     scene was added, leaving .ride-track ~130vh shorter than the
+     100vh-per-scene content it actually contains. Since .ride-scene
+     stays 100vh at every breakpoint, the base rule's `height: 1000vh`
+     (10 scenes x 100vh) is already correct here too, so it's left to
+     inherit rather than re-declared and risk drifting again. The JS
+     in counseling-3d.js also now sets this height directly in pixels
+     from the real scene count on load/resize, which is the actual
+     source of truth and additionally sidesteps mobile browsers'
+     100vh-includes-the-address-bar quirk; this CSS value only matters
+     as a pre-JS fallback. */
   .ride-panel { padding: var(--space-3); border-radius: 14px; }
   .ride-panel.compact { padding: var(--space-2) var(--space-3); }
   .ride-meta-grid { grid-template-columns: 1fr; gap: var(--space-2); }
   .carousel-controls { gap: var(--space-2); }
   .carousel-arrow { width: 40px; height: 40px; }
 
-  /* No progress indicator on mobile at all — the horizontal dot bar
+  /* No progress indicator on mobile or tablet — the horizontal dot bar
      that briefly replaced .trust-track/.section-rail here caused its
-     own problems, so mobile now relies on mandatory snap scroll
-     alone (see the base html rule above) with no on-screen "where am
-     I" UI. .trust-track and .section-rail stay hidden below rather
-     than reintroducing the original overlap they caused. */
-  .trust-track { display: none; }
+     own problems, so anything short of desktop now relies on mandatory
+     snap scroll alone (see the base html rule above) with no on-screen
+     "where am I" UI. .trust-track is hidden by default (see its base
+     rule) and only re-enabled at a genuine desktop width further down;
+     .section-rail is hidden directly below. */
 
   /* Belt-and-suspenders: counseling-3d.js also actively re-centers
      the nearest scene after scroll settles, since scroll-snap's
@@ -1228,11 +1246,22 @@ img { max-width: 100%; display: block; }
 }
 
 @media (max-width: 480px) {
-  .ride-track { height: 800vh; } /* was 720vh for 9 scenes, scaled for the new 10th scene */
+  /* Same fix as the 760px breakpoint above: no more hand-calculated
+     override, inherits the correct 1000vh base value / the JS-set
+     pixel height. */
   .ride-scene { padding: 0 var(--space-2); }
   .ride-scene[data-carousel] { padding-top: 5.5rem; }
   .ride-panel h1 { font-size: clamp(1.7rem, 9vw, 2.3rem); }
   .carousel-caption { padding: 0.65rem 1rem; font-size: 0.8rem; }
+}
+
+/* Trust progress bar: desktop only. 1024px is used as the cutoff
+   (rather than the 760px the header nav switches at) because the
+   goal is specifically to exclude tablets too, not just phones — a
+   761-1023px viewport (an iPad in portrait, for instance) shouldn't
+   see it either. */
+@media (min-width: 1024px) {
+  .trust-track { display: block; }
 }
 
 /* ============================================================

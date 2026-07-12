@@ -100,6 +100,39 @@
   var sceneZ = sceneEls.map(function (el, i) { return 8 - i * 16; });
   var carouselIndex = sceneEls.findIndex(function (el) { return el.hasAttribute('data-carousel'); });
 
+  /* ---------- track height: source of truth lives here, not in CSS ----------
+     Each .ride-scene is a normal-flow 100vh block using position:sticky
+     to "stick" for its own 100vh of scroll room, so .ride-track needs
+     exactly sceneEls.length * 100vh of real height for the trick to
+     work end to end. counseling.css's vh-based height is a fallback for
+     before this runs, but it has drifted out of sync with the scene
+     count before (a scene got added and only the desktop vh value was
+     updated), and even when correct, "100vh" itself doesn't reliably
+     mean "the visible viewport" on mobile browsers with a collapsing
+     address bar. Setting it here in real measured pixels, straight from
+     the actual number of scenes, avoids both problems. When the track
+     ends up shorter than the content it holds, the last scenes visually
+     overflow past it and overlap whatever comes after (the footer/nav),
+     which is what was cutting the Hook scene and everything past it off
+     on mobile. */
+  var track = document.querySelector('.ride-track');
+  function syncTrackHeight() {
+    if (!track) return;
+    track.style.height = (sceneEls.length * window.innerHeight) + 'px';
+  }
+  syncTrackHeight();
+  var trackResizeTimer = null;
+  window.addEventListener('resize', function () {
+    // Debounced: mobile browsers fire resize repeatedly while the
+    // address bar animates in/out during ordinary scrolling, and
+    // resizing the track mid-scroll would fight that scroll.
+    clearTimeout(trackResizeTimer);
+    trackResizeTimer = setTimeout(function () {
+      syncTrackHeight();
+      updateScroll();
+    }, 150);
+  });
+
   /* ---------- buoy markers at each scene depth ---------- */
   var buoys = [];
   sceneZ.forEach(function (z, i) {
@@ -289,7 +322,6 @@
      Same mechanism as the homepage's pw-beat activation: progress maps
      to camera.position.z, and the nearest scene's DOM panel gets
      .is-active. */
-  var track = document.querySelector('.ride-track');
   var trustFill = document.getElementById('trustFill');
   var progress = 0;
   var activeScene = 0;
