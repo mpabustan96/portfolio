@@ -116,6 +116,7 @@ img { max-width: 100%; display: block; }
   color: var(--cyan); background: rgba(4,8,14,0.7);
   border: 1px solid var(--line-strong); padding: 0.4rem 0.7rem; border-radius: 4px;
   pointer-events: none;
+  transition: opacity 0.4s ease;
 }
 
 /* ---------- Nav — fixed overlay so it never eats into a beat's
@@ -308,6 +309,20 @@ footer {
 
 @media (max-width: 760px) {
   .duo { grid-template-columns: 1fr; gap: 1.25rem; }
+
+  /* The BEAT readout is only useful during the snap transition itself;
+     left on permanently it sits over text in the two/duo-column and
+     availability beats on narrow screens. about.js toggles .is-visible
+     on beat-change and fades it back out shortly after the snap
+     settles (see showHud in about.js), so it's only ever on-screen
+     while a transition is actually happening. */
+  .hud-readout {
+    opacity: 0;
+  }
+
+  .hud-readout.is-visible {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 640px) {

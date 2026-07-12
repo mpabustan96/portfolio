@@ -62,6 +62,35 @@
   var grid = document.getElementById('corridor-grid');
   var decrypted = false;
 
+  /* ---------- HUD readout visibility (mobile only) ----------
+     On mobile the BEAT counter is only meaningful while a snap
+     transition is actually happening; left up permanently it covers
+     text in the duo and availability beats. showHud() reveals it on
+     every beat change, then — only under the mobile media query —
+     fades it back out ~900ms later, timed just past the beat's own
+     0.6s snap transition so it reads before it disappears. Desktop
+     keeps it on screen the whole time, same as before. */
+  var hudMobileQuery = window.matchMedia('(max-width: 760px)');
+  var hudHideTimer = null;
+  function showHud(html) {
+    if (!hudReadout) return;
+    if (html !== undefined) hudReadout.innerHTML = html;
+    clearTimeout(hudHideTimer);
+    hudReadout.classList.add('is-visible');
+    if (hudMobileQuery.matches) {
+      hudHideTimer = setTimeout(function () {
+        hudReadout.classList.remove('is-visible');
+      }, 900);
+    }
+  }
+  showHud();
+  if (hudMobileQuery.addEventListener) {
+    hudMobileQuery.addEventListener('change', function (e) {
+      clearTimeout(hudHideTimer);
+      if (!e.matches) hudReadout && hudReadout.classList.add('is-visible');
+    });
+  }
+
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       var beat = entry.target;
@@ -70,7 +99,7 @@
 
       if (isActive) {
         var index = beats.indexOf(beat);
-        if (hudReadout) hudReadout.innerHTML = 'SYS://ABOUT.EXE<br>BEAT: ' + (index + 1) + ' / ' + beats.length;
+        showHud('SYS://ABOUT.EXE<br>BEAT: ' + (index + 1) + ' / ' + beats.length);
         if (progressFill) progressFill.style.width = ((index / (beats.length - 1)) * 100) + '%';
 
         if (beat.id === 'beat-origin' && !decrypted) {
