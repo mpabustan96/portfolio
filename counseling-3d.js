@@ -162,6 +162,7 @@
         });
         sceneZ = sceneEls.map(function (el, i) { return 8 - i * 16; });
         carouselIndex = sceneEls.findIndex(function (el) { return el.hasAttribute('data-carousel'); });
+        observeScenes();
       }
       syncTrackHeight();
       updateScroll();
@@ -358,70 +359,37 @@
      to camera.position.z, and the nearest scene's DOM panel gets
      .is-active. */
   var progress = 0;
-  var activeScene = 0;
-
-  /* ---------- section rail: alternate nav alongside the scroll ride ----------
-     Dots stay in sync with the same activeScene index updateScroll already
-     computes below; clicking one scrolls the page to that scene's position
-     by inverting the same progress -> scrollY math updateScroll uses. This
-     never touches camera.userData.targetZ directly — it just moves scrollY,
-     so the very next updateScroll() (fired by the scroll event the jump
-     itself produces) picks it up through the normal path. */
-  var railItems = Array.prototype.slice.call(document.querySelectorAll('.rail-item'));
-  function updateRail(idx) {
-    // Matched by data-index rather than array position — kept this
-    // way (rather than reverting to the old i === idx match) since
-    // it's equally correct with a single rail list and one less thing
-    // to break if a second nav element gets added again later.
-    railItems.forEach(function (li) {
-      var isActive = parseInt(li.getAttribute('data-index'), 10) === idx;
-      li.classList.toggle('is-active', isActive);
-      var btn = li.querySelector('.rail-btn');
-      if (btn) btn.setAttribute('aria-current', isActive ? 'true' : 'false');
-    });
-  }
-  function goToScene(idx) {
-    var el = sceneEls[idx];
-    if (!el) return;
-    // Real element position (getBoundingClientRect + current scroll),
-    // rather than an index/trackHeight ratio — same reasoning as the
-    // active-scene detection above, so a snap or rail-click always lands
-    // on the actual scene even if the vh used to size .ride-track has
-    // drifted from the real viewport.
-    var target = el.getBoundingClientRect().top + window.scrollY;
-    window.scrollTo({ top: target, behavior: 'smooth' });
-  }
-  railItems.forEach(function (li) {
-    var btn = li.querySelector('.rail-btn');
-    if (!btn) return;
-    btn.addEventListener('click', function () {
-      goToScene(parseInt(btn.getAttribute('data-target'), 10));
-    });
-  });
+  var activeScene = -1; // unset on purpose — see setActiveScene(0) below, which needs
+  // its very first call to actually run rather than short-circuit against a
+  // default that happens to match
 
   function updateScroll() {
+    // Camera dolly only. Which scene is "active" no longer comes from
+    // scroll math at all — see setActiveScene()/observeScenes() below,
+    // which uses IntersectionObserver instead. This keeps updateScroll
+    // cheap (no getBoundingClientRect scan on every scroll event) and
+    // removes the drift that used to come from window.innerHeight
+    // changing live as iOS Safari's address bar collapses/expands.
     var trackHeight = track.offsetHeight - window.innerHeight;
     progress = Math.min(1, Math.max(0, trackHeight > 0 ? window.scrollY / trackHeight : 0));
+    camera.userData.targetZ = sceneZ[0] - progress * (sceneZ[0] - sceneZ[sceneZ.length - 1]);
+  }
+  window.addEventListener('scroll', updateScroll, { passive: true });
+  camera.userData.targetZ = sceneZ[0];
 
-    // Which scene is "active" (opacity: 1, the only visible one) used to
-    // come from this scrollY/trackHeight ratio alone. iOS Safari/Chrome
-    // change window.innerHeight live as the address bar collapses (scrolling
-    // down) and reveals (scrolling up) — asymmetrically between the two
-    // directions — which let the ratio drift out of sync with what's
-    // physically in the viewport, especially scrolling back up. That drift
-    // is what made previous sections fail to reappear: the scene actually
-    // on screen kept opacity:0 because the ratio math still pointed
-    // .is-active somewhere else. Reading each scene's real rendered
-    // position sidesteps that drift entirely.
-    var viewportCenter = window.innerHeight / 2;
-    var idx = 0;
-    var bestDist = Infinity;
-    sceneEls.forEach(function (el, i) {
-      var rect = el.getBoundingClientRect();
-      var dist = Math.abs((rect.top + rect.height / 2) - viewportCenter);
-      if (dist < bestDist) { bestDist = dist; idx = i; }
-    });
-
+  /* ---------- active-scene detection: IntersectionObserver ----------
+     Replaces the old getBoundingClientRect scan (which ran on every
+     scroll event and drifted on iOS Safari as the address bar animates,
+     the root cause of panels going stale scrolling back up) and the old
+     JS scroll-snap loop (which fought the CSS snap by animating scrollY
+     itself). Now: CSS does the snapping on its own (scroll-snap-type: y
+     proximity, see counseling.css) and the browser's native intersection
+     tracking — not scroll-event math — decides which panel is active.
+     One observer, re-created whenever sceneEls changes (i.e. on a
+     desktop/mobile breakpoint cross), watching all scenes at once. */
+  var sceneObserver = null;
+  function setActiveScene(idx) {
+    if (idx === activeScene) return;
     if (idx !== carouselIndex && activeScene === carouselIndex) {
       // leaving the carousel stop resets it, so it's never still
       // zoomed in the next time it's scrolled back into view
@@ -430,26 +398,28 @@
     }
     activeScene = idx;
     sceneEls.forEach(function (el, i) { el.classList.toggle('is-active', i === idx); });
-    updateRail(idx);
-
-    camera.userData.targetZ = sceneZ[0] - progress * (sceneZ[0] - sceneZ[sceneZ.length - 1]);
   }
-  window.addEventListener('scroll', updateScroll, { passive: true });
-  camera.userData.targetZ = sceneZ[0];
-
-  /* ---------- snap-to-nearest-scene on scroll settle ----------
-     Runs at every screen size now, matching the mandatory CSS snap
-     in counseling.css. Once scrolling stops for a beat, animate to
-     the exact scrollY goToScene(idx) would use for the nearest
-     scene — the same position the rail's own click-to-jump already
-     lands on — so the page always settles fully centered instead of
-     holding mid-scene. */
-  var snapTimer = null;
-  function scheduleSnap() {
-    clearTimeout(snapTimer);
-    snapTimer = setTimeout(function () { goToScene(activeScene); }, 140);
+  function observeScenes() {
+    if (sceneObserver) sceneObserver.disconnect();
+    sceneObserver = new IntersectionObserver(function (entries) {
+      // Among scenes currently crossing the threshold, pick the one
+      // most centered/visible right now rather than reacting to every
+      // entry individually, so two scenes mid-crossover never both
+      // claim .is-active at once.
+      var best = null;
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
+      });
+      if (best) {
+        var idx = sceneEls.indexOf(best.target);
+        if (idx !== -1) setActiveScene(idx);
+      }
+    }, { threshold: [0.5, 0.6, 0.7, 0.8, 0.9, 1] });
+    sceneEls.forEach(function (el) { sceneObserver.observe(el); });
   }
-  window.addEventListener('scroll', scheduleSnap, { passive: true });
+  observeScenes();
+  setActiveScene(0);
 
   /* ---------- swipe (touch only) + tap-to-zoom on the carousel ----------
      A touch drag that's clearly horizontal (more horizontal movement
