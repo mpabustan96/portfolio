@@ -31,10 +31,6 @@
 <body>
   <script src="page-transitions.js"></script>
 
-  <div class="trust-track" aria-hidden="true">
-    <div class="trust-fill" id="trustFill"></div>
-  </div>
-
   <canvas id="ride-canvas" aria-hidden="true"></canvas>
 
   <!-- Section rail: alternate navigation to the Harbor Ride's own scroll
@@ -129,8 +125,8 @@
         </div>
       </section>
 
-      <!-- 4: RESEARCH & DISCOVERY -->
-      <section class="ride-scene" data-scene="4">
+      <!-- 4: RESEARCH & DISCOVERY (desktop: one stop) -->
+      <section class="ride-scene" data-scene="4" data-device="desktop">
         <div class="ride-panel">
           <p class="ride-eyebrow">02 &middot; Research &amp; Discovery</p>
           <div class="note">
@@ -142,8 +138,27 @@
         </div>
       </section>
 
-      <!-- 5: DEFINE & IDEATE -->
-      <section class="ride-scene" data-scene="5">
+      <!-- 4a/4b: RESEARCH & DISCOVERY (mobile: same content, split into two shorter stops) -->
+      <section class="ride-scene" data-scene="4a" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">02 &middot; Research &amp; Discovery</p>
+          <div class="note">
+            <span class="note-label">Honest framing</span>
+            <p>This wasn't formal user research, and I want to be upfront about that rather than dress it up. There was no patient interviewing, no survey, no analytics to mine, because the practice had no digital footprint yet, so there was nothing to measure. What I had instead was direct, recurring access to the one person who understood the audience best: my client herself.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="4b" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">02 &middot; Research &amp; Discovery, continued</p>
+          <p>We met weekly over Zoom for the life of the project. It wasn't a single intake call but an ongoing brainstorming cadence. Each session, I brought design questions and rough direction, and she brought her read on what mattered to the people who'd be landing on this site, drawn from years of sitting across from them.</p>
+          <p>That input was real, but it was limited in a specific way: it was her general impressions of patients, not documented patient feedback. I treated it as informed stakeholder discovery rather than a substitute for talking to users directly, and that distinction shaped how much weight I put on any one opinion versus my own judgment as the designer.</p>
+        </div>
+      </section>
+
+      <!-- 5: DEFINE & IDEATE (desktop: one stop) -->
+      <section class="ride-scene" data-scene="5" data-device="desktop">
         <div class="ride-panel">
           <p class="ride-eyebrow">03 &middot; Define &amp; Ideate</p>
           <p>One disagreement defined this phase. My client's instinct, based on her sense of her patients, was that a hesitant visitor needed to see her services first. I saw it differently. Someone arriving anxious isn't ready to process a clinical list in the first five seconds; they're scanning for an emotional signal first, something closer to <em>does this feel safe?</em></p>
@@ -164,8 +179,35 @@
         </div>
       </section>
 
-      <!-- 6: DESIGN DECISIONS, part 1 - process + IA -->
-      <section class="ride-scene" data-scene="6">
+      <!-- 5a/5b: DEFINE & IDEATE (mobile: same content, split into two shorter stops) -->
+      <section class="ride-scene" data-scene="5a" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">03 &middot; Define &amp; Ideate</p>
+          <p>One disagreement defined this phase. My client's instinct, based on her sense of her patients, was that a hesitant visitor needed to see her services first. I saw it differently. Someone arriving anxious isn't ready to process a clinical list in the first five seconds; they're scanning for an emotional signal first, something closer to <em>does this feel safe?</em></p>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="5b" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">03 &middot; Define &amp; Ideate, continued</p>
+          <div class="tension">
+            <div class="tension-card instinct">
+              <span class="who">Her Instinct</span>
+              <p>"Show services first, what I treat, who I work with. That answers 'is this person right for me?' fast."</p>
+            </div>
+            <div class="tension-divider">vs.</div>
+            <div class="tension-card call">
+              <span class="who">My Call</span>
+              <p>Lead with tone and trust, and let services follow once the emotional bar is cleared. One click away, not page one.</p>
+            </div>
+          </div>
+
+          <p class="resolution">Trust before information, for an audience whose primary barrier isn't confusion, but hesitation.</p>
+        </div>
+      </section>
+
+      <!-- 6: DESIGN DECISIONS, part 1 - process + IA (desktop: one stop) -->
+      <section class="ride-scene" data-scene="6" data-device="desktop">
         <div class="ride-panel">
           <p class="ride-eyebrow">04 &middot; Design Decisions</p>
 
@@ -181,8 +223,29 @@
         </div>
       </section>
 
-      <!-- 7: DESIGN DECISIONS, part 2 - visual tone + resolving the tension -->
-      <section class="ride-scene" data-scene="7">
+      <!-- 6a/6b: DESIGN DECISIONS, part 1 (mobile: same content, split into two shorter stops) -->
+      <section class="ride-scene" data-scene="6a" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">04 &middot; Design Decisions</p>
+          <div class="note">
+            <span class="note-label">Process note</span>
+            <p>There are no wireframes to show here, and I want to be direct about why. Given the scope, four pages, one stakeholder, a fixed builder platform, and the weekly live-feedback cadence, I designed directly inside the GoDaddy builder and iterated with my client in real time on calls rather than presenting static mockups first. That's a faster loop for a project this size, but it's a different, lower-fidelity process than a wireframe-to-final-UI progression, and I'm not going to manufacture wireframes after the fact just to make it look like one.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="6b" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">04 &middot; Design Decisions, continued</p>
+          <div class="subsection">
+            <h3>Information architecture</h3>
+            <p>Four pages, deliberately minimal: Home, About, Services, Contact. Anything more would have added decision fatigue for a visitor who is already hesitant. Every page carries one clear next action toward Services or Contact, never two competing calls to action on the same screen.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7: DESIGN DECISIONS, part 2 - visual tone + resolving the tension (desktop: one stop) -->
+      <section class="ride-scene" data-scene="7" data-device="desktop">
         <div class="ride-panel">
           <p class="ride-eyebrow">04 &middot; Design Decisions, continued</p>
 
@@ -191,6 +254,27 @@
             <p>The calming blue palette and typography were chosen specifically to read as low-stimulation, the opposite of a clinical or corporate feel. This was the most deliberate lever I had to support the trust-before-information decision above: the page has to feel safe before it says anything.</p>
           </div>
 
+          <div class="subsection">
+            <h3>Resolving the stakeholder tension</h3>
+            <p>Rather than picking a side and dropping it, I kept her instinct intact. Services information stayed complete and easy to find, but I moved it a layer deeper than page one. That way, an anxious visitor isn't confronted with a clinical list before they're ready, and a visitor who is ready can still find exactly what she treats in one click.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7a/7b: DESIGN DECISIONS, part 2 (mobile: same content, split into two shorter stops) -->
+      <section class="ride-scene" data-scene="7a" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">04 &middot; Design Decisions, continued</p>
+          <div class="subsection">
+            <h3>Visual tone</h3>
+            <p>The calming blue palette and typography were chosen specifically to read as low-stimulation, the opposite of a clinical or corporate feel. This was the most deliberate lever I had to support the trust-before-information decision above: the page has to feel safe before it says anything.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="7b" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">04 &middot; Design Decisions, continued</p>
           <div class="subsection">
             <h3>Resolving the stakeholder tension</h3>
             <p>Rather than picking a side and dropping it, I kept her instinct intact. Services information stayed complete and easy to find, but I moved it a layer deeper than page one. That way, an anxious visitor isn't confronted with a clinical list before they're ready, and a visitor who is ready can still find exactly what she treats in one click.</p>
@@ -229,14 +313,32 @@
         </div>
       </section>
 
-      <!-- 9: RESULTS & REFLECTION -->
-      <section class="ride-scene" data-scene="9">
+      <!-- 9: RESULTS & REFLECTION (desktop: one stop) -->
+      <section class="ride-scene" data-scene="9" data-device="desktop">
         <div class="ride-panel">
           <p class="ride-eyebrow">05 &middot; Results &amp; Reflection</p>
           <div class="note">
             <span class="note-label">Honest framing</span>
             <p>I don't have a measured outcome for this project. No inquiry counts, no booking data, no follow-up survey. What I have is that the site shipped, has been live since spring 2025, and my client is still using it as her practice's primary online presence. I'd rather flag that limitation directly than imply a result I can't back up.</p>
           </div>
+          <p><strong style="color:var(--harbor);">What I'd do differently:</strong> ask her to gather patient feedback, even informally, with a quick question like "how did you find us, and what almost stopped you from reaching out," instead of relying on her general impressions. That single change would turn a stakeholder opinion into real evidence, and it would tell me whether the trust-before-services bet paid off, instead of leaving it as a decision I still believe in but can't prove.</p>
+        </div>
+      </section>
+
+      <!-- 9a/9b: RESULTS & REFLECTION (mobile: same content, split into two shorter stops) -->
+      <section class="ride-scene" data-scene="9a" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">05 &middot; Results &amp; Reflection</p>
+          <div class="note">
+            <span class="note-label">Honest framing</span>
+            <p>I don't have a measured outcome for this project. No inquiry counts, no booking data, no follow-up survey. What I have is that the site shipped, has been live since spring 2025, and my client is still using it as her practice's primary online presence. I'd rather flag that limitation directly than imply a result I can't back up.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="9b" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">05 &middot; Results &amp; Reflection, continued</p>
           <p><strong style="color:var(--harbor);">What I'd do differently:</strong> ask her to gather patient feedback, even informally, with a quick question like "how did you find us, and what almost stopped you from reaching out," instead of relying on her general impressions. That single change would turn a stakeholder opinion into real evidence, and it would tell me whether the trust-before-services bet paid off, instead of leaving it as a decision I still believe in but can't prove.</p>
         </div>
       </section>

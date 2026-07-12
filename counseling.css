@@ -39,18 +39,16 @@ html {
      nearest .ride-scene rather than just nudging near one. Paired
      with the JS-driven settle-snap in counseling-3d.js (see
      scheduleSnap), which actively re-centers after scroll stops,
-     since CSS scroll-snap against position:sticky targets is
-     inconsistent enough across browsers that CSS alone can't be
-     trusted to land dead-center. */
+     since native CSS scroll-snap alone is inconsistent enough across
+     mobile browsers that it can't be trusted to land dead-center. */
   scroll-snap-type: y mandatory;
 }
 
 /* No prefers-reduced-motion override here, by design — matching every
    other file on this site (page-transitions.js, index-3d.js,
    index-matrix.js, counseling-3d.js all state this explicitly): the
-   trust-fill bar, scroll reveals, and the Harbor Ride scene itself are
-   all meant to always animate, on every device, regardless of OS
-   motion settings. */
+   scroll reveals and the Harbor Ride scene itself are meant to always
+   animate, on every device, regardless of OS motion settings. */
 
 body {
   margin: 0;
@@ -77,43 +75,6 @@ button:focus-visible {
 }
 
 img { max-width: 100%; display: block; }
-
-/* ---------- Trust progress indicator ---------- */
-
-.trust-track {
-  /* Desktop-only by default now: hidden here, then explicitly
-     re-enabled for desktop widths only, in the min-width query near
-     the Harbor Ride responsive rules below. Previously this was only
-     hidden below 760px, so tablet-width viewports (e.g. iPad
-     portrait) still showed it; now anything short of a real desktop
-     viewport hides it. */
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background: transparent;
-  z-index: 100;
-}
-
-.trust-track::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--line);
-  opacity: 0.5;
-}
-
-.trust-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--seafoam), var(--current));
-  transition: width 0.1s linear;
-}
 
 /* ---------- Header ---------- */
 
@@ -935,7 +896,7 @@ img { max-width: 100%; display: block; }
    HARBOR RIDE: 3D scroll scene addition (counseling.html only)
    Everything above this line is unchanged from the original
    flat layout and is retained rather than deleted: the tokens,
-   fonts, header, .trust-track/.trust-fill, .note/.note-label,
+   fonts, header, .note/.note-label,
    .tension/.tension-card/.resolution, .subsection, and
    .meta-item label/value styles are all REUSED below instead
    of being reinvented, so the ride reads as the same design
@@ -965,17 +926,61 @@ img { max-width: 100%; display: block; }
 
 .ride-track {
   position: relative;
-  /* Was 900vh for 9 scenes (100vh/scene). Splitting the Design
-     Decisions stop in two makes it 10 scenes, so this scales up to
-     keep the same per-scene scroll distance rather than compressing
-     everything. */
+  /* Pre-JS fallback height for the desktop scene count (10 stops:
+     hero, meta, hook, problem, research, define, design x2, carousel,
+     results). counseling-3d.js recalculates this in real pixels from
+     the actual visible scene count on load (see syncTrackHeight),
+     which is the real source of truth; this value only matters for
+     the instant before that script runs. The mobile breakpoint below
+     overrides it to match the larger mobile-only scene count. */
   height: 1000vh;
   z-index: 1;
 }
 
+/* ---------- Device-specific scene variants ----------
+   Five stops (Research & Discovery, Define & Ideate, both Design
+   Decisions stops, Results & Reflection) are dense enough that a
+   single scroll stop can run long, especially on a short phone
+   screen. Each of those five exists twice in the DOM: once as a
+   single desktop-width stop (data-device="desktop") and once split
+   into two shorter mobile stops (data-device="mobile") carrying the
+   exact same text, just divided. Only one variant is ever visible at
+   a time; counseling-3d.js filters which one it treats as part of
+   the ride based on the same 760px breakpoint already used
+   throughout this file. Shared stops (hero, meta, hook, problem, and
+   the carousel, which is never split since its controls are
+   singleton-ID elements that can't be duplicated in the DOM) have no
+   data-device attribute and are simply always shown. */
+.ride-scene[data-device="mobile"] { display: none; }
+
+@media (max-width: 760px) {
+  .ride-scene[data-device="desktop"] { display: none; }
+  .ride-scene[data-device="mobile"] { display: flex; }
+
+  .ride-track {
+    /* Mobile has 15 stops instead of desktop's 10 (the five dense
+       stops above are split into two each): 4 shared + 5 mobile-split
+       pairs (10) + 1 carousel = 15. Same pre-JS-fallback caveat as
+       the base rule above. */
+    height: 1500vh;
+  }
+}
+
 .ride-scene {
-  position: sticky;
-  top: 0;
+  /* Was position: sticky/top:0. With .ride-track sized to exactly
+     N x 100vh (one slot per scene, no extra scroll room), a sticky
+     element here can never actually hold — its pin window is zero,
+     since sticky only pins for as long as its own box has height
+     beyond the viewport. So it contributed no visual effect (the
+     opacity crossfade + scroll-snap + JS camera dolly do all the real
+     work already), while still sitting in exactly the equal-height
+     stacked-sticky + JS-mutated container height + shifting mobile
+     viewport (address bar) configuration that's a known trigger for
+     WebKit/mobile Safari's sticky reverse-scroll defect — panels that
+     render fine scrolling forward but go stale/invisible scrolling
+     back up. Switching to a plain relative block removes that failure
+     mode entirely with no visual change going forward. */
+  position: relative;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -1230,19 +1235,18 @@ img { max-width: 100%; display: block; }
   .carousel-arrow { width: 40px; height: 40px; }
 
   /* No progress indicator on mobile or tablet — the horizontal dot bar
-     that briefly replaced .trust-track/.section-rail here caused its
-     own problems, so anything short of desktop now relies on mandatory
-     snap scroll alone (see the base html rule above) with no on-screen
-     "where am I" UI. .trust-track is hidden by default (see its base
-     rule) and only re-enabled at a genuine desktop width further down;
-     .section-rail is hidden directly below. */
+     that briefly replaced .section-rail here caused its own problems,
+     so anything short of desktop now relies on mandatory snap scroll
+     alone (see the base html rule above) with no on-screen "where am
+     I" UI. The progress bar has been removed site-wide (it's not just
+     hidden on mobile); .section-rail is hidden directly below. */
 
   /* Belt-and-suspenders: counseling-3d.js also actively re-centers
-     the nearest scene after scroll settles, since scroll-snap's
-     behavior against position:sticky targets is inconsistent enough
-     across mobile browsers that CSS alone can't be trusted to land
-     dead-center. See the base html rule above for the snap-type
-     itself, which now applies at every screen size. */
+     the nearest scene after scroll settles, since native scroll-snap
+     behavior is inconsistent enough across mobile browsers that CSS
+     alone can't be trusted to land dead-center. See the base html
+     rule above for the snap-type itself, which now applies at every
+     screen size. */
 }
 
 @media (max-width: 480px) {
@@ -1255,14 +1259,33 @@ img { max-width: 100%; display: block; }
   .carousel-caption { padding: 0.65rem 1rem; font-size: 0.8rem; }
 }
 
-/* Trust progress bar: desktop only. 1024px is used as the cutoff
-   (rather than the 760px the header nav switches at) because the
-   goal is specifically to exclude tablets too, not just phones — a
-   761-1023px viewport (an iPad in portrait, for instance) shouldn't
-   see it either. */
-@media (min-width: 1024px) {
-  .trust-track { display: block; }
+/* ---------- Short / landscape mobile viewports ----------
+   Each .ride-scene is a fixed 100vh slot, and the text-heavier panels
+   (Research & Discovery, Define & Ideate, both Design Decisions
+   stops, Results & Reflection) can run taller than a landscape phone
+   viewport (as short as ~330-400px). Without this, that overflow
+   would render behind the following content with no way to reach it,
+   since the outer page scroll is claimed by the ride's own scene-to-
+   scene snapping, not a way to scroll further inside one panel. This
+   rule caps the panel to the viewport and turns on its own internal
+   scroll instead, so a touch drag inside a tall panel scrolls its
+   text first; only once that inner scroll is exhausted does the
+   gesture fall through to the outer page/ride scroll. touch-action
+   is scoped to the panel only (not the canvas), so it doesn't
+   interfere with the carousel's own swipe handling at its stop. */
+@media (max-height: 500px) {
+  .ride-panel {
+    max-height: 92vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+  .ride-scene { align-items: center; }
+  .ride-scene[data-carousel] { padding-top: 1rem; }
+  .ride-panel h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
 }
+
+
 
 /* ============================================================
    SECTION RAIL: alternate navigation, alongside the scroll ride

@@ -95,8 +95,21 @@
   var mistPoints = new THREE.Points(mistGeo, mistMat);
   scene.add(mistPoints);
 
-  /* ---------- scenes: one z position per .ride-scene, evenly spaced ---------- */
-  var sceneEls = Array.prototype.slice.call(document.querySelectorAll('.ride-scene'));
+  /* ---------- scenes: one z position per .ride-scene, evenly spaced ----------
+     Five dense stops exist twice in the DOM — once as a single
+     data-device="desktop" stop, once split into two shorter
+     data-device="mobile" stops (see counseling.css) — so the scene
+     list here is filtered to whichever variant applies at the
+     current breakpoint. Shared stops (hero, meta, hook, problem,
+     carousel) have no data-device attribute and always pass through.
+     This mirrors the same 760px breakpoint already used elsewhere in
+     this file (isMobile above) and in counseling.css. */
+  var allSceneEls = Array.prototype.slice.call(document.querySelectorAll('.ride-scene'));
+  var sceneEls = allSceneEls.filter(function (el) {
+    var device = el.getAttribute('data-device');
+    if (!device) return true;
+    return isMobile ? device === 'mobile' : device === 'desktop';
+  });
   var sceneZ = sceneEls.map(function (el, i) { return 8 - i * 16; });
   var carouselIndex = sceneEls.findIndex(function (el) { return el.hasAttribute('data-carousel'); });
 
@@ -322,7 +335,6 @@
      Same mechanism as the homepage's pw-beat activation: progress maps
      to camera.position.z, and the nearest scene's DOM panel gets
      .is-active. */
-  var trustFill = document.getElementById('trustFill');
   var progress = 0;
   var activeScene = 0;
 
@@ -363,7 +375,6 @@
   function updateScroll() {
     var trackHeight = track.offsetHeight - window.innerHeight;
     progress = Math.min(1, Math.max(0, trackHeight > 0 ? window.scrollY / trackHeight : 0));
-    if (trustFill) trustFill.style.width = (progress * 100) + '%';
 
     var idx = Math.min(sceneZ.length - 1, Math.round(progress * (sceneZ.length - 1)));
     if (idx !== carouselIndex && activeScene === carouselIndex) {
