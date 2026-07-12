@@ -982,6 +982,12 @@ img { max-width: 100%; display: block; }
      mode entirely with no visual change going forward. */
   position: relative;
   height: 100vh;
+  height: 100dvh; /* dvh tracks the real, currently-visible viewport as the
+     iOS address bar collapses/expands, instead of the one-time vh value —
+     this cuts down (but by itself doesn't fully solve) the drift between
+     "how tall the browser says the viewport is" and what's actually on
+     screen. counseling-3d.js's own active-scene detection (see
+     getBoundingClientRect() in updateScroll) is what fully resolves it. */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -995,6 +1001,17 @@ img { max-width: 100%; display: block; }
 
 .ride-scene.is-active {
   opacity: 1;
+  /* pointer-events: auto removed from here on purpose — see the scoped
+     rule below. A flex box with pointer-events:auto is hit-testable over
+     its ENTIRE area, including the empty space where no child renders,
+     not just where visible content sits. Since this box sits above
+     #ride-canvas (z-index 1 vs 0), that empty space was silently
+     swallowing every tap and swipe meant for the 3D carousel underneath —
+     the actual cause of "can't swipe/tap the carousel on mobile". Only
+     the real panel content should ever be a hit target. */
+}
+
+.ride-scene.is-active .ride-panel {
   pointer-events: auto;
 }
 

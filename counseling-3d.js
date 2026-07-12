@@ -131,7 +131,11 @@
   var track = document.querySelector('.ride-track');
   function syncTrackHeight() {
     if (!track) return;
-    track.style.height = (sceneEls.length * window.innerHeight) + 'px';
+    // visualViewport.height reflects the real, currently-visible viewport
+    // (already excludes the collapsed/expanded address bar); innerHeight
+    // is the fallback for browsers without the API.
+    var vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    track.style.height = (sceneEls.length * vh) + 'px';
   }
   syncTrackHeight();
   var trackResizeTimer = null;
@@ -141,6 +145,24 @@
     // resizing the track mid-scroll would fight that scroll.
     clearTimeout(trackResizeTimer);
     trackResizeTimer = setTimeout(function () {
+      var nowMobile = window.matchMedia('(max-width: 760px)').matches;
+      if (nowMobile !== isMobile) {
+        // Breakpoint crossed — e.g. rotating the phone into landscape
+        // (iPhone 15 Pro Max is ~932px wide there, past the 760px cutoff),
+        // or resizing a desktop window. counseling.css's data-device rule
+        // just swapped which .ride-scene elements are actually visible,
+        // so the sceneEls/sceneZ/carouselIndex this script filtered once
+        // at load would otherwise keep pointing at now-hidden elements,
+        // and .is-active would never reach the ones actually on screen.
+        isMobile = nowMobile;
+        sceneEls = allSceneEls.filter(function (el) {
+          var device = el.getAttribute('data-device');
+          if (!device) return true;
+          return isMobile ? device === 'mobile' : device === 'desktop';
+        });
+        sceneZ = sceneEls.map(function (el, i) { return 8 - i * 16; });
+        carouselIndex = sceneEls.findIndex(function (el) { return el.hasAttribute('data-carousel'); });
+      }
       syncTrackHeight();
       updateScroll();
     }, 150);
@@ -359,9 +381,14 @@
     });
   }
   function goToScene(idx) {
-    var trackHeight = track.offsetHeight - window.innerHeight;
-    if (trackHeight <= 0) return;
-    var target = (idx / (sceneZ.length - 1)) * trackHeight;
+    var el = sceneEls[idx];
+    if (!el) return;
+    // Real element position (getBoundingClientRect + current scroll),
+    // rather than an index/trackHeight ratio — same reasoning as the
+    // active-scene detection above, so a snap or rail-click always lands
+    // on the actual scene even if the vh used to size .ride-track has
+    // drifted from the real viewport.
+    var target = el.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({ top: target, behavior: 'smooth' });
   }
   railItems.forEach(function (li) {
@@ -376,7 +403,25 @@
     var trackHeight = track.offsetHeight - window.innerHeight;
     progress = Math.min(1, Math.max(0, trackHeight > 0 ? window.scrollY / trackHeight : 0));
 
-    var idx = Math.min(sceneZ.length - 1, Math.round(progress * (sceneZ.length - 1)));
+    // Which scene is "active" (opacity: 1, the only visible one) used to
+    // come from this scrollY/trackHeight ratio alone. iOS Safari/Chrome
+    // change window.innerHeight live as the address bar collapses (scrolling
+    // down) and reveals (scrolling up) — asymmetrically between the two
+    // directions — which let the ratio drift out of sync with what's
+    // physically in the viewport, especially scrolling back up. That drift
+    // is what made previous sections fail to reappear: the scene actually
+    // on screen kept opacity:0 because the ratio math still pointed
+    // .is-active somewhere else. Reading each scene's real rendered
+    // position sidesteps that drift entirely.
+    var viewportCenter = window.innerHeight / 2;
+    var idx = 0;
+    var bestDist = Infinity;
+    sceneEls.forEach(function (el, i) {
+      var rect = el.getBoundingClientRect();
+      var dist = Math.abs((rect.top + rect.height / 2) - viewportCenter);
+      if (dist < bestDist) { bestDist = dist; idx = i; }
+    });
+
     if (idx !== carouselIndex && activeScene === carouselIndex) {
       // leaving the carousel stop resets it, so it's never still
       // zoomed in the next time it's scrolled back into view
@@ -436,7 +481,13 @@
   });
   window.addEventListener('pointermove', function (e) {
     if (!dragging) return;
-    dragDist += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
+    // Track max displacement from the start point directly, rather than
+    // accumulating movementX/movementY — iOS WebKit doesn't reliably
+    // report movement deltas for touch-originated pointer events, so
+    // dragDist stayed near 0 and a real drag/swipe could get misread as
+    // a tap once the swipe-threshold check below it failed.
+    var d = Math.abs(e.clientX - dragStartX) + Math.abs(e.clientY - dragStartY);
+    if (d > dragDist) dragDist = d;
   });
   function releasePointer() {
     dragging = false;
