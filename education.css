@@ -3,10 +3,9 @@
    Deep navy blueprint. Replaces the chalkboard
    identity entirely on this page — monospace
    annotations, grid-paper backdrop, drafting-table
-   registration marks. The 3D coverflow is a
-   self-contained module with its own internal
-   scroll (see .bp-scroll below); nothing on this
-   page depends on vh or window scroll math.
+   registration marks. The bootcamp project sheets
+   (see .bp-grid below) are a plain static grid,
+   no scroll container or JS involved.
 ============================================= */
 :root {
   --navy:        #0A1830;
@@ -149,64 +148,44 @@ body::before {
 .bp-intro p { font-size: 1rem; color: var(--ink); max-width: 56ch; line-height: 1.75; margin-bottom: 0.5rem; }
 
 .bp-hint { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-quiet); margin-top: 0.75rem; }
-.bp-hint .arrow { display: inline-block; animation: bp-nudge 1.6s ease-in-out infinite; }
-@keyframes bp-nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
 
 /* =============================================
-   SPEC SHEET VIEWPORT
-   Self-contained, fixed pixel height, its own
-   internal scroll. Every measurement in the JS is
-   the element's own real clientHeight/scrollTop —
-   never window/vh — so this behaves identically
-   regardless of surrounding page chrome.
+   SPEC SHEET GRID
+   Plain, static layout — no scroll box, no swipe/
+   drag, no JS. Three sheets sit side by side and
+   fill the width of the box on desktop; on mobile
+   they stack vertically instead. Every sheet is a
+   normal, always-visible, always-clickable card.
 ============================================= */
 .bp-viewport {
-  position: relative; height: 640px; border: 1px solid var(--line-strong); border-radius: 10px;
+  position: relative; border: 1px solid var(--line-strong); border-radius: 10px;
   overflow: hidden; background: var(--navy-2); margin: 1.5rem 0 1rem;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
 }
-@media (max-width: 760px) { .bp-viewport { height: 560px; } }
-@media (max-width: 480px) { .bp-viewport { height: 500px; } }
 
-.bp-scroll {
-  position: absolute; inset: 0; overflow-y: scroll; overflow-x: hidden;
-  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
-  scroll-snap-type: y mandatory;
+.bp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  align-items: stretch;
 }
-.bp-scroll::-webkit-scrollbar { width: 8px; }
-.bp-scroll::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
-
-.bp-track { position: relative; width: 100%; }
-
-/* position:sticky is safe here — .bp-scroll (its immediate overflow-y:scroll
-   ancestor) is the nearest scroll container, nothing hidden-overflow sits
-   between them, so this sticks against the box actually driving the scroll,
-   not against some outer page context. */
-.bp-stage {
-  position: sticky; top: 0; height: 640px; width: 100%;
-  perspective: 1400px; perspective-origin: 50% 42%;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-.bp-snap-cell {
-  width: 100%; height: 640px; pointer-events: none;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-@media (max-width: 760px) { .bp-stage { height: 560px; } }
-@media (max-width: 480px) { .bp-stage { height: 500px; } }
-
-.bp-rail { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
 
 .bp-sheet {
-  position: absolute; top: 50%; left: 50%; width: 400px; height: 560px; margin: -280px 0 0 -200px;
+  position: relative;
+  width: 100%;
   background: var(--navy); border: 1px solid var(--line-strong); border-radius: 6px;
   padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column;
-  box-shadow: 0 30px 70px -20px rgba(0,0,0,0.65); will-change: transform, opacity;
+  box-shadow: 0 20px 50px -20px rgba(0,0,0,0.65);
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
-@media (max-width: 760px) { .bp-sheet { width: 320px; height: 480px; margin: -240px 0 0 -160px; padding: 0.95rem 1rem 1.1rem; } }
-@media (max-width: 480px) { .bp-sheet { width: 270px; height: 430px; margin: -215px 0 0 -135px; } }
+.bp-sheet:hover { border-color: var(--line-strong); transform: translateY(-3px); }
+
+/* Below 760px, drop to a single column so the sheets stack vertically
+   instead of squeezing three-across. */
+@media (max-width: 760px) {
+  .bp-grid { grid-template-columns: 1fr; gap: 18px; }
+  .bp-sheet { padding: 0.95rem 1rem 1.1rem; }
+}
 
 /* corner registration marks — drafting-table touch */
 .reg-mark { position: absolute; width: 14px; height: 14px; pointer-events: none; }
@@ -249,13 +228,6 @@ body::before {
   transition: background 0.2s ease;
 }
 .bp-open:hover { background: var(--paper); }
-
-/* progress + counter, plain static elements below the box */
-.bp-progress-row { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 3rem; }
-.bp-progress-track { flex: 1; height: 2px; background: var(--line); position: relative; }
-.bp-progress-fill { position: absolute; left: 0; top: 0; height: 100%; width: 0%; background: var(--cyan); transition: width 0.1s linear; }
-.bp-counter { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-quiet); white-space: nowrap; }
-.bp-counter b { color: var(--paper); }
 
 /* ambient scan-line, always running, independent of scroll */
 .bp-scan {
