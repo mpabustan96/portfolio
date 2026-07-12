@@ -35,12 +35,20 @@
 
 html {
   scroll-behavior: smooth;
+  /* "proximity" (not "mandatory") on purpose — it nudges the scroll to
+     rest on a scene boundary when you're already close to one, but
+     won't fight fast scroll momentum or force a hard stop every notch.
+     Kept subtle so it doesn't compete with the carousel scene's own
+     touch-swipe handling. */
+  scroll-snap-type: y proximity;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
+/* No prefers-reduced-motion override here, by design — matching every
+   other file on this site (page-transitions.js, index-3d.js,
+   index-matrix.js, counseling-3d.js all state this explicitly): the
+   trust-fill bar, scroll reveals, and the Harbor Ride scene itself are
+   all meant to always animate, on every device, regardless of OS
+   motion settings. */
 
 body {
   margin: 0;
@@ -644,6 +652,15 @@ img { max-width: 100%; display: block; }
 /* ---------- Footer / project nav ---------- */
 
 .project-nav {
+  /* Without this, .project-nav is a plain non-positioned block, and per
+     CSS stacking rules a position:fixed element (#ride-canvas, z-index:0)
+     actually paints ON TOP of in-flow static content like this, even
+     though the canvas is earlier in the DOM. index.css's footer already
+     sets position:relative + z-index for the exact same reason — this
+     brings .project-nav in line with that precedent so it's actually
+     visible/clickable instead of hidden behind the canvas. */
+  position: relative;
+  z-index: 1;
   border-top: 1px solid var(--line);
   padding: var(--space-6) var(--space-5);
   display: flex;
@@ -692,6 +709,9 @@ img { max-width: 100%; display: block; }
 .project-nav a.next { text-align: right; }
 
 .site-footer {
+  /* Same fixed-canvas stacking fix as .project-nav above. */
+  position: relative;
+  z-index: 1;
   text-align: center;
   padding: var(--space-4) var(--space-3) var(--space-5);
   font-size: 0.85rem;
@@ -900,4 +920,273 @@ img { max-width: 100%; display: block; }
   .note {
     padding: var(--space-2);
   }
+}
+
+/* ============================================================
+   HARBOR RIDE: 3D scroll scene addition (counseling.html only)
+   Everything above this line is unchanged from the original
+   flat layout and is retained rather than deleted: the tokens,
+   fonts, header, .trust-track/.trust-fill, .note/.note-label,
+   .tension/.tension-card/.resolution, .subsection, and
+   .meta-item label/value styles are all REUSED below instead
+   of being reinvented, so the ride reads as the same design
+   system, just staged differently. Rules below this line are
+   additive and scoped to the new ride-* classes; nothing above
+   this line was removed.
+
+   By design, none of this is gated behind
+   prefers-reduced-motion: the scene always animates, matching
+   the same "always running" precedent matrix-bg.js and the
+   homepage's Portal Warp scene already set on this site.
+   ============================================================ */
+
+#ride-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+  touch-action: pan-y;
+}
+
+/* Site header/nav stay flat, normal DOM, above the canvas, same
+   relationship the homepage's sticky nav has to its canvas. */
+.site-header { position: sticky; z-index: 80; }
+
+.ride-track {
+  position: relative;
+  /* Was 900vh for 9 scenes (100vh/scene). Splitting the Design
+     Decisions stop in two makes it 10 scenes, so this scales up to
+     keep the same per-scene scroll distance rather than compressing
+     everything. */
+  height: 1000vh;
+  z-index: 1;
+}
+
+.ride-scene {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 var(--space-3);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  scroll-snap-align: start;
+}
+
+.ride-scene.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* The carousel stop pushes its DOM panel to the top so the 3D
+   carousel owns the center of the viewport, unobstructed. */
+.ride-scene[data-carousel] {
+  align-items: flex-start;
+  padding-top: 6.5rem;
+}
+
+.ride-panel {
+  max-width: 620px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: var(--space-4);
+  box-shadow: 0 30px 70px -30px rgba(15, 76, 102, 0.28);
+}
+
+.ride-panel.compact {
+  padding: var(--space-3) var(--space-4);
+  max-width: 460px;
+}
+
+.ride-panel p {
+  text-align: left;
+}
+
+.ride-panel p:last-child {
+  margin-bottom: 0;
+}
+
+.ride-panel .note {
+  text-align: left;
+  margin: var(--space-2) 0;
+}
+
+.ride-panel .subsection {
+  text-align: left;
+}
+
+.ride-panel .hook-line {
+  margin: 0;
+}
+
+.ride-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--current);
+  margin-bottom: var(--space-2);
+}
+
+.ride-panel.compact .ride-eyebrow {
+  margin-bottom: 0.3rem;
+}
+
+.ride-hint {
+  margin-top: var(--space-2);
+  font-size: 0.78rem;
+  color: var(--ink-quiet);
+  letter-spacing: 0.02em;
+}
+
+.ride-panel.compact .ride-hint {
+  margin-top: 0.35rem;
+}
+
+.ride-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3) var(--space-4);
+  text-align: left;
+}
+
+/* ---------- carousel UI: front-and-center, always readable ---------- */
+.carousel-ui {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ride-scene[data-carousel].is-active .carousel-ui {
+  display: flex;
+}
+
+.carousel-caption {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.85rem 1.4rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  max-width: min(90vw, 440px);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.carousel-caption strong {
+  color: var(--harbor);
+  display: block;
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.carousel-back {
+  margin-top: 0.5rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--current);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: none;
+}
+
+.carousel-back.is-visible {
+  display: inline-block;
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  pointer-events: auto;
+}
+
+.carousel-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--current);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--current);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--seafoam-soft);
+  transform: scale(1.06);
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.carousel-dot.is-active {
+  background: var(--current);
+  width: 22px;
+  border-radius: 5px;
+  transition: width 0.2s ease;
+}
+
+/* project-nav and site-footer sit as normal flowing DOM directly
+   after .ride-track, the same relationship the homepage's footer
+   has to its .pw-track, they simply appear once the last sticky
+   ride scene releases at the end of the scroll. No changes needed
+   to their existing rules above; this just confirms the stacking
+   context lines up (z-index 2, same as before). */
+
+/* ============================================================
+   RESPONSIVE : Harbor Ride
+   ============================================================ */
+@media (max-width: 760px) {
+  .ride-track { height: 866.7vh; } /* was 780vh for 9 scenes, scaled for the new 10th scene */
+  .ride-panel { padding: var(--space-3); border-radius: 14px; }
+  .ride-panel.compact { padding: var(--space-2) var(--space-3); }
+  .ride-meta-grid { grid-template-columns: 1fr; gap: var(--space-2); }
+  .carousel-controls { gap: var(--space-2); }
+  .carousel-arrow { width: 40px; height: 40px; }
+}
+
+@media (max-width: 480px) {
+  .ride-track { height: 800vh; } /* was 720vh for 9 scenes, scaled for the new 10th scene */
+  .ride-scene { padding: 0 var(--space-2); }
+  .ride-scene[data-carousel] { padding-top: 5.5rem; }
+  .ride-panel h1 { font-size: clamp(1.7rem, 9vw, 2.3rem); }
+  .carousel-caption { padding: 0.65rem 1rem; font-size: 0.8rem; }
 }

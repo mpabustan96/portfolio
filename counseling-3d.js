@@ -1,0 +1,418 @@
+/* =============================================
+   COUNSELING 3D: "Harbor Ride" scroll scene
+   Replaces the flat scrolling layout with a
+   scroll-driven Three.js ride: the camera glides
+   forward over a wireframe current, past soft
+   buoy markers, while glass DOM panels (.ride-panel)
+   fade in and out per stop, matching the same
+   is-active toggling pattern index-3d.js uses for
+   .pw-beat on the homepage.
+
+   Distinct from the homepage's midnight data-tunnel
+   on purpose: this is a bright, low-stimulation
+   morning-harbor scene built from counseling.css's
+   own water-themed tokens (--harbor, --current,
+   --seafoam, --mist), matching the page's
+   "trust before information" thesis instead of
+   borrowing the homepage's identity.
+
+   One stop (marked with [data-carousel] in the
+   HTML) hosts the screenshot carousel: real
+   screenshots rigged to the camera so they're
+   always large, centered, and in focus, cycled
+   with arrow buttons, dots, a touch swipe, or a
+   tap on the centered screen to zoom in. The swipe
+   only fires on a clearly horizontal touch drag,
+   so it never fights the page's own vertical
+   scroll, which the canvas's touch-action: pan-y
+   already hands to the browser natively.
+
+   Requires counseling.html to load three.js (r128)
+   before this file, and to define:
+     <canvas id="ride-canvas"></canvas>
+     <div class="ride-track"> containing
+       <section class="ride-scene" data-scene="N">
+         <div class="ride-panel">...</div>
+       </section>
+     one of which also carries [data-carousel]
+     and the carousel control markup (see
+     counseling.html for the exact structure).
+
+   No prefers-reduced-motion branch, by design:
+   same "always running" call already made for
+   matrix-bg.js and the homepage's Portal Warp scene.
+============================================= */
+(function () {
+  var canvas = document.getElementById('ride-canvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var isMobile = window.matchMedia('(max-width: 760px)').matches;
+
+  /* ---------- palette, pulled straight from counseling.css ---------- */
+  var MIST = 0xF0F6FA;
+  var HARBOR = 0x0F4C66;
+  var CURRENT = 0x2F7A9E;
+  var SEAFOAM = 0xA9D2C8;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: !isMobile });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(isMobile ? 1.5 : 2, window.devicePixelRatio || 1));
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(MIST);
+  scene.fog = new THREE.Fog(MIST, 10, 42);
+
+  var camera = new THREE.PerspectiveCamera(52, window.innerWidth / window.innerHeight, 0.1, 260);
+  camera.position.set(0, 1.6, 12);
+
+  window.addEventListener('resize', function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
+  /* ---------- water: wireframe plane, gentle vertex swell ---------- */
+  var waterSegs = isMobile ? 34 : 60;
+  var waterGeo = new THREE.PlaneGeometry(120, 260, 30, waterSegs);
+  waterGeo.rotateX(-Math.PI / 2);
+  var waterMat = new THREE.MeshBasicMaterial({ color: CURRENT, wireframe: true, transparent: true, opacity: 0.28 });
+  var water = new THREE.Mesh(waterGeo, waterMat);
+  water.position.y = -2.4;
+  scene.add(water);
+  var waterBase = waterGeo.attributes.position.array.slice();
+
+  /* ---------- drifting mist particles ---------- */
+  var mistCount = isMobile ? 120 : 260;
+  var mistGeo = new THREE.BufferGeometry();
+  var mistPos = new Float32Array(mistCount * 3);
+  for (var i = 0; i < mistCount; i++) {
+    mistPos[i * 3] = (Math.random() - 0.5) * 40;
+    mistPos[i * 3 + 1] = Math.random() * 6 - 1;
+    mistPos[i * 3 + 2] = -Math.random() * 220 + 10;
+  }
+  mistGeo.setAttribute('position', new THREE.BufferAttribute(mistPos, 3));
+  var mistMat = new THREE.PointsMaterial({ color: SEAFOAM, size: 0.12, transparent: true, opacity: 0.45 });
+  var mistPoints = new THREE.Points(mistGeo, mistMat);
+  scene.add(mistPoints);
+
+  /* ---------- scenes: one z position per .ride-scene, evenly spaced ---------- */
+  var sceneEls = Array.prototype.slice.call(document.querySelectorAll('.ride-scene'));
+  var sceneZ = sceneEls.map(function (el, i) { return 8 - i * 16; });
+  var carouselIndex = sceneEls.findIndex(function (el) { return el.hasAttribute('data-carousel'); });
+
+  /* ---------- buoy markers at each scene depth ---------- */
+  var buoys = [];
+  sceneZ.forEach(function (z, i) {
+    var geo = new THREE.SphereGeometry(0.22, 16, 16);
+    var mat = new THREE.MeshBasicMaterial({ color: i % 2 ? SEAFOAM : CURRENT, transparent: true, opacity: 0.85 });
+    var buoy = new THREE.Mesh(geo, mat);
+    buoy.position.set(i % 2 === 0 ? -3.2 : 3.2, -0.6, z);
+    scene.add(buoy);
+    buoys.push(buoy);
+  });
+
+  /* ============================================================
+     CAROUSEL: rigged to the camera (a "HUD" group whose
+     transform is copied from the camera every frame, then pushed
+     forward), so the screens are always large, centered, and
+     sharply in focus regardless of where the ride camera is or
+     how it's bobbing. The water/mist blur into a soft backdrop
+     behind it instead of competing for attention.
+     ============================================================ */
+  var hudGroup = new THREE.Group();
+  scene.add(hudGroup);
+
+  var shots = [
+    { file: 'images/counseling-homepage.png', label: 'Homepage', desc: '"A Path to Hope" hero, plus the Contact Us section with hours and address below.' },
+    { file: 'images/counseling-contact.png', label: 'Contact', desc: 'Where To Find Us, address, phone, and an embedded map of the San Jose office.' },
+    { file: 'images/counseling-services.png', label: 'Services', desc: 'Mental Health Service list, Addiction, Anger Management, Grief, Trauma and PTSD, LGBTQ+, and more.' }
+  ];
+
+  // Frame each real screenshot into a fixed-aspect canvas using cover +
+  // top anchoring, matching the site's own .shot-frame.has-image
+  // { object-fit: cover; object-position: top; } rule, so all three
+  // panels read as a consistent set even though the source screenshots
+  // are different heights. No darkening/scrim is applied.
+  var FRAME_W = 800, FRAME_H = 500;
+  function frameTexture(img) {
+    var c = document.createElement('canvas');
+    c.width = FRAME_W; c.height = FRAME_H;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, FRAME_W, FRAME_H);
+    var scale = Math.max(FRAME_W / img.width, FRAME_H / img.height);
+    var dw = img.width * scale, dh = img.height * scale;
+    var dx = (FRAME_W - dw) / 2, dy = 0;
+    ctx.drawImage(img, dx, dy, dw, dh);
+    return new THREE.CanvasTexture(c);
+  }
+  function loadingTexture() {
+    var c = document.createElement('canvas');
+    c.width = FRAME_W; c.height = FRAME_H;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#E4F1ED';
+    ctx.fillRect(0, 0, FRAME_W, FRAME_H);
+    ctx.fillStyle = '#6B7B83';
+    ctx.font = '500 22px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Loading...', FRAME_W / 2, FRAME_H / 2);
+    return new THREE.CanvasTexture(c);
+  }
+
+  var carouselMeshes = shots.map(function (s, i) {
+    var geo = new THREE.PlaneGeometry(2.6, 1.625);
+    var mat = new THREE.MeshBasicMaterial({ map: loadingTexture(), transparent: true, side: THREE.DoubleSide, opacity: 1 });
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.userData = { label: s.label, desc: s.desc, index: i };
+    hudGroup.add(mesh);
+
+    var edges = new THREE.LineSegments(
+      new THREE.EdgesGeometry(geo),
+      new THREE.LineBasicMaterial({ color: CURRENT, transparent: true, opacity: 0.4 })
+    );
+    mesh.add(edges);
+
+    // No crossOrigin flag: these are same-folder, same-origin images,
+    // and crossOrigin='anonymous' on a local/static load is what
+    // silently breaks textures under some static servers or file://
+    // (the same fix already applied to the homepage's portal cards).
+    var img = new Image();
+    img.onload = function () { mat.map = frameTexture(img); mat.map.needsUpdate = true; };
+    img.onerror = function () { console.warn('[Harbor Ride] could not load ' + s.file); };
+    img.src = s.file;
+
+    return mesh;
+  });
+
+  var centerIndex = 0;
+  var zoomed = false;
+
+  function wrap(i) { return (i + shots.length) % shots.length; }
+  function diffFromCenter(i) {
+    var d = i - centerIndex;
+    if (d > shots.length / 2) d -= shots.length;
+    if (d < -shots.length / 2) d += shots.length;
+    return d;
+  }
+  function goTo(i) { centerIndex = wrap(i); zoomed = false; updateCaption(); updateDots(); }
+  function nextShot() { goTo(centerIndex + 1); }
+  function prevShot() { goTo(centerIndex - 1); }
+
+  var captionTitle = document.getElementById('captionTitle');
+  var captionBody = document.getElementById('captionBody');
+  var backBtn = document.getElementById('carouselBack');
+  function updateCaption() {
+    var s = shots[centerIndex];
+    if (captionTitle) captionTitle.textContent = s.label;
+    if (captionBody) captionBody.textContent = s.desc;
+    if (backBtn) backBtn.classList.toggle('is-visible', zoomed);
+  }
+  var dotsWrap = document.getElementById('carouselDots');
+  if (dotsWrap) {
+    shots.forEach(function (s, i) {
+      var b = document.createElement('button');
+      b.className = 'carousel-dot';
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Go to ' + s.label);
+      b.addEventListener('click', function () { goTo(i); });
+      dotsWrap.appendChild(b);
+    });
+  }
+  function updateDots() {
+    if (!dotsWrap) return;
+    Array.prototype.forEach.call(dotsWrap.children, function (d, i) {
+      d.classList.toggle('is-active', i === centerIndex);
+    });
+  }
+  updateCaption();
+  updateDots();
+
+  var prevBtn = document.getElementById('carouselPrev');
+  var nextBtn = document.getElementById('carouselNext');
+  if (prevBtn) prevBtn.addEventListener('click', prevShot);
+  if (nextBtn) nextBtn.addEventListener('click', nextShot);
+  if (backBtn) backBtn.addEventListener('click', function () { zoomed = false; updateCaption(); });
+
+  /* ---------- scroll -> camera dolly + active-scene toggling ----------
+     Same mechanism as the homepage's pw-beat activation: progress maps
+     to camera.position.z, and the nearest scene's DOM panel gets
+     .is-active. */
+  var track = document.querySelector('.ride-track');
+  var trustFill = document.getElementById('trustFill');
+  var progress = 0;
+  var activeScene = 0;
+
+  function updateScroll() {
+    var trackHeight = track.offsetHeight - window.innerHeight;
+    progress = Math.min(1, Math.max(0, trackHeight > 0 ? window.scrollY / trackHeight : 0));
+    if (trustFill) trustFill.style.width = (progress * 100) + '%';
+
+    var idx = Math.min(sceneZ.length - 1, Math.round(progress * (sceneZ.length - 1)));
+    if (idx !== carouselIndex && activeScene === carouselIndex) {
+      // leaving the carousel stop resets it, so it's never still
+      // zoomed in the next time it's scrolled back into view
+      zoomed = false;
+      updateCaption();
+    }
+    activeScene = idx;
+    sceneEls.forEach(function (el, i) { el.classList.toggle('is-active', i === idx); });
+
+    camera.userData.targetZ = sceneZ[0] - progress * (sceneZ[0] - sceneZ[sceneZ.length - 1]);
+  }
+  window.addEventListener('scroll', updateScroll, { passive: true });
+  camera.userData.targetZ = sceneZ[0];
+
+  /* ---------- swipe (touch only) + tap-to-zoom on the carousel ----------
+     A touch drag that's clearly horizontal (more horizontal movement
+     than vertical) cycles the carousel, same as the arrow buttons. A
+     drag that's mostly vertical is left alone entirely, since with
+     touch-action: pan-y the browser has already claimed it as a page
+     scroll and won't hand us further move events for it anyway. Mouse
+     drags don't trigger swipe navigation, only a tap does, since a
+     mouse doesn't need the gesture the way a touchscreen does. */
+  /* Swipe tuning — SWIPE_MIN_PX is the minimum horizontal travel before
+     it counts as an intentional swipe rather than a stray touch
+     (lowered from an earlier 36px so it registers a bit more readily
+     on mobile without going so low it fires on an accidental tap-drag).
+     SWIPE_DOMINANCE_RATIO is how much more horizontal than vertical
+     movement is required, so a diagonal or vertical scroll drag never
+     gets mistaken for a swipe. */
+  var SWIPE_MIN_PX = 28;
+  var SWIPE_DOMINANCE_RATIO = 1.4;
+  var TAP_MAX_DRAG_PX = 6;
+
+  var dragStartX = 0, dragStartY = 0, dragging = false, dragDist = 0, dragIsTouch = false, activePointerId = null;
+  canvas.addEventListener('pointerdown', function (e) {
+    if (activeScene !== carouselIndex) return;
+    dragging = true; dragDist = 0;
+    dragStartX = e.clientX; dragStartY = e.clientY;
+    dragIsTouch = e.pointerType === 'touch';
+    activePointerId = e.pointerId;
+    canvas.setPointerCapture(e.pointerId);
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    dragDist += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0);
+  });
+  function releasePointer() {
+    dragging = false;
+    if (activePointerId !== null && canvas.hasPointerCapture && canvas.hasPointerCapture(activePointerId)) {
+      canvas.releasePointerCapture(activePointerId);
+    }
+    activePointerId = null;
+  }
+  function endDrag(e) {
+    if (!dragging) return;
+    var dx = e.clientX - dragStartX;
+    var dy = e.clientY - dragStartY;
+    var wasTouch = dragIsTouch;
+    var dist = dragDist;
+    releasePointer();
+    if (activeScene !== carouselIndex) return;
+    if (wasTouch && Math.abs(dx) > SWIPE_MIN_PX && Math.abs(dx) > Math.abs(dy) * SWIPE_DOMINANCE_RATIO) {
+      dx < 0 ? nextShot() : prevShot();
+    } else if (dist < TAP_MAX_DRAG_PX) {
+      handleCarouselTap(e);
+    }
+  }
+  window.addEventListener('pointerup', endDrag);
+  // A pointercancel means the browser (not us) claimed the gesture,
+  // almost always because it read the drag as a vertical page scroll.
+  // Just release, don't evaluate dx/dy against a position that no
+  // longer reflects the user's actual intent.
+  window.addEventListener('pointercancel', releasePointer);
+
+  var raycaster = new THREE.Raycaster();
+  var ndc = new THREE.Vector2();
+  function handleCarouselTap(e) {
+    ndc.x = (e.clientX / window.innerWidth) * 2 - 1;
+    ndc.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    raycaster.setFromCamera(ndc, camera);
+    var hits = raycaster.intersectObjects(carouselMeshes);
+    if (!hits.length) return;
+    var hitIndex = hits[0].object.userData.index;
+    if (hitIndex === centerIndex) {
+      zoomed = !zoomed;
+      updateCaption();
+    } else {
+      goTo(hitIndex);
+    }
+  }
+
+  /* ---------- keyboard support for the carousel ----------
+     Left/Right cycle the carousel, Enter/Space toggles zoom on the
+     centered screen, active only while the carousel stop is the one
+     in view (these keys don't otherwise scroll the page, so this
+     never interferes with normal keyboard scrolling elsewhere). */
+  document.addEventListener('keydown', function (e) {
+    if (activeScene !== carouselIndex) return;
+    if (e.key === 'ArrowLeft') { prevShot(); }
+    else if (e.key === 'ArrowRight') { nextShot(); }
+    else if (e.key === 'Enter' || e.key === ' ') {
+      zoomed = !zoomed;
+      updateCaption();
+      e.preventDefault();
+    }
+  });
+
+  /* ---------- main loop ---------- */
+  var clock = new THREE.Clock();
+  var fwd = new THREE.Vector3();
+  function animate() {
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+    var inCarousel = activeScene === carouselIndex;
+    var bobAmp = inCarousel ? 0.3 : 1;
+
+    camera.position.z += (camera.userData.targetZ - camera.position.z) * 0.06;
+    camera.position.y = 1.6 + Math.sin(t * 0.55) * 0.12 * bobAmp;
+    camera.rotation.z = Math.sin(t * 0.35) * 0.012 * bobAmp;
+
+    buoys.forEach(function (b, i) { b.position.y = -0.6 + Math.sin(t * 0.8 + i) * 0.15; });
+
+    mistPoints.rotation.y += 0.0004;
+    var mp = mistGeo.attributes.position.array;
+    for (var i = 0; i < mistCount; i++) {
+      mp[i * 3 + 1] += 0.0025;
+      if (mp[i * 3 + 1] > 5) mp[i * 3 + 1] = -1;
+    }
+    mistGeo.attributes.position.needsUpdate = true;
+
+    var wp = waterGeo.attributes.position.array;
+    for (var j = 0; j < wp.length; j += 3) {
+      wp[j + 1] = waterBase[j + 1] + Math.sin(t * 0.6 + wp[j] * 0.15 + wp[j + 2] * 0.1) * 0.18;
+    }
+    waterGeo.attributes.position.needsUpdate = true;
+    waterMat.opacity += ((inCarousel ? 0.1 : 0.28) - waterMat.opacity) * 0.05;
+    mistMat.opacity += ((inCarousel ? 0.15 : 0.45) - mistMat.opacity) * 0.05;
+
+    hudGroup.position.copy(camera.position);
+    hudGroup.quaternion.copy(camera.quaternion);
+    fwd.set(0, 0, -1).applyQuaternion(camera.quaternion);
+    hudGroup.position.addScaledVector(fwd, 4.4);
+    hudGroup.visible = inCarousel;
+
+    carouselMeshes.forEach(function (m) {
+      var d = diffFromCenter(m.userData.index);
+      var isCenter = d === 0;
+      var targetX = zoomed && isCenter ? 0 : d * 2.05;
+      var targetZ = zoomed && isCenter ? 1.1 : -Math.abs(d) * 0.5;
+      var targetRotY = zoomed && isCenter ? 0 : d * -0.55;
+      var targetScale = zoomed && isCenter ? 1.55 : (isCenter ? 1.15 : 0.72);
+      var targetOpacity = zoomed && !isCenter ? 0 : (isCenter ? 1 : 0.55);
+
+      m.position.x += (targetX - m.position.x) * 0.12;
+      m.position.z += (targetZ - m.position.z) * 0.12;
+      m.rotation.y += (targetRotY - m.rotation.y) * 0.12;
+      m.scale.x += (targetScale - m.scale.x) * 0.12;
+      m.scale.y += (targetScale - m.scale.y) * 0.12;
+      m.material.opacity += (targetOpacity - m.material.opacity) * 0.12;
+      m.renderOrder = isCenter ? 2 : 1;
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+  updateScroll();
+})();
