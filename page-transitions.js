@@ -19,8 +19,15 @@
      panel fades in — then on arrival the same rings
      open back out again as the panel clears, handing
      off directly into the Portal Warp scene's own
-     opening beat instead of clashing with it. This is
-     one of two exceptions below.
+     opening beat instead of clashing with it. The
+     outer ring is dashed and spins at one constant
+     rate for the whole navigation, close through open,
+     so even though the scale itself reverses, the spin
+     never does — the same "one continuous motion"
+     approach Grid Wipe uses, just on rotation instead
+     of position, since scale has no direction to carry
+     through the way a slide does. This is one of two
+     exceptions below.
    - Landing on education.html specifically plays
      GRID WIPE: a single blueprint-grid panel slides
      in from the left to cover the page you're leaving,
@@ -348,9 +355,28 @@
      — handing off straight into the Portal Warp scene's own opening
      beat instead of covering it with an unrelated effect. Always
      themed off index.html's own bg/accent, since the destination
-     here is always the homepage. */
+     here is always the homepage.
 
-  function buildIrisPanel(theme) {
+     Close-then-reopen is a scale animation, and scale has no
+     direction the way position does — there's no way to make
+     "shrinking" continue into "growing" without it visually reading
+     as a reversal. So the seamless trick from Grid Wipe (one motion,
+     same direction, never undone) is carried over on a DIFFERENT
+     axis here: rotation. The outer ring is dashed, not solid, so its
+     spin is actually visible, and it spins at one constant rate for
+     the ENTIRE navigation — through the close, through the pause,
+     into the reopen — never resetting or reversing direction. The
+     entrance's starting angle is calculated to pick up exactly where
+     the exit's spin would have left off, so even though it's a fresh
+     page and a fresh element, it reads as the same ring still
+     turning. Only the scale (close/open) and opacity (fade in/out)
+     reverse; the spin is the one thing that never does. */
+
+  var IRIS_SPIN_TOTAL_MS = IRIS_CLOSE_MS + IRIS_PAUSE_MS + IRIS_OPEN_MS;
+  var IRIS_SPIN_CLOSE_DEG = 360 * IRIS_CLOSE_MS / IRIS_SPIN_TOTAL_MS;
+  var IRIS_SPIN_ENTRANCE_START_DEG = 360 * (IRIS_CLOSE_MS + IRIS_PAUSE_MS) / IRIS_SPIN_TOTAL_MS;
+
+  function buildIrisPanel(theme, ring2StartDeg) {
     var wrap = overlayShell();
 
     var panel = document.createElement('div');
@@ -360,8 +386,8 @@
     ring2.style.cssText =
       'position:absolute; top:50%; left:50%; border-radius:50%;' +
       'width:' + IRIS_RING2_VMIN + 'vmin; height:' + IRIS_RING2_VMIN + 'vmin;' +
-      'border:1px solid ' + theme.accent + ';' +
-      'transform:translate(-50%,-50%) scale(1); opacity:0.45;';
+      'border:1px dashed ' + theme.accent + ';' +
+      'transform:translate(-50%,-50%) rotate(' + (ring2StartDeg || 0) + 'deg) scale(1); opacity:0.5;';
 
     var ring1 = document.createElement('div');
     ring1.style.cssText =
@@ -378,14 +404,14 @@
   }
 
   function playIrisExit(theme, href) {
-    var s = buildIrisPanel(theme);
+    var s = buildIrisPanel(theme, 0);
 
     requestAnimationFrame(function () {
       ease(s.ring1, IRIS_CLOSE_MS);
       ease(s.ring2, IRIS_CLOSE_MS, 20);
       s.panel.style.transition = 'opacity ' + IRIS_CLOSE_MS + 'ms ease';
       s.ring1.style.transform = 'translate(-50%,-50%) scale(0.02)';
-      s.ring2.style.transform = 'translate(-50%,-50%) scale(0.02)';
+      s.ring2.style.transform = 'translate(-50%,-50%) rotate(' + IRIS_SPIN_CLOSE_DEG + 'deg) scale(0.02)';
       s.panel.style.opacity = '1';
     });
 
@@ -393,10 +419,10 @@
   }
 
   function playIrisEntrance(theme) {
-    var s = buildIrisPanel(theme);
+    var s = buildIrisPanel(theme, IRIS_SPIN_ENTRANCE_START_DEG);
     s.panel.style.opacity = '1';
     s.ring1.style.transform = 'translate(-50%,-50%) scale(0.02)';
-    s.ring2.style.transform = 'translate(-50%,-50%) scale(0.02)';
+    s.ring2.style.transform = 'translate(-50%,-50%) rotate(' + IRIS_SPIN_ENTRANCE_START_DEG + 'deg) scale(0.02)';
     void s.wrap.offsetHeight;
 
     setTimeout(function () {
@@ -404,7 +430,7 @@
       ease(s.ring2, IRIS_OPEN_MS, 20);
       s.panel.style.transition = 'opacity ' + IRIS_OPEN_MS + 'ms ease';
       s.ring1.style.transform = 'translate(-50%,-50%) scale(1)';
-      s.ring2.style.transform = 'translate(-50%,-50%) scale(1)';
+      s.ring2.style.transform = 'translate(-50%,-50%) rotate(360deg) scale(1)';
       s.panel.style.opacity = '0';
       setTimeout(function () { s.wrap.remove(); }, IRIS_OPEN_MS + 60);
     }, IRIS_PAUSE_MS);
