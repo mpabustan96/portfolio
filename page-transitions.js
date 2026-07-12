@@ -12,12 +12,15 @@
    - index.html, about.html, education.html are
      "hub" pages; the other five are case studies.
      The effect is chosen by the DESTINATION alone:
-   - Landing on index.html specifically plays NO
-     cover at all — the homepage's own Portal Warp
-     scene (index-3d.js) is the entrance now, and a
-     Data Cascade cover flashing in front of it would
-     just duplicate/clash with that scene's own
-     opening beat. This is the one exception below.
+   - Landing on index.html specifically plays
+     PORTAL IRIS CLOSE: two concentric rings, echoing
+     the actual torus rings in the Portal Warp scene
+     (index-3d.js), close to a point as a midnight
+     panel fades in — then on arrival the same rings
+     open back out again as the panel clears, handing
+     off directly into the Portal Warp scene's own
+     opening beat instead of clashing with it. This is
+     the one exception below.
    - Landing on another HUB page (about.html,
      education.html, from anywhere) plays
      DATA CASCADE: a bank of vertical bars sweeps
@@ -125,6 +128,18 @@
   var DECRYPT_HOLD_MS = 1320;  // exit: total time covered before navigating (delay + scramble + hold)
   var DECRYPT_PAUSE_MS = 150;  // entrance: how long the resolved name holds before clearing away
   var DECRYPT_CLEAR_MS = 460;  // how long the cover takes to fade + bands sweep away
+
+  // Portal Iris Close timing — medium (between snappy and theatrical),
+  // destination is always index.html so there's no per-page variance.
+  var IRIS_CLOSE_MS = 600;   // exit: rings closing to a point + panel fading in
+  var IRIS_PAUSE_MS = 140;   // entrance: how long the fully-closed iris holds before opening
+  var IRIS_OPEN_MS = 600;    // entrance: rings opening back out + panel clearing
+  // Ring diameters in vmin (not px) on purpose — vmin is the smaller of
+  // viewport width/height, so these two rings hold the same proportion
+  // of the screen on a narrow phone as on an ultrawide monitor, matching
+  // the "percentage/viewport based" rule the rest of this file follows.
+  var IRIS_RING1_VMIN = 34;
+  var IRIS_RING2_VMIN = 46;
 
   function filename(pathOrHref) {
     var clean = pathOrHref.replace(/[?#].*$/, '');
@@ -300,6 +315,76 @@
     }, CASCADE_PAUSE_MS);
   }
 
+  /* ---------- PORTAL IRIS CLOSE ----------
+     The homepage's own exception. Two concentric rings, sized to
+     directly echo the two torus rings each portal group draws in
+     index-3d.js, close to a point as a midnight panel fades in
+     (exit), then reopen from a point as the panel clears (entrance)
+     — handing off straight into the Portal Warp scene's own opening
+     beat instead of covering it with an unrelated effect. Always
+     themed off index.html's own bg/accent, since the destination
+     here is always the homepage. */
+
+  function buildIrisPanel(theme) {
+    var wrap = overlayShell();
+
+    var panel = document.createElement('div');
+    panel.style.cssText = 'position:absolute; inset:0; background:' + theme.bg + '; opacity:0;';
+
+    var ring2 = document.createElement('div');
+    ring2.style.cssText =
+      'position:absolute; top:50%; left:50%; border-radius:50%;' +
+      'width:' + IRIS_RING2_VMIN + 'vmin; height:' + IRIS_RING2_VMIN + 'vmin;' +
+      'border:1px solid ' + theme.accent + ';' +
+      'transform:translate(-50%,-50%) scale(1); opacity:0.45;';
+
+    var ring1 = document.createElement('div');
+    ring1.style.cssText =
+      'position:absolute; top:50%; left:50%; border-radius:50%;' +
+      'width:' + IRIS_RING1_VMIN + 'vmin; height:' + IRIS_RING1_VMIN + 'vmin;' +
+      'border:2px solid ' + theme.accent + ';' +
+      'transform:translate(-50%,-50%) scale(1); opacity:0.9;';
+
+    wrap.appendChild(panel);
+    wrap.appendChild(ring2);
+    wrap.appendChild(ring1);
+
+    return { wrap: wrap, panel: panel, ring1: ring1, ring2: ring2 };
+  }
+
+  function playIrisExit(theme, href) {
+    var s = buildIrisPanel(theme);
+
+    requestAnimationFrame(function () {
+      ease(s.ring1, IRIS_CLOSE_MS);
+      ease(s.ring2, IRIS_CLOSE_MS, 20);
+      s.panel.style.transition = 'opacity ' + IRIS_CLOSE_MS + 'ms ease';
+      s.ring1.style.transform = 'translate(-50%,-50%) scale(0.02)';
+      s.ring2.style.transform = 'translate(-50%,-50%) scale(0.02)';
+      s.panel.style.opacity = '1';
+    });
+
+    setTimeout(function () { window.location.href = href; }, IRIS_CLOSE_MS);
+  }
+
+  function playIrisEntrance(theme) {
+    var s = buildIrisPanel(theme);
+    s.panel.style.opacity = '1';
+    s.ring1.style.transform = 'translate(-50%,-50%) scale(0.02)';
+    s.ring2.style.transform = 'translate(-50%,-50%) scale(0.02)';
+    void s.wrap.offsetHeight;
+
+    setTimeout(function () {
+      ease(s.ring1, IRIS_OPEN_MS);
+      ease(s.ring2, IRIS_OPEN_MS, 20);
+      s.panel.style.transition = 'opacity ' + IRIS_OPEN_MS + 'ms ease';
+      s.ring1.style.transform = 'translate(-50%,-50%) scale(1)';
+      s.ring2.style.transform = 'translate(-50%,-50%) scale(1)';
+      s.panel.style.opacity = '0';
+      setTimeout(function () { s.wrap.remove(); }, IRIS_OPEN_MS + 60);
+    }, IRIS_PAUSE_MS);
+  }
+
   /* ---------- DECRYPT FLICKER ----------
      Replaces the old diagonal Signature Stroke. A full-cover
      panel in the DESTINATION'S own background fades in, a
@@ -435,21 +520,21 @@
   }
 
   /* ---------- PLAN RESOLUTION ----------
-     'none' is new: landing on index.html plays no cover at all,
-     since the Portal Warp scene is now the entrance itself. */
+     'iris' is the homepage's own exception: landing on index.html
+     plays Portal Iris Close instead of Data Cascade or Decrypt
+     Flicker, so the cover directly foreshadows the Portal Warp
+     scene's own rings rather than clashing with them. */
 
   function resolvePlan(originName, destName) {
-    if (destName === 'index.html') return { type: 'none' };
+    if (destName === 'index.html') return { type: 'iris' };
     var dest = pageInfo(destName);
     return { type: dest.type === 'case' ? 'decrypt' : 'cascade' };
   }
 
   function playExit(plan, destTheme, destName, href) {
-    if (plan.type === 'none') {
-      window.location.href = href;
-      return;
-    }
-    if (plan.type === 'decrypt') {
+    if (plan.type === 'iris') {
+      playIrisExit(destTheme, href);
+    } else if (plan.type === 'decrypt') {
       playDecryptExit(destTheme, pageInfo(destName).name, href);
     } else {
       playCascadeExit(destTheme, href);
@@ -461,6 +546,8 @@
     var theme = pageInfo(ownName);
     if (state.type === 'decrypt') {
       playDecryptEntrance(theme, theme.name);
+    } else if (state.type === 'iris') {
+      playIrisEntrance(theme);
     } else {
       playCascadeEntrance(theme);
     }
@@ -502,11 +589,12 @@
 
     e.preventDefault();
     var plan = resolvePlan(originName, destName);
-    if (plan.type !== 'none') {
-      try {
-        sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ type: plan.type, ts: Date.now() }));
-      } catch (err) {}
-    }
+    // Every plan now covers something on the way in (iris, decrypt, or
+    // cascade — there's no longer a 'none' plan type), so this always
+    // records what the destination should play on arrival.
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ type: plan.type, ts: Date.now() }));
+    } catch (err) {}
     playExit(plan, pageInfo(destName), destName, href);
   });
 })();
