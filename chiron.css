@@ -60,11 +60,6 @@
 
 html { scroll-behavior: smooth; }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
-
 body {
   margin: 0;
   background: var(--dusk);
@@ -87,6 +82,22 @@ button:focus-visible {
 }
 
 img { max-width: 100%; display: block; }
+
+/* ---------- Constellation background — Sagittarius, the archer ----------
+   Chiron is the mythological figure behind the constellation Sagittarius.
+   A fixed canvas draws a faint starfield, with the bow-and-arrow star
+   pattern periodically tracing itself in bronze light before fading —
+   sitting behind the reticle spine and all page content. */
+
+#constellation-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
 
 /* ---------- Reticle spine — the page's connective signature ----------
    A faint vertical line down the page center, broken at intervals
