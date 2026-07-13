@@ -76,12 +76,12 @@
       font: "'Fraunces', serif", weight: 500, italic: false, gfont: 'Fraunces:opsz,wght@9..144,500'
     },
     'about.html': {
-      name: 'About', bg: '#030509', accent: '#22D3EE',
-      font: "'Share Tech Mono', monospace", weight: 400, italic: false, gfont: 'Share+Tech+Mono'
+      name: 'About', bg: '#F0E9D6', accent: '#233A5E',
+      font: "'Fraunces', serif", weight: 500, italic: false, gfont: 'Fraunces:opsz,wght@9..144,500'
     },
     'education.html': {
-      name: 'Bootcamp Projects', bg: '#0A2440', accent: '#8ECFFF',
-      font: "'Share Tech Mono', monospace", weight: 400, italic: false, gfont: 'Share+Tech+Mono'
+      name: 'Bootcamp Projects', bg: '#0A1830', accent: '#6FE3FF',
+      font: "'Space Grotesk', sans-serif", weight: 500, italic: false, gfont: 'Space+Grotesk:wght@500'
     },
     'chiron.html': {
       name: 'Chiron', bg: '#14171F', accent: '#C58A3F',
@@ -105,17 +105,18 @@
     }
   };
 
-  // PLACEHOLDER — every list below except index.html is a guess.
-  // Replace with each page's real section / ride-scene beat names.
+  // Real section / page contents per page, pulled directly from each
+  // page's own section headings (or, for the education hub, its three
+  // project titles) — no more placeholders.
   var SECTIONS = {
     'index.html': ['Work', 'About', "Let's talk"],
-    'about.html': ['Background', 'Approach', 'Skills'],                         // PLACEHOLDER
-    'education.html': ['Overview'],                                            // PLACEHOLDER
-    'chiron.html': ['Overview'],                                               // PLACEHOLDER
-    'counseling.html': ['Discovery', 'Identity', 'Interface', 'Outcome'],       // PLACEHOLDER
-    'ui-ux-nest.html': ['Overview'],                                           // PLACEHOLDER
-    'albertinas-angels.html': ['Identity', 'Donor research', 'Testing', 'Iteration'], // PLACEHOLDER
-    'big-cat-rescue.html': ['Brand', 'Sanctuary', 'Adoption', 'Outcome']        // PLACEHOLDER
+    'about.html': ['Philosophy', 'How I Got Here', 'Background & Skills', 'Availability'],
+    'education.html': ['Big Cat Rescue', 'UI/UX Nest', 'Chiron'],
+    'chiron.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'User Flow', 'Design Decisions', 'Results & Reflection'],
+    'counseling.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'Design Decisions', 'Results & Reflection'],
+    'ui-ux-nest.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'Design Decisions', 'Usability Testing', 'Results & Reflection'],
+    'albertinas-angels.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'Design Decisions', 'Results & Reflection'],
+    'big-cat-rescue.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'Design Decisions', 'Usability Testing', 'Results & Reflection']
   };
 
   var BOOK_MONO = "'Space Mono', monospace";
