@@ -275,31 +275,19 @@
         </div>
       </section>
 
-      <!-- 8: DESIGN DECISIONS - the screens (carousel) -->
+      <!-- 8: DESIGN DECISIONS - the screens (filmstrip carousel) -->
       <section class="ride-scene" data-scene="8" data-carousel>
-        <div class="ride-panel compact">
+        <div class="ride-panel wide">
           <p class="ride-eyebrow">04 &middot; Design Decisions, continued</p>
           <h2 style="font-family:var(--serif); font-weight:500; color:var(--harbor); font-size:1.2rem; margin:0 0 0.2rem;">The screens, up close.</h2>
-          <p class="ride-hint">Swipe, use the arrows or dots below, or tap the centered screen to zoom in</p>
-        </div>
-        <div class="carousel-ui">
-          <div class="carousel-caption">
-            <strong id="captionTitle"></strong>
-            <span id="captionBody"></span>
-            <div class="carousel-caption-actions">
-              <button class="carousel-back" id="carouselBack" type="button">← Zoom out</button>
-              <button class="carousel-expand" id="carouselExpand" type="button">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>
-                View full size
-              </button>
-            </div>
-          </div>
-          <div class="carousel-controls">
-            <button class="carousel-arrow" id="carouselPrev" type="button" aria-label="Previous screen">
+          <p class="ride-hint">Swipe, drag, use the arrows, or tap the screen to zoom in</p>
+          <div class="filmstrip-track" id="filmstripScreensTrack" tabindex="0"></div>
+          <div class="filmstrip-dots" id="filmstripScreensDots"></div>
+          <div class="filmstrip-arrows">
+            <button class="filmstrip-arrow" id="filmstripScreensPrev" type="button" aria-label="Previous screen">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
             </button>
-            <div class="carousel-dots" id="carouselDots"></div>
-            <button class="carousel-arrow" id="carouselNext" type="button" aria-label="Next screen">
+            <button class="filmstrip-arrow" id="filmstripScreensNext" type="button" aria-label="Next screen">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
             </button>
           </div>
@@ -402,9 +390,9 @@
     <img class="lightbox-img" id="lightboxImg" src="" alt="">
   </div>
 
-  <!-- Harbor Ride scene: camera dolly, water, mist, buoys, and the
-       screenshot carousel. Trust-fill progress and .ride-scene
-       activation are both driven from here now (see counseling-3d.js). -->
+  <!-- Harbor Ride scene: camera dolly, water, mist, buoys, the flat-DOM
+       filmstrip carousel, and continuous-scroll .ride-scene activation
+       are all driven from here (see counseling-3d.js). -->
   <script src="counseling-3d.js"></script>
 
 </body>

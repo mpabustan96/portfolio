@@ -41,18 +41,19 @@
 
 html {
   scroll-behavior: smooth;
-  /* Proximity, not mandatory: this only snaps when a scroll gesture
-     already lands close to a snap target, so it never yanks momentum
-     scrolling out of a user's hands mid-flick the way mandatory snap
-     does on some mobile browsers. No JS scroll-to-snap loop backs
-     this up on purpose (see albertinas-3d.js) — native snap plus a
-     JS snap loop fighting each other for the same scroll position is
-     what caused the mobile stutter on the counseling page; this page
-     only ever has one thing driving scroll position: the user. Only
-     .ride-scene[data-carousel] opts into scroll-snap-align (see
-     below), so this only ever has one real target to pull toward —
-     every other stop scrolls freely with no snap. */
-  scroll-snap-type: y proximity;
+  /* No scroll-snap-type at all, by design — matching big-cat-rescue.css.
+     This page previously avoided a JS scroll-to-snap *loop* fighting
+     CSS snap (that was the right call, and the reasoning is preserved
+     below), but it still carried `scroll-snap-type: y proximity` here
+     plus an IntersectionObserver deciding the active panel in
+     albertinas-3d.js. On mobile, resize events fired by the collapsing/
+     expanding address bar kept re-measuring .ride-track's height
+     mid-scroll, and proximity-snap would then pull the scroll position
+     toward the nearest snap target whenever a resize landed close to
+     one — the "boomerang" on direction changes. Removing snap entirely
+     means there is now exactly one thing driving scroll position: the
+     person scrolling, and the active panel is derived from the same
+     continuous scroll-progress math that drives the camera. */
 }
 
 /* No prefers-reduced-motion override here, by design — matching every
@@ -1092,9 +1093,8 @@ img { max-width: 100%; display: block; }
   opacity: 0.16;
   transition: opacity 0.6s ease;
   pointer-events: none;
-  /* No scroll-snap-align here on purpose — snapping is scoped to the
-     carousel stop only (see .ride-scene[data-carousel] below), so the
-     rest of the ride scrolls freely instead of snapping stop to stop. */
+  /* No scroll-snap-align anywhere on this page anymore — matching Big
+     Cat Rescue, every stop (including the carousel) scrolls freely. */
 }
 
 .ride-scene.is-active {
@@ -1105,18 +1105,17 @@ img { max-width: 100%; display: block; }
   pointer-events: auto;
 }
 
-.ride-scene[data-carousel] {
-  align-items: flex-start;
-  padding-top: 6.5rem;
-  /* The only stop that still snaps — makes it easy to land cleanly on
-     the carousel so its swipe/tap controls have a settled target,
-     while every other stop now scrolls past freely with no snap. */
-  scroll-snap-align: start;
-}
+/* No special-case for [data-carousel] anymore — it's a normal centered
+   .ride-scene like any other beat; the filmstrip lives as ordinary
+   content inside a wider .ride-panel (see .ride-panel.wide below)
+   instead of a floating bottom HUD overlay. */
 
 .ride-panel {
   max-width: 620px;
   width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background: var(--panel-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -1131,6 +1130,8 @@ img { max-width: 100%; display: block; }
   padding: var(--space-3) var(--space-4);
   max-width: 460px;
 }
+
+.ride-panel.wide { max-width: 780px; }
 
 .ride-panel p {
   text-align: left;
@@ -1222,90 +1223,109 @@ img { max-width: 100%; display: block; }
    surface — reused unchanged) — just confirm spacing. */
 .ride-panel .style-block { margin: var(--space-2) 0 0; }
 
-/* ---------- carousel UI ---------- */
-.carousel-ui {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 6%;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  z-index: 5;
-  pointer-events: none;
-}
+/* ---------- filmstrip carousel: flat DOM, real <img> tags ----------
+   Replaces the old Three.js HUD carousel UI (.carousel-ui/.carousel-
+   caption/.carousel-controls/.carousel-arrow/.carousel-dot) entirely —
+   that markup and CSS is gone, not just unused, since it was styled
+   for a floating bottom overlay over the 3D scene that no longer
+   exists. Same shared filmstrip pattern as big-cat-rescue.css,
+   restyled with this page's own violet/gold palette. */
 
-.ride-scene[data-carousel].is-active .carousel-ui { display: flex; }
-
-.carousel-caption {
-  background: var(--panel-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--panel-line);
-  border-radius: 12px;
-  padding: 0.85rem 1.4rem;
-  font-size: 0.85rem;
-  color: var(--panel-ink-soft);
-  max-width: min(90vw, 440px);
-  text-align: center;
-  pointer-events: auto;
-}
-
-.carousel-caption strong {
-  color: var(--panel-ink);
-  display: block;
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.1rem;
-  margin-bottom: 0.2rem;
-}
-
-.carousel-caption-actions {
-  margin-top: 0.5rem;
+.filmstrip-track {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0.5rem calc(50% - min(31vw, 115px)) 1rem;
+  touch-action: pan-x;
+  scrollbar-width: none;
+  margin-top: var(--space-2);
 }
 
-.carousel-back,
-.carousel-expand {
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--panel-accent);
-  background: none;
-  border: none;
+.filmstrip-track::-webkit-scrollbar { display: none; }
+
+.film-shot {
+  position: relative;
+  width: min(62vw, 230px);
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--dusk-2);
+  border: 1.5px solid var(--panel-line);
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  opacity: 0.5;
+  transform: scale(0.88);
+  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
   cursor: pointer;
-  padding: 0;
 }
 
-.carousel-back { display: none; }
-.carousel-back.is-visible { display: inline-block; }
-
-.carousel-expand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
+.film-shot.is-center {
+  opacity: 1;
+  transform: scale(1);
+  border-color: var(--panel-accent);
+  cursor: zoom-in;
 }
 
-.carousel-expand:hover,
-.carousel-expand:focus-visible,
-.carousel-back:hover,
-.carousel-back:focus-visible {
-  color: var(--panel-gold);
+.film-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
 }
 
-.carousel-controls {
+.film-shot .film-label {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: rgba(27, 33, 40, 0.7);
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.filmstrip-dots {
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  pointer-events: auto;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
 }
 
-.carousel-arrow {
-  width: 44px;
-  height: 44px;
+.filmstrip-dots .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--panel-line);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.filmstrip-dots .dot.is-active {
+  background: var(--panel-gold);
+  width: 18px;
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.filmstrip-arrows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.filmstrip-arrow {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 1px solid var(--violet-soft);
   background: var(--panel-bg);
@@ -1314,32 +1334,10 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.carousel-arrow:hover {
-  background: #fff;
-  transform: scale(1.06);
-}
-
-.carousel-dots { display: flex; gap: 0.5rem; }
-
-.carousel-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(246, 242, 234, 0.4);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.carousel-dot.is-active {
-  background: var(--panel-gold);
-  width: 22px;
-  border-radius: 5px;
-  transition: width 0.2s ease;
-}
+.filmstrip-arrow:hover { background: #fff; }
+.filmstrip-arrow:disabled { opacity: 0.35; cursor: default; }
 
 /* ============================================================
    RESPONSIVE : Firefly Ride
@@ -1348,23 +1346,19 @@ img { max-width: 100%; display: block; }
   .ride-panel { padding: var(--space-3); border-radius: 14px; }
   .ride-panel.compact { padding: var(--space-2) var(--space-3); }
   .ride-meta-grid { grid-template-columns: 1fr; gap: var(--space-2); }
-  .carousel-controls { gap: var(--space-2); }
-  .carousel-arrow { width: 40px; height: 40px; }
+  .filmstrip-arrow { width: 34px; height: 34px; }
 }
 
 @media (max-width: 480px) {
   .ride-scene { padding: 0 var(--space-2); }
-  .ride-scene[data-carousel] { padding-top: 5.5rem; }
   .ride-panel h1 { font-size: clamp(1.6rem, 9vw, 2.2rem); }
-  .carousel-caption { padding: 0.65rem 1rem; font-size: 0.8rem; }
 }
 
 /* ---------- Short / landscape mobile viewports ----------
    Same safety valve counseling.css uses: caps a tall panel to the
    viewport and lets it scroll internally first, so a touch drag
    inside a tall panel scrolls its own text before falling through to
-   the outer ride scroll. Scoped to the panel only, so it never
-   interferes with the carousel's own swipe handling at its stop. */
+   the outer ride scroll. */
 @media (max-height: 500px) {
   .ride-panel {
     max-height: 92vh;
@@ -1373,6 +1367,5 @@ img { max-width: 100%; display: block; }
     touch-action: pan-y;
   }
   .ride-scene { align-items: center; }
-  .ride-scene[data-carousel] { padding-top: 1rem; }
   .ride-panel h1 { font-size: clamp(1.4rem, 5vw, 1.9rem); }
 }
