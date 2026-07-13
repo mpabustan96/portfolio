@@ -6,6 +6,7 @@
 <title>Big Cat Rescue, Case Study | Mark Pabustan</title>
 <link rel="stylesheet" href="big-cat-rescue.css">
 
+  <!-- Favicon (theme-adaptive) -->
   <link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
   <link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="images/favicon.ico" sizes="any">
@@ -13,6 +14,7 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#0A0C12">
 
+  <!-- Open Graph / social preview -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Mark Pabustan — UI/UX Designer">
   <meta property="og:title" content="Big Cat Rescue — Case Study | Mark Pabustan">
@@ -23,12 +25,14 @@
   <meta name="twitter:description" content="A four-person redesign of a sanctuary's donor website and donation flow.">
   <meta name="twitter:image" content="images/og-image.png">
 
+  <!-- Three.js r128: powers the Golden Hour Trail scene in big-cat-rescue-3d.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
   <script src="page-transitions.js"></script>
 
-  <canvas id="ride-canvas" aria-hidden="true"></canvas>
+  <canvas id="safari-canvas" aria-hidden="true"></canvas>
+  <div id="safari-progress" aria-hidden="true"></div>
 
   <header class="site-header">
     <a href="index.html" class="logo"><img src="images/logo-white.png" alt="Mark Pabustan, home" width="194" height="114"></a>
@@ -49,15 +53,17 @@
   <main>
     <div class="ride-track">
 
+      <!-- 0: HERO -->
       <section class="ride-scene" data-scene="0">
         <div class="ride-panel">
           <p class="ride-eyebrow">UI/UX Case Study, Bootcamp Team Project</p>
-          <h1 style="font-family:var(--serif); font-weight:400; color:var(--sand); font-size:clamp(1.7rem,4vw,2.6rem); line-height:1.3; margin:0 0 var(--space-2);">A site that looked like it didn't need your donation.</h1>
+          <h1 style="font-family:var(--serif); font-weight:400; color:var(--sand); font-size:clamp(1.9rem,4.6vw,3rem); line-height:1.3; margin:0 0 var(--space-3);">A site that looked like it didn't need your donation.</h1>
           <p>Big Cat Rescue runs on the generosity of people who will never set foot on the property. Its old website made that harder than it needed to be, donation options buried under a layout worn enough to make the organization look shut down. We chose this project ourselves, and spent the weeks after learning that agreement is harder to reach than any one good idea.</p>
           <p class="ride-hint">Scroll to begin ↓</p>
         </div>
       </section>
 
+      <!-- 1: METADATA STRIP -->
       <section class="ride-scene" data-scene="1">
         <div class="ride-panel">
           <p class="ride-eyebrow">At a glance</p>
@@ -82,17 +88,19 @@
         </div>
       </section>
 
+      <!-- 2: HOOK -->
       <section class="ride-scene" data-scene="2">
-        <div class="ride-panel">
+        <div class="ride-panel centered">
           <p class="hook-line">"A donor doesn't see the sanctuary. They see the website, and decide from that alone whether the place is real."</p>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="3">
+      <!-- 3: THE PROBLEM (desktop: one stop) -->
+      <section class="ride-scene" data-scene="3" data-device="desktop">
         <div class="ride-panel">
-          <p class="ride-eyebrow">01 &middot; The Problem</p>
+          <p class="ride-eyebrow">The Problem</p>
           <p>This project started with a choice, not a brief. As a four-person team in a UI/UX bootcamp, we had to pick our own organization to redesign, which meant the first real design decision happened before we'd opened Figma: who do we build this for, and why does it matter enough to spend weeks on?</p>
-          <p>We landed on Big Cat Rescue, a sanctuary for tigers, lions, and other big cats, after looking at their existing site and finding it worked against the very thing it needed to do. The donation flow was buried, the page structure didn't reflect how a visitor thinks about a non-profit, and the visual design looked dated enough to undercut its own credibility. For an organization that depends entirely on donor trust, an unconvincing website isn't a cosmetic problem. It's the whole funnel.</p>
+          <p>We landed on Big Cat Rescue, a sanctuary for tigers, lions, and other big cats, after looking at their existing site and finding it worked against the very thing it needed to do. The donation flow was buried, the page structure didn't reflect how a visitor thinks about a non-profit (which animals do you help, how do you give, why should you trust this), and the visual design looked dated enough to undercut its own credibility. For an organization that depends entirely on donor trust, an unconvincing website isn't a cosmetic problem. It's the whole funnel.</p>
           <div class="team-strip">
             <span class="team-chip">Self-scoped project</span>
             <span class="team-chip">No assigned client</span>
@@ -101,9 +109,30 @@
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="4" data-device="desktop">
+      <!-- 3a/3b: THE PROBLEM (mobile: split) -->
+      <section class="ride-scene" data-scene="3a" data-device="mobile">
         <div class="ride-panel">
-          <p class="ride-eyebrow">02 &middot; Research &amp; Discovery</p>
+          <p class="ride-eyebrow">The Problem</p>
+          <p>This project started with a choice, not a brief. As a four-person team in a UI/UX bootcamp, we had to pick our own organization to redesign, which meant the first real design decision happened before we'd opened Figma: who do we build this for, and why does it matter enough to spend weeks on?</p>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="3b" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">The Problem, continued</p>
+          <p>We landed on Big Cat Rescue, a sanctuary for tigers, lions, and other big cats, after looking at their existing site and finding it worked against the very thing it needed to do. The donation flow was buried, the page structure didn't reflect how a visitor thinks about a non-profit (which animals do you help, how do you give, why should you trust this), and the visual design looked dated enough to undercut its own credibility. For an organization that depends entirely on donor trust, an unconvincing website isn't a cosmetic problem. It's the whole funnel.</p>
+          <div class="team-strip">
+            <span class="team-chip">Self-scoped project</span>
+            <span class="team-chip">No assigned client</span>
+            <span class="team-chip">4-person team</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4a/4b: RESEARCH & DISCOVERY (split on all viewports — long section) -->
+      <section class="ride-scene" data-scene="4a">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">Research &amp; Discovery</p>
           <p>We ran user interviews and a short survey with people who'd donated to causes like this before, to understand what moves someone from "I care about this" to "I gave money." The sample was small, this was a bootcamp project on a bootcamp timeline, but the pattern across answers was consistent enough to act on.</p>
           <div class="stat-grid">
             <div class="stat-card">
@@ -128,7 +157,13 @@
               <div class="stat-row"><span>Never</span><span class="stat-num">12.5%</span></div>
             </div>
           </div>
-          <p>The most useful finding wasn't any single number, it was the combination of "100% say transparency is very important" next to a donation flow that gave almost no information about where money went. That gap became the thesis for the whole redesign: <em>a site that's honest about itself reads as more trustworthy than one that just looks polished.</em></p>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="4b">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">Research &amp; Discovery, continued</p>
+          <p>The most useful finding wasn't any single number, it was the combination of "100% say transparency is very important" next to a donation flow that, on the existing site, gave almost no information about where money went. That gap, between what people say they need to trust an organization and what the current site offered, became the thesis for the whole redesign: <em>a site that's honest about itself reads as more trustworthy than one that just looks polished.</em></p>
           <div class="note">
             <span class="note-label">Honest framing</span>
             <p>This was a real survey, but a small, informal one run by a student team, not a validated research study. We treated it as a strong directional signal, not a statistically rigorous dataset, and weighed our own judgment alongside it rather than letting four data points override every design conversation.</p>
@@ -136,52 +171,10 @@
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="4a" data-device="mobile">
+      <!-- 5: WHAT WE WERE WORKING AGAINST (desktop: one stop) -->
+      <section class="ride-scene" data-scene="5" data-device="desktop">
         <div class="ride-panel">
-          <p class="ride-eyebrow">02 &middot; Research &amp; Discovery</p>
-          <p>We ran user interviews and a short survey with people who'd donated to causes like this before, to understand what moves someone from "I care about this" to "I gave money." The sample was small, this was a bootcamp project on a bootcamp timeline, but the pattern across answers was consistent enough to act on.</p>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <span class="stat-label">Preferred payment method</span>
-              <div class="stat-row"><span>Credit card</span><span class="stat-num">70%</span></div>
-              <div class="stat-row"><span>Venmo</span><span class="stat-num">20%</span></div>
-              <div class="stat-row"><span>Other</span><span class="stat-num">10%</span></div>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">Importance of transparency</span>
-              <div class="stat-row"><span>Very important</span><span class="stat-num">100%</span></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="ride-scene" data-scene="4b" data-device="mobile">
-        <div class="ride-panel">
-          <p class="ride-eyebrow">02 &middot; Research &amp; Discovery, continued</p>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <span class="stat-label">Frequency of donation</span>
-              <div class="stat-row"><span>One-time</span><span class="stat-num">80%</span></div>
-              <div class="stat-row"><span>Monthly</span><span class="stat-num">20%</span></div>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">Preferred update frequency</span>
-              <div class="stat-row"><span>Yearly</span><span class="stat-num">75%</span></div>
-              <div class="stat-row"><span>Monthly</span><span class="stat-num">12.5%</span></div>
-              <div class="stat-row"><span>Never</span><span class="stat-num">12.5%</span></div>
-            </div>
-          </div>
-          <p>The most useful finding wasn't any single number, it was the combination of "100% say transparency is very important" next to a donation flow that gave almost no information about where money went. That gap became the thesis for the whole redesign: <em>a site that's honest about itself reads as more trustworthy than one that just looks polished.</em></p>
-          <div class="note">
-            <span class="note-label">Honest framing</span>
-            <p>This was a real survey, but a small, informal one run by a student team, not a validated research study. We weighed our own judgment alongside it rather than letting four data points override every design conversation.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="ride-scene" data-scene="5">
-        <div class="ride-panel">
-          <p class="ride-eyebrow">03 &middot; What We Were Working Against</p>
+          <p class="ride-eyebrow">What We Were Working Against</p>
           <p>Before redesigning anything, we audited the existing Big Cat Rescue site as a team and wrote down every friction point we could agree on without much debate. This list ended up being the one part of the project where all four of us were aligned from the start:</p>
           <ul class="findings-list">
             <li><span class="findings-dot" aria-hidden="true"></span>Too many pages, with no clear hierarchy between them</li>
@@ -191,14 +184,47 @@
             <li><span class="findings-dot" aria-hidden="true"></span>A visual style that looked expired, which made it harder to trust</li>
             <li><span class="findings-dot" aria-hidden="true"></span>Information overload on pages that needed to make a fast case for donating</li>
           </ul>
-          <p class="ride-hint">The old site is the first stop in the screenshot gallery later in this ride.</p>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="6" data-device="desktop">
+      <!-- 5a/5b: WHAT WE WERE WORKING AGAINST (mobile: split) -->
+      <section class="ride-scene" data-scene="5a" data-device="mobile">
         <div class="ride-panel">
-          <p class="ride-eyebrow">04 &middot; Define &amp; Ideate</p>
-          <p>With four designers and no client to break ties, almost every meaningful decision went through some version of the same loop: someone proposes a direction, someone else pushes back with a real reason, and the team has to resolve it rather than letting whoever's loudest win.</p>
+          <p class="ride-eyebrow">What We Were Working Against</p>
+          <p>Before redesigning anything, we audited the existing Big Cat Rescue site as a team and wrote down every friction point we could agree on without much debate. This list ended up being the one part of the project where all four of us were aligned from the start:</p>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="5b" data-device="mobile">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">What We Were Working Against, continued</p>
+          <ul class="findings-list">
+            <li><span class="findings-dot" aria-hidden="true"></span>Too many pages, with no clear hierarchy between them</li>
+            <li><span class="findings-dot" aria-hidden="true"></span>Limited options for donating, both in payment method and frequency</li>
+            <li><span class="findings-dot" aria-hidden="true"></span>Confusing site architecture that didn't match how a visitor thinks</li>
+            <li><span class="findings-dot" aria-hidden="true"></span>Inconsistent typography across pages</li>
+            <li><span class="findings-dot" aria-hidden="true"></span>A visual style that looked expired, which made it harder to trust</li>
+            <li><span class="findings-dot" aria-hidden="true"></span>Information overload on pages that needed to make a fast case for donating</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 6: FILMSTRIP — OLD SITE (shared, single carousel stop) -->
+      <section class="ride-scene" data-scene="6" data-carousel>
+        <div class="ride-panel wide">
+          <p class="ride-eyebrow">What We Were Working Against, continued</p>
+          <h2>The old site, up close.</h2>
+          <p class="ride-hint">Tap the screen to zoom in</p>
+          <div class="filmstrip-track" id="filmstripAuditTrack" tabindex="0"></div>
+          <div class="filmstrip-dots" id="filmstripAuditDots"></div>
+        </div>
+      </section>
+
+      <!-- 7a/7b: DEFINE & IDEATE, part 1 (split on all viewports — long section) -->
+      <section class="ride-scene" data-scene="7a">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">Define &amp; Ideate</p>
+          <p>With four designers and no client to break ties, almost every meaningful decision in this project went through some version of the same loop: someone proposes a direction, someone else pushes back with a real reason, and the team has to resolve it rather than letting whoever's loudest win. Two of those moments shaped the final design more than any single screen did.</p>
           <div class="merge-block">
             <div class="merge-split">
               <div class="merge-card voice-a">
@@ -210,6 +236,14 @@
                 <p>If it feels too much like entertainment, it undercuts the credibility a donor needs to feel before giving money to a non-profit they've never heard of.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ride-scene" data-scene="7b">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">Define &amp; Ideate, continued</p>
+          <div class="merge-block">
             <div class="merge-resolution">
               <span class="merge-label">Where we landed</span>
               <p>Keep the vibrant, photographic, slightly wild visual identity that makes the animals feel real and present, but pair it with a calmer, more conventional layout structure underneath, so the page still reads as organized and trustworthy, not flashy.</p>
@@ -218,10 +252,11 @@
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="6b" data-device="desktop">
+      <!-- 8a/8b: DEFINE & IDEATE, part 2 (split on all viewports — long section) -->
+      <section class="ride-scene" data-scene="8a">
         <div class="ride-panel">
-          <p class="ride-eyebrow">04 &middot; Define &amp; Ideate, continued</p>
-          <div class="merge-block" style="margin-top:0;">
+          <p class="ride-eyebrow">Define &amp; Ideate, continued</p>
+          <div class="merge-block">
             <div class="merge-split">
               <div class="merge-card voice-a">
                 <span class="who">One instinct</span>
@@ -232,125 +267,98 @@
                 <p>That's the exact information-overload problem we just flagged on the old site. A first-time visitor doesn't need every option, they need one clear next step.</p>
               </div>
             </div>
-            <div class="merge-resolution">
-              <span class="merge-label">Where we landed</span>
-              <p>A simplified site map: Home, Get Involved, Cub Facts, and Donate as the four top-level destinations, with deeper content nested one level in instead of all competing for space up front.</p>
-            </div>
-          </div>
-          <p>Neither resolution was any one person's idea by the end. The real skill wasn't generating ideas, it was running enough rounds of "what are we both actually optimizing for" until the disagreement turned into a sharper design instead of a stalemate.</p>
-        </div>
-      </section>
-
-      <section class="ride-scene" data-scene="6a" data-device="mobile">
-        <div class="ride-panel">
-          <p class="ride-eyebrow">04 &middot; Define &amp; Ideate</p>
-          <p>With four designers and no client to break ties, almost every meaningful decision went through the same loop: propose, push back with a real reason, resolve.</p>
-          <div class="merge-block" style="margin-top:0;">
-            <div class="merge-split">
-              <div class="merge-card voice-a">
-                <span class="who">One instinct</span>
-                <p>Lean into the "exotic animal sanctuary" angle hard, big imagery, dramatic color, an interface that feels like an adventure.</p>
-              </div>
-              <div class="merge-card voice-b">
-                <span class="who">The counter</span>
-                <p>Too much entertainment undercuts the credibility a donor needs before giving to a non-profit they've never heard of.</p>
-              </div>
-            </div>
-            <div class="merge-resolution">
-              <span class="merge-label">Where we landed</span>
-              <p>Keep the vibrant, photographic identity, but pair it with a calmer, more conventional layout underneath.</p>
-            </div>
           </div>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="6c" data-device="mobile">
+      <section class="ride-scene" data-scene="8b">
         <div class="ride-panel">
-          <p class="ride-eyebrow">04 &middot; Define &amp; Ideate, continued</p>
-          <div class="merge-block" style="margin-top:0;">
-            <div class="merge-split">
-              <div class="merge-card voice-a">
-                <span class="who">One instinct</span>
-                <p>Surface every animal type, every program, every way to help, right on the homepage.</p>
-              </div>
-              <div class="merge-card voice-b">
-                <span class="who">The counter</span>
-                <p>That's the same information-overload problem we just flagged on the old site.</p>
-              </div>
-            </div>
+          <p class="ride-eyebrow">Define &amp; Ideate, continued</p>
+          <div class="merge-block">
             <div class="merge-resolution">
               <span class="merge-label">Where we landed</span>
-              <p>A simplified site map: Home, Get Involved, Cub Facts, and Donate, with deeper content nested one level in.</p>
+              <p>A simplified site map: Home, Get Involved, Cub Facts, and Donate as the four top-level destinations, with the deeper content (animal types, volunteer paths, cat laws) nested one level in instead of all competing for space up front.</p>
             </div>
           </div>
-          <p>Neither resolution was any one person's idea by the end, it came from rounds of "what are we both actually optimizing for."</p>
+          <p style="margin-top: var(--space-3);">Neither of those resolutions was any one person's idea by the end. That's the part of group design that's harder to put on a slide than a clean wireframe: the real skill wasn't generating ideas, it was running enough rounds of "what are we both actually optimizing for" until the disagreement turned into a sharper version of the design instead of a stalemate.</p>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="7">
+      <!-- 9: DESIGN DECISIONS — lo-fi to hi-fi (shared) -->
+      <section class="ride-scene" data-scene="9">
         <div class="ride-panel">
-          <p class="ride-eyebrow">05 &middot; Design Decisions</p>
-          <div class="subsection" style="border-top:none; padding-top:0;">
+          <p class="ride-eyebrow">Design Decisions</p>
+          <div class="subsection">
             <h3>From lo-fi to hi-fi</h3>
             <p>We started in low-fidelity wireframes to lock the page structure, image carousel up top, search, a mission statement, before anyone touched color or type. That sequencing mattered for a four-person team specifically: it's much easier to agree on where a search bar goes than to agree on it once it's already styled and someone's attached to their version.</p>
           </div>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="7b">
-        <div class="ride-panel">
-          <p class="ride-eyebrow">05 &middot; Design Decisions, continued</p>
-          <div class="subsection" style="border-top:none; padding-top:0;">
-            <h3>A donation flow built around how people give</h3>
-            <p>The research was direct on this point: a strong majority preferred card payment, and donation frequency split heavily toward one-time gifts over monthly ones. We designed the donate page around that reality, one-time and monthly as equally prominent toggles, preset amount buttons sized for the most common gift ranges, and a confirmation screen that closes the loop instead of leaving a donor wondering if it worked.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="ride-scene" data-scene="7c">
-        <div class="ride-panel">
-          <p class="ride-eyebrow">05 &middot; Design Decisions, continued</p>
-          <div class="subsection" style="border-top:none; padding-top:0;">
-            <h3>A real brand system, not just a homepage</h3>
-            <p>Because we were redesigning an existing organization rather than inventing a fictional one, we built out a full style system: a warm olive-and-mango palette suited to a sanctuary rather than a sterile non-profit look, Rubik Mono One for headlines to give the brand a bit of stubborn, hand-stamped personality, and Work Sans for everything else. That system is what let four people design different pages and have them feel like one site instead of four.</p>
-          </div>
-          <p class="ride-hint">Lo-fi/hi-fi, donation, and design-system screens are all in the gallery next.</p>
-        </div>
-      </section>
-
-      <section class="ride-scene" data-scene="8" data-carousel>
-        <div class="ride-panel compact">
-          <p class="ride-eyebrow">05 &middot; Design Decisions, continued</p>
-          <h2 style="font-family:var(--serif); font-weight:400; color:var(--sand); font-size:1.2rem; margin:0 0 0.2rem;">The screens, up close.</h2>
-          <p class="ride-hint">Swipe, use the arrows or dots below, or tap the centered screen to zoom in</p>
-        </div>
-        <div class="carousel-ui">
-          <div class="carousel-caption">
-            <strong id="captionTitle"></strong>
-            <span id="captionBody"></span>
-            <div class="carousel-caption-actions">
-              <button class="carousel-back" id="carouselBack" type="button">← Zoom out</button>
-              <button class="carousel-expand" id="carouselExpand" type="button">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg>
-                View full size
-              </button>
-            </div>
-          </div>
-          <div class="carousel-controls">
-            <button class="carousel-arrow" id="carouselPrev" type="button" aria-label="Previous screen">
+      <!-- 10: FILMSTRIP — LO-FI + HI-FI (shared) -->
+      <section class="ride-scene" data-scene="10" data-carousel>
+        <div class="ride-panel wide">
+          <p class="ride-eyebrow">Design Decisions, continued</p>
+          <h2>Lo-fi to hi-fi, up close.</h2>
+          <p class="ride-hint">Swipe, drag, use the arrows, or tap the screen to zoom in</p>
+          <div class="filmstrip-track" id="filmstripLofiTrack" tabindex="0"></div>
+          <div class="filmstrip-dots" id="filmstripLofiDots"></div>
+          <div class="filmstrip-arrows">
+            <button class="filmstrip-arrow" id="filmstripLofiPrev" type="button" aria-label="Previous screen">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
             </button>
-            <div class="carousel-dots" id="carouselDots"></div>
-            <button class="carousel-arrow" id="carouselNext" type="button" aria-label="Next screen">
+            <button class="filmstrip-arrow" id="filmstripLofiNext" type="button" aria-label="Next screen">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
             </button>
           </div>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="9" data-device="desktop">
+      <!-- 11: DESIGN DECISIONS — donation flow (shared) -->
+      <section class="ride-scene" data-scene="11">
         <div class="ride-panel">
-          <p class="ride-eyebrow">06 &middot; Putting It in Front of People</p>
+          <p class="ride-eyebrow">Design Decisions, continued</p>
+          <div class="subsection">
+            <h3>A donation flow built around how people give</h3>
+            <p>The research was direct on this point: a strong majority preferred card payment, and donation frequency split heavily toward one-time gifts over monthly ones. We designed the donate page around that reality instead of around what we assumed a non-profit "should" offer, one-time and monthly as equally prominent toggles, preset amount buttons sized for the most common gift ranges, and a confirmation screen that closes the loop instead of leaving a donor wondering if it worked.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12: DESIGN DECISIONS — brand system (shared) -->
+      <section class="ride-scene" data-scene="12">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">Design Decisions, continued</p>
+          <div class="subsection">
+            <h3>A real brand system, not just a homepage</h3>
+            <p>Because we were redesigning an existing organization rather than inventing a fictional one, we built out a full style system. Color and type weren't a moodboard, they were a working spec: a warm olive-and-mango palette suited to a sanctuary rather than a sterile non-profit look, Rubik Mono One for headlines to give the brand a bit of stubborn, hand-stamped personality, and Work Sans for everything else so the donation content stayed easy to read. That system is what let four people design different pages, Get Involved, Cub Facts, Donate, and have them feel like one site instead of four.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13: FILMSTRIP — DONATION FLOW + BRAND SYSTEM (shared) -->
+      <section class="ride-scene" data-scene="13" data-carousel>
+        <div class="ride-panel wide">
+          <p class="ride-eyebrow">Design Decisions, continued</p>
+          <h2>The donation flow &amp; brand system, up close.</h2>
+          <p class="ride-hint">Swipe, drag, use the arrows, or tap the screen to zoom in</p>
+          <div class="filmstrip-track" id="filmstripBrandTrack" tabindex="0"></div>
+          <div class="filmstrip-dots" id="filmstripBrandDots"></div>
+          <div class="filmstrip-arrows">
+            <button class="filmstrip-arrow" id="filmstripBrandPrev" type="button" aria-label="Previous screen">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+            </button>
+            <button class="filmstrip-arrow" id="filmstripBrandNext" type="button" aria-label="Next screen">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 14a/14b: USABILITY TESTING (split on all viewports — long section) -->
+      <section class="ride-scene" data-scene="14a">
+        <div class="ride-panel">
+          <p class="ride-eyebrow">Putting It in Front of People</p>
           <p>We ran usability tests on the hi-fi prototype before calling it finished, and the findings were specific enough to act on directly rather than vague "users were confused" notes:</p>
           <ul class="findings-list">
             <li><span class="findings-dot" aria-hidden="true"></span>Certain interactive elements didn't stand out enough to register as clickable</li>
@@ -360,69 +368,39 @@
             <li><span class="findings-dot" aria-hidden="true"></span>Vertical padding on the donate page felt excessive and made the flow feel longer than it was</li>
             <li><span class="findings-dot" aria-hidden="true"></span>Testers wanted transparency stats surfaced directly on the donate page itself, not just elsewhere on the site</li>
           </ul>
-          <p>That last finding closed the loop on the research from the start of the project: the same group that told us transparency mattered most also told us, independently, that they wanted to see it at the exact moment they were about to give money.</p>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="9a" data-device="mobile">
+      <section class="ride-scene" data-scene="14b">
         <div class="ride-panel">
-          <p class="ride-eyebrow">06 &middot; Putting It in Front of People</p>
-          <p>We ran usability tests on the hi-fi prototype before calling it finished, and the findings were specific enough to act on directly:</p>
-          <ul class="findings-list">
-            <li><span class="findings-dot" aria-hidden="true"></span>Certain interactive elements didn't stand out enough to register as clickable</li>
-            <li><span class="findings-dot" aria-hidden="true"></span>Visitors wanted a clearer overview of what each page contained</li>
-            <li><span class="findings-dot" aria-hidden="true"></span>The logo didn't navigate back to the homepage</li>
-          </ul>
+          <p class="ride-eyebrow">Putting It in Front of People, continued</p>
+          <p>That last finding closed the loop on the research from the start of the project: the same group that told us transparency mattered most also told us, independently, that they wanted to see it at the exact moment they were about to give money. We treated that as a confirmation we'd built the right priority into the page, even with the smaller fixes still left to make.</p>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="9b" data-device="mobile">
+      <!-- 15a/15b: RESULTS & REFLECTION (split on all viewports — long section) -->
+      <section class="ride-scene" data-scene="15a">
         <div class="ride-panel">
-          <p class="ride-eyebrow">06 &middot; Putting It in Front of People, continued</p>
-          <ul class="findings-list">
-            <li><span class="findings-dot" aria-hidden="true"></span>The donate form needed a cancel option</li>
-            <li><span class="findings-dot" aria-hidden="true"></span>Vertical padding on the donate page felt excessive</li>
-            <li><span class="findings-dot" aria-hidden="true"></span>Testers wanted transparency stats surfaced directly on the donate page itself</li>
-          </ul>
-          <p>That last finding closed the loop on the research from the start: the same group that told us transparency mattered most also told us they wanted to see it at the exact moment they were about to give money.</p>
-        </div>
-      </section>
-
-      <section class="ride-scene" data-scene="10" data-device="desktop">
-        <div class="ride-panel">
-          <p class="ride-eyebrow">07 &middot; Results &amp; Reflection</p>
-          <div class="reflection-card" style="padding: var(--space-3) var(--space-3);">
+          <p class="ride-eyebrow">Results &amp; Reflection</p>
+          <div class="reflection-card">
             <div class="note">
               <span class="note-label">Honest framing</span>
-              <p>This redesign never shipped, and there's no donation or traffic data to point to. It exists as a complete Figma prototype: full site map, lo-fi through hi-fi screens, a working style system, and usability testing that fed real changes back into the design.</p>
+              <p>This redesign never shipped, and there's no donation or traffic data to point to. It exists as a complete Figma prototype: full site map, lo-fi through hi-fi screens, a working style system, and usability testing that fed real changes back into the design. What I can speak to honestly is the process, not a deployed result.</p>
             </div>
             <div class="closure-note">
               <span class="note-label">What happened after</span>
               <p>By the time we wrapped the project, Big Cat Rescue had unfortunately shut down due to financial struggles. The redesign was never going to be handed off at that point, which is its own quiet reminder that even a well-reasoned design only matters if the organization behind it survives long enough to use it.</p>
             </div>
-            <p style="margin-top: 1rem;"><strong style="color: var(--sand);">What I'd do differently:</strong> push earlier for a larger, more structured research sample, and build in a checkpoint specifically for resolving four-way design disagreements before they happened mid-sprint.</p>
           </div>
         </div>
       </section>
 
-      <section class="ride-scene" data-scene="10a" data-device="mobile">
+      <section class="ride-scene" data-scene="15b">
         <div class="ride-panel">
-          <p class="ride-eyebrow">07 &middot; Results &amp; Reflection</p>
-          <div class="note">
-            <span class="note-label">Honest framing</span>
-            <p>This redesign never shipped, and there's no donation or traffic data to point to. It exists as a complete Figma prototype: full site map, lo-fi through hi-fi screens, a working style system, and usability testing that fed real changes back into the design.</p>
+          <p class="ride-eyebrow">Results &amp; Reflection, continued</p>
+          <div class="reflection-card">
+            <p style="margin: 0;"><strong style="color: var(--sand);">What I'd do differently:</strong> push earlier for a larger, more structured research sample instead of leaning on a small informal survey, and build in a checkpoint specifically for resolving four-way design disagreements before they happened mid-sprint, rather than working them out in the moment every time. The compromises we landed on were good ones, but we got there more by persistence than by a process built to make that easier.</p>
           </div>
-        </div>
-      </section>
-
-      <section class="ride-scene" data-scene="10b" data-device="mobile">
-        <div class="ride-panel">
-          <p class="ride-eyebrow">07 &middot; Results &amp; Reflection, continued</p>
-          <div class="closure-note">
-            <span class="note-label">What happened after</span>
-            <p>By the time we wrapped the project, Big Cat Rescue had unfortunately shut down due to financial struggles. Even a well-reasoned design only matters if the organization behind it survives long enough to use it.</p>
-          </div>
-          <p><strong style="color: var(--sand);">What I'd do differently:</strong> push earlier for a larger, more structured research sample, and build in a checkpoint specifically for resolving four-way design disagreements before they happened mid-sprint.</p>
         </div>
       </section>
 
@@ -444,14 +422,17 @@
     <p>&copy; 2026 Mark Pabustan, UI/UX Designer</p>
   </footer>
 
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Full-size screenshot" aria-hidden="true">
-    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close full-size image">
-      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+  <!-- IMAGE LIGHTBOX — full-resolution view, opened from any filmstrip's
+       centered card (see big-cat-rescue-3d.js) -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close enlarged image">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17"/></svg>
     </button>
     <img class="lightbox-img" id="lightboxImg" src="" alt="">
   </div>
 
 <script>
+  // Mobile nav toggle
   const navToggle = document.getElementById('nav-toggle');
   const mobileNav = document.getElementById('nav-links-mobile');
 
@@ -481,6 +462,9 @@
   });
 </script>
 
+  <!-- Golden Hour Trail scene: camera dolly, grass, dust, acacia
+       silhouettes, sun glow, discrete beat navigation, and the
+       three filmstrip carousels (see big-cat-rescue-3d.js). -->
   <script src="big-cat-rescue-3d.js"></script>
 
 </body>
