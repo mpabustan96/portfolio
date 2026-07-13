@@ -317,8 +317,7 @@
   // Ambient light drift — soft motes rising slowly behind all page content
   (function () {
     const canvas = document.getElementById('lightDrift');
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!canvas || prefersReducedMotion) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
     const styles = getComputedStyle(document.documentElement);
