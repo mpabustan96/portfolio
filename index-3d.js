@@ -315,10 +315,55 @@
   }
 
   // Wheel — one notch/flick = one beat, regardless of scroll speed.
+  //
+  // TRACKPAD FIX: a physical mouse wheel fires one discrete,
+  // large-delta 'wheel' event per click, so "any event = one beat"
+  // felt right for a mouse. Trackpads (and Magic Mouse) don't behave
+  // that way — a single two-finger swipe fires dozens of small-delta
+  // events, and lifting your fingers still leaves a tail of
+  // momentum/inertia events firing for several hundred ms after the
+  // gesture visually stops. Those trailing events were queuing up
+  // behind isAnimating and firing goToBeat() again the instant the
+  // in-flight animation finished, which is what caused one swipe to
+  // skip past a case study instead of landing on the next one.
+  //
+  // Fix has two parts:
+  //   1. Small deltas have to accumulate past a threshold within a
+  //      short gesture window before they count as an intentional
+  //      scroll, so a light trackpad touch doesn't fire early.
+  //   2. After a trigger, a cooldown window (longer than the beat
+  //      animation itself) swallows any trailing momentum events
+  //      instead of letting them queue up a second jump.
+  // deltaMode is normalized too, since some browsers report
+  // line-based deltas (DOM_DELTA_LINE) instead of pixels
+  // (DOM_DELTA_PIXEL), which would otherwise throw off the threshold.
+  var WHEEL_THRESHOLD = 55;      // px-equivalent accumulated delta needed to trigger
+  var WHEEL_GESTURE_GAP_MS = 150; // no wheel events for this long = gesture reset
+  var WHEEL_COOLDOWN_MS = 1000;   // > 800ms animation, swallows trailing momentum
+  var wheelAccum = 0;
+  var wheelGestureTimer = null;
+  var wheelCooldownUntil = 0;
+
   window.addEventListener('wheel', function (e) {
     e.preventDefault();
-    if (isAnimating) return;
-    goToBeat(currentIndex + (e.deltaY > 0 ? 1 : -1));
+
+    var now = performance.now();
+    if (isAnimating || now < wheelCooldownUntil) return;
+
+    var deltaY = e.deltaY;
+    if (e.deltaMode === 1) deltaY *= 16;              // DOM_DELTA_LINE -> ~px
+    else if (e.deltaMode === 2) deltaY *= window.innerHeight; // DOM_DELTA_PAGE -> px
+
+    wheelAccum += deltaY;
+    clearTimeout(wheelGestureTimer);
+    wheelGestureTimer = setTimeout(function () { wheelAccum = 0; }, WHEEL_GESTURE_GAP_MS);
+
+    if (Math.abs(wheelAccum) < WHEEL_THRESHOLD) return;
+
+    var direction = wheelAccum > 0 ? 1 : -1;
+    wheelAccum = 0;
+    wheelCooldownUntil = now + WHEEL_COOLDOWN_MS;
+    goToBeat(currentIndex + direction);
   }, { passive: false });
 
   // Touch — one swipe past a small threshold = one beat.
