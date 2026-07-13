@@ -46,11 +46,6 @@
 
 html { scroll-behavior: smooth; }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
-
 body {
   margin: 0;
   background: var(--lava);
@@ -73,6 +68,77 @@ button:focus-visible {
 }
 
 img { max-width: 100%; display: block; }
+
+/* ---------- Dappled Light — ambient background motion ----------
+   Soft mango-toned blobs behind the whole page, like sunlight
+   moving through canopy onto the ground. Fixed full-page, sits
+   below the seam-spine (z-index: 1) and all content (z-index: 2).
+   Motion mode: Breeze Sweep — every blob sways left-right together
+   on one shared rhythm, like a single gust passing through canopy,
+   rather than drifting independently. */
+
+.dapple-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dapple-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(46px);
+  background: radial-gradient(circle at 35% 35%, rgba(227, 182, 51, 0.22), rgba(227, 182, 51, 0) 70%);
+  animation: dappleBreeze ease-in-out infinite;
+}
+
+@keyframes dappleBreeze {
+  0%   { transform: translateX(-6vw) translateY(0) scale(1); }
+  50%  { transform: translateX(6vw) translateY(-2%) scale(1.06); }
+  100% { transform: translateX(-6vw) translateY(0) scale(1); }
+}
+
+/* Fewer, less expensive blobs on mobile — this page has a known history
+   of scroll jank on small screens, so keep the ambient layer light there. */
+@media (max-width: 760px) {
+  .dapple-blob { filter: blur(30px); }
+  .dapple-blob:nth-child(n + 5) { display: none; }
+}
+
+/* ---------- Seam line — the page's connective signature ----------
+   A faint two-tone stitched line runs down the page center,
+   nodding to the BCR leaf-logo seam without repeating the logo. */
+
+.seam-spine {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--mango-line) 0px,
+    var(--mango-line) 6px,
+    transparent 6px,
+    transparent 13px
+  );
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.seam-spine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: var(--seam-progress, 0%);
+  background: var(--mango);
+  opacity: 0.8;
+  transition: height 0.1s linear;
+}
 
 /* ---------- Header ---------- */
 
@@ -174,7 +240,91 @@ img { max-width: 100%; display: block; }
   color: var(--silver);
 }
 
-/* ---------- Metadata (reused inside .ride-meta-grid) ---------- */
+/* ---------- Hero ---------- */
+
+.hero {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-6) var(--space-3) var(--space-5);
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mango);
+  margin-bottom: var(--space-3);
+  opacity: 0;
+  animation: rise 0.9s ease forwards;
+  animation-delay: 0.3s;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4.6vw, 3.1rem);
+  line-height: 1.3;
+  color: var(--sand);
+  max-width: 17ch;
+  margin: 0 0 var(--space-4);
+  opacity: 0;
+  animation: rise 1s ease forwards;
+  animation-delay: 0.45s;
+}
+
+.hero p.lede {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  color: var(--silver-dim);
+  max-width: 44ch;
+  margin: 0 auto var(--space-5);
+  opacity: 0;
+  animation: rise 1s ease forwards;
+  animation-delay: 0.65s;
+}
+
+.hero .scroll-cue {
+  opacity: 0;
+  animation: rise 1s ease forwards, float 2.6s ease-in-out infinite;
+  animation-delay: 0.85s, 1.8s;
+  color: var(--mango);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* ---------- Metadata strip ---------- */
+
+.meta-strip {
+  max-width: var(--measure-wide);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) var(--space-6);
+  border-top: 1px solid var(--olive);
+  border-bottom: 1px solid var(--olive);
+  position: relative;
+  z-index: 2;
+}
 
 .meta-item .label {
   font-size: 0.7rem;
@@ -191,7 +341,34 @@ img { max-width: 100%; display: block; }
   color: var(--sand);
 }
 
-.ride-panel h2 {
+/* ---------- Sections ---------- */
+
+.section {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+  scroll-margin-top: 90px;
+  position: relative;
+  z-index: 2;
+}
+
+.section.wide { max-width: var(--measure-wide); }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.section-mark {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--mango);
+}
+
+.section h2 {
   font-family: var(--serif);
   font-weight: 400;
   font-size: clamp(1.3rem, 2.6vw, 1.85rem);
@@ -200,12 +377,12 @@ img { max-width: 100%; display: block; }
   line-height: 1.4;
 }
 
-.ride-panel p {
+.section p {
   margin: 0 0 var(--space-3);
   color: var(--silver);
 }
 
-.ride-panel p.hook-line {
+.section p.hook-line {
   font-family: var(--serif);
   font-size: clamp(1rem, 2.4vw, 1.2rem);
   line-height: 1.7;
@@ -215,13 +392,24 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
 }
 
+.fade-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ---------- Team strip ---------- */
 
 .team-strip {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin: var(--space-3) 0 0;
+  margin: var(--space-3) 0 var(--space-4);
 }
 
 .team-chip {
@@ -241,7 +429,7 @@ img { max-width: 100%; display: block; }
   border-left: 3px solid var(--mango);
   border-radius: 4px;
   padding: var(--space-3) var(--space-4);
-  margin: var(--space-3) 0 0;
+  margin: var(--space-3) 0 var(--space-4);
 }
 
 .note .note-label {
@@ -256,17 +444,33 @@ img { max-width: 100%; display: block; }
 
 .note p { margin: 0; color: var(--silver); }
 
+.placeholder {
+  background: var(--olive-soft);
+  border: 1px dashed var(--silver-quiet);
+  border-radius: 6px;
+  padding: var(--space-2) var(--space-3);
+  margin: var(--space-3) 0;
+}
+
+.placeholder .placeholder-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rusty);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.placeholder p { margin: 0; color: var(--silver-dim); font-size: 0.92rem; font-style: italic; }
+
 /* ---------- Stat grid (real survey data) ---------- */
 
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-3);
-  margin: var(--space-3) 0;
-}
-
-@media (max-width: 600px) {
-  .stat-grid { grid-template-columns: 1fr; }
+  margin: var(--space-4) 0;
 }
 
 .stat-card {
@@ -303,9 +507,15 @@ img { max-width: 100%; display: block; }
   font-size: 1.05rem;
 }
 
-/* ---------- SPLIT / MERGE — the signature motif ---------- */
+/* ---------- SPLIT / MERGE — the signature motif ----------
+   Two columns at different "weights" (one slightly larger,
+   read first) converge visually into a single centered
+   resolution card below. Used for every real four-person
+   compromise in the project. */
 
-.merge-block { margin: 0; }
+.merge-block {
+  margin: var(--space-4) 0;
+}
 
 .merge-split {
   display: grid;
@@ -343,6 +553,7 @@ img { max-width: 100%; display: block; }
 
 .merge-card p { margin: 0; font-size: 0.95rem; color: var(--silver); }
 
+/* Converging seam connectors */
 .merge-split::after {
   content: '';
   position: absolute;
@@ -352,12 +563,6 @@ img { max-width: 100%; display: block; }
   height: 28px;
   background: var(--mango-line);
   transform: translateX(-50%);
-}
-
-@media (max-width: 760px) {
-  .merge-split { grid-template-columns: 1fr; }
-  .merge-split::after { bottom: -18px; height: 18px; }
-  .merge-resolution { margin-top: 18px; }
 }
 
 .merge-resolution {
@@ -390,7 +595,12 @@ img { max-width: 100%; display: block; }
 
 /* ---------- Subsection blocks (Design Decisions) ---------- */
 
-.subsection { padding: 0; }
+.subsection {
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--olive);
+}
+
+.subsection:first-of-type { border-top: none; padding-top: 0; }
 
 .subsection h3 {
   font-family: var(--sans);
@@ -400,7 +610,64 @@ img { max-width: 100%; display: block; }
   margin: 0 0 var(--space-2);
 }
 
-/* ---------- Image lightbox (reused for filmstrip "view full size") ---------- */
+/* ---------- Screenshot placeholders ---------- */
+
+.shot-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+
+.shot-row.single { grid-template-columns: 1fr; }
+
+.shot-frame {
+  aspect-ratio: 16 / 11;
+  border: 1.5px dashed var(--mango-line);
+  border-radius: 10px;
+  background: var(--olive-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: var(--mango);
+}
+
+.shot-frame.mobile-shot { aspect-ratio: 9 / 16; max-width: 260px; margin: 0 auto; }
+
+/* Real images replacing placeholders — solid border, image fills frame */
+.shot-frame.has-image {
+  border-style: solid;
+  border-color: var(--olive);
+  padding: 0;
+  overflow: hidden;
+  display: block;
+}
+
+.shot-frame.has-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+  display: block;
+  cursor: zoom-in;
+  transition: filter 0.2s ease, transform 0.3s ease;
+}
+
+.shot-frame.has-image img:hover,
+.shot-frame.has-image img:focus-visible {
+  filter: brightness(1.08);
+  transform: scale(1.015);
+}
+
+.shot-frame.has-image img:focus-visible {
+  outline: 2px solid var(--mango);
+  outline-offset: -2px;
+}
+
+/* ---------- Image lightbox ---------- */
 
 .lightbox {
   position: fixed;
@@ -436,7 +703,9 @@ img { max-width: 100%; display: block; }
   transition: transform 0.25s ease;
 }
 
-.lightbox.is-open .lightbox-img { transform: scale(1); }
+.lightbox.is-open .lightbox-img {
+  transform: scale(1);
+}
 
 .lightbox-close {
   position: fixed;
@@ -466,11 +735,91 @@ img { max-width: 100%; display: block; }
   .lightbox-close { top: var(--space-2); right: var(--space-2); width: 40px; height: 40px; }
 }
 
+/* Donation flow: stacked desktop crops beside one full-height mobile capture */
+.shot-row.donation-row {
+  grid-template-columns: 1fr 260px;
+  align-items: start;
+}
+
+.donation-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.shot-frame.has-image.wide-shot {
+  aspect-ratio: auto;
+}
+
+.shot-frame.has-image.wide-shot img {
+  height: auto;
+  object-fit: contain;
+  background: var(--lava-2);
+}
+
+/* Mobile capture is a full scrollable page, not a single screen —
+   let it run its natural (taller) ratio instead of forcing 9:16 */
+.shot-frame.has-image.mobile-shot.tall {
+  aspect-ratio: auto;
+  max-width: 260px;
+}
+
+.shot-frame.has-image.mobile-shot.tall img {
+  height: auto;
+  object-fit: contain;
+  background: var(--lava-2);
+}
+
+/* Full-page hifi screenshot — runs its natural tall ratio instead of
+   forcing a fixed 16:11 crop, so the full redesign scroll is visible */
+.shot-frame.has-image.tall-shot {
+  aspect-ratio: auto;
+}
+
+.shot-frame.has-image.tall-shot img {
+  height: auto;
+  object-fit: contain;
+  background: var(--lava-2);
+}
+
+/* Style system reference sheets — 3 across, natural ratio so dense
+   sheets (color swatches, type scale, logo lockups) stay legible */
+.shot-row.style-system-row {
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+}
+
+.shot-row.style-system-row .shot-frame.has-image {
+  aspect-ratio: auto;
+}
+
+.shot-row.style-system-row .shot-frame.has-image img {
+  height: auto;
+  object-fit: contain;
+  background: #fff;
+}
+
+.shot-frame .shot-icon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.7;
+}
+
+.shot-frame span.shot-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 var(--space-2);
+  color: var(--silver-dim);
+}
+
 /* ---------- Findings list (user test results) ---------- */
 
 .findings-list {
   list-style: none;
-  margin: var(--space-3) 0 0;
+  margin: var(--space-3) 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -501,18 +850,21 @@ img { max-width: 100%; display: block; }
 .reflection-card {
   background: var(--olive-soft);
   border-radius: 14px;
-  padding: var(--space-4);
+  padding: var(--space-5) var(--space-4);
   border: 1px solid var(--olive);
 }
 
 .reflection-card .note { background: var(--lava-2); border-left-color: var(--mango); }
+.reflection-card .placeholder { background: var(--lava-2); }
 
+/* Closure note — the one place rusty-red and a quieter visual
+   register are allowed in, kept low-key rather than dramatic */
 .closure-note {
   background: var(--lava-2);
   border-left: 3px solid var(--rusty);
   border-radius: 4px;
   padding: var(--space-3) var(--space-4);
-  margin: var(--space-3) 0 0;
+  margin: var(--space-3) 0;
 }
 
 .closure-note .note-label { color: var(--rusty); }
@@ -521,8 +873,6 @@ img { max-width: 100%; display: block; }
 /* ---------- Footer / project nav ---------- */
 
 .project-nav {
-  position: relative;
-  z-index: 2;
   border-top: 1px solid var(--olive);
   padding: var(--space-6) var(--space-5);
   display: flex;
@@ -530,6 +880,8 @@ img { max-width: 100%; display: block; }
   gap: var(--space-3);
   max-width: var(--measure-wide);
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .project-nav a {
@@ -570,26 +922,33 @@ img { max-width: 100%; display: block; }
 .project-nav a.next { text-align: right; }
 
 .site-footer {
-  position: relative;
-  z-index: 2;
   text-align: center;
   padding: var(--space-4) var(--space-3) var(--space-5);
   font-size: 0.85rem;
   color: var(--silver-quiet);
+  position: relative;
+  z-index: 2;
 }
 
 /* ============================================================
-   RESPONSIVE — legacy 760px / 480px (header + nav only; ride
-   layout has its own responsive block further down)
+   RESPONSIVE — 760px and below
    ============================================================ */
 
 @media (max-width: 760px) {
+
+  .seam-spine { display: none; }
+
   .site-header { padding: 0 var(--space-3); height: 56px; }
   .site-header .logo img { height: 24px; }
+
   .site-header nav { display: none; }
+
   .nav-toggle { display: flex; order: -1; }
+
   .site-header .logo { order: 1; }
 
+  /* Pinned mobile dropdown — stays fixed directly under the sticky
+     header as the page scrolls, instead of scrolling away with content. */
   .nav-links-mobile.is-open {
     position: fixed;
     top: var(--mobile-nav-offset, 56px);
@@ -600,292 +959,73 @@ img { max-width: 100%; display: block; }
     z-index: 49;
   }
 
+  .hero { min-height: 80vh; padding: var(--space-5) var(--space-3) var(--space-4); }
+  .hero-tiger { width: 62px; height: 62px; }
+  .hero h1 { font-size: clamp(1.6rem, 8vw, 2.2rem); max-width: none; }
+  .hero p.lede { font-size: 1rem; max-width: none; margin-bottom: var(--space-4); }
+
+  .meta-strip {
+    grid-template-columns: repeat(2, 1fr);
+    padding: var(--space-3) var(--space-3) var(--space-4);
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .section { padding: var(--space-4) var(--space-3); }
+  .section-head { margin-bottom: var(--space-3); gap: var(--space-1); }
+
+  .stat-grid { grid-template-columns: 1fr; }
+
+  .merge-split { grid-template-columns: 1fr; gap: var(--space-2); }
+  .merge-split::after { display: none; }
+  .merge-resolution { margin-top: var(--space-2); }
+
+  .shot-row { grid-template-columns: 1fr; }
+  .shot-frame:not(.has-image) { aspect-ratio: 4 / 3; }
+  .shot-frame.has-image.mobile-shot.tall { max-width: 220px; margin: 0 auto; }
+
+  .reflection-card { padding: var(--space-3) var(--space-3); border-radius: 10px; }
+
   .project-nav {
     flex-direction: column;
     padding: var(--space-4) var(--space-3);
     gap: var(--space-2);
   }
+
   .project-nav a { flex: none; width: 100%; }
   .project-nav a.next { text-align: left; }
 }
 
 @media (max-width: 480px) {
+
   :root {
     --space-4: 2rem;
     --space-5: 3rem;
     --space-6: 4rem;
   }
+
   body { font-size: 16px; }
+
   .site-header {
     flex-wrap: wrap;
     row-gap: 0.5rem;
     height: auto;
     padding: var(--space-2) var(--space-3);
   }
+
   .site-header nav { gap: var(--space-2); }
   .site-header nav a { font-size: 0.85rem; min-height: 36px; }
-}
 
-/* ============================================================
-   SAFARI RIDE: 3D scroll scene (big-cat-rescue.html only)
-   Same mechanism as counseling.css's Harbor Ride, restaged with
-   a golden-hour savanna backdrop instead of water: a wireframe
-   grass plane, drifting dust, a warm sun glow, and a jeep-style
-   camera bob. Navigation is true continuous native scroll (see
-   big-cat-rescue-3d.js) — the same scroll-tied dolly model
-   counseling-3d.js uses, rather than index-3d.js's discrete
-   one-jump-per-gesture beat-stepping.
+  .hero { min-height: 76vh; }
+  .hero h1 { font-size: clamp(1.45rem, 9vw, 1.9rem); line-height: 1.35; }
 
-   Everything above this line is unchanged from the original
-   flat layout and is retained for any reused component classes
-   (.note, .team-strip, .stat-grid, .findings-list, .merge-*,
-   .subsection, .reflection-card, .closure-note, .lightbox) —
-   those are reused verbatim inside .ride-panel below, the same
-   way counseling.css reuses .note/.tension/.subsection.
+  .meta-strip { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+  .meta-item .value { font-size: 0.88rem; word-break: break-word; }
 
-   By design, none of this is gated behind
-   prefers-reduced-motion — the scene always animates, matching
-   the "always running" precedent already set on this site.
-   ============================================================ */
+  .section h2 { font-size: clamp(1.15rem, 6vw, 1.5rem); }
+  .hook-line { font-size: clamp(0.95rem, 4.5vw, 1.1rem) !important; }
 
-#safari-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  display: block;
-  touch-action: pan-y;
-}
+  .subsection h3 { font-size: 1rem; }
 
-#safari-progress {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background: var(--mango);
-  z-index: 60;
-  width: 0%;
-  box-shadow: 0 0 14px var(--mango-line);
-}
-
-.ride-track {
-  position: relative;
-  height: 2300vh; /* pre-JS fallback; big-cat-rescue-3d.js sets the real
-                     pixel height from the actual filtered scene count */
-  z-index: 1;
-}
-
-.ride-scene[data-device="mobile"] { display: none; }
-
-@media (max-width: 760px) {
-  .ride-scene[data-device="desktop"] { display: none; }
-  .ride-scene[data-device="mobile"] { display: flex; }
-}
-
-.ride-scene {
-  position: relative;
-  height: 100vh;
-  /* svh (small viewport height), not dvh: dvh continuously tracks the
-     browser chrome as it collapses/expands mid-scroll, which grows and
-     shrinks every .ride-scene's own height while the person is
-     scrolling. That fought with big-cat-rescue-3d.js's own fixed-pixel
-     .ride-track height and was part of what produced the direction-
-     reversal "boomerang". svh always assumes the smallest possible
-     viewport (chrome fully visible) and never changes after load, so
-     scene height stays stable regardless of scroll direction. */
-  height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 var(--space-3);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-}
-
-.ride-scene.is-active { opacity: 1; }
-.ride-scene.is-active .ride-panel { pointer-events: auto; }
-
-.ride-panel {
-  max-width: 620px;
-  width: 100%;
-  max-height: 88vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background: rgba(58, 58, 38, 0.82);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--olive);
-  border-radius: 18px;
-  padding: var(--space-4);
-  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.55);
-  text-align: left;
-}
-
-.ride-panel.wide { max-width: 780px; }
-.ride-panel.centered { text-align: center; }
-
-.ride-eyebrow {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--mango);
-  margin-bottom: var(--space-2);
-  display: block;
-}
-
-.ride-hint {
-  margin-top: var(--space-2);
-  font-size: 0.78rem;
-  color: var(--silver-dim);
-  letter-spacing: 0.02em;
-}
-
-.ride-meta-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3) var(--space-4);
-}
-
-.ride-panel .team-strip,
-.ride-panel .note,
-.ride-panel .stat-grid,
-.ride-panel .findings-list,
-.ride-panel .closure-note { margin-top: var(--space-3); }
-
-.ride-panel .subsection + .subsection { margin-top: var(--space-3); }
-
-/* ---------- filmstrip carousel: shared across the three carousel stops ---------- */
-
-.filmstrip-track {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  /* half of the card's own clamped width (min(62vw,230px)), so the first/last
-     card can always scroll to true center at any viewport, not just desktop */
-  padding: 0.5rem calc(50% - min(31vw, 115px)) 1rem;
-  touch-action: pan-x;
-  scrollbar-width: none;
-  margin-top: var(--space-2);
-}
-
-.filmstrip-track::-webkit-scrollbar { display: none; }
-
-.film-shot {
-  position: relative;
-  width: min(62vw, 230px);
-  aspect-ratio: 4 / 3;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--lava-2);
-  border: 1.5px solid var(--olive);
-  flex-shrink: 0;
-  scroll-snap-align: center;
-  opacity: 0.5;
-  transform: scale(0.88);
-  transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-  cursor: pointer;
-}
-
-.film-shot.is-center {
-  opacity: 1;
-  transform: scale(1);
-  border-color: var(--mango-line);
-  cursor: zoom-in;
-}
-
-.film-shot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  display: block;
-}
-
-.film-shot .film-label {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.66rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--sand);
-  background: rgba(20, 20, 12, 0.6);
-  padding: 3px 10px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
-.filmstrip-dots {
-  display: flex;
-  justify-content: center;
-  gap: 0.4rem;
-  margin-top: 0.6rem;
-}
-
-.filmstrip-dots .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--olive);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.filmstrip-dots .dot.is-active {
-  background: var(--mango);
-  width: 18px;
-  border-radius: 4px;
-  transition: width 0.2s ease;
-}
-
-.filmstrip-arrows {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
-}
-
-.filmstrip-arrow {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid var(--olive);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--sand);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.filmstrip-arrow:hover { border-color: var(--mango); }
-.filmstrip-arrow:disabled { opacity: 0.35; cursor: default; }
-
-/* ============================================================
-   RESPONSIVE : Safari Ride
-   ============================================================ */
-
-@media (max-width: 760px) {
-  .ride-panel { padding: var(--space-3); border-radius: 14px; }
-  .filmstrip-arrow { width: 34px; height: 34px; }
-}
-
-@media (max-width: 480px) {
-  .ride-scene { padding: 0 var(--space-2); }
-  .ride-panel h2 { font-size: clamp(1.15rem, 6vw, 1.45rem); }
-  .ride-meta-grid { grid-template-columns: 1fr; }
-}
-
-@media (max-height: 500px) {
-  .ride-panel { max-height: 92vh; touch-action: pan-y; }
-  .ride-scene { align-items: center; }
+  .merge-card { padding: var(--space-3); }
+  .note, .placeholder { padding: var(--space-2); }
 }
