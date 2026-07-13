@@ -151,13 +151,12 @@ img { max-width: 100%; display: block; }
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: var(--ink);
-  letter-spacing: -0.01em;
 }
-.home-logo span { color: var(--navy); }
+.home-logo img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
 
 .home-nav-links {
   display: flex;
@@ -485,6 +484,11 @@ img { max-width: 100%; display: block; }
 }
 .home-frame--contain .plate-thumb { display: flex; align-items: center; justify-content: center; }
 .home-frame--contain .plate-thumb img { object-fit: contain; }
+
+/* Albertina's Angels card — its own case study runs on a dark violet
+   palette; navy here gives the artwork a calm, high-contrast backdrop
+   instead of the default cream background. */
+.plate-thumb--angels { background: #1B2A4A; }
 
 .plate-status {
   display: flex;
