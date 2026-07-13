@@ -89,20 +89,33 @@ img { max-width: 100%; display: block; }
   position: absolute;
   border-radius: 50%;
   filter: blur(46px);
-  background: radial-gradient(circle at 35% 35%, rgba(227, 182, 51, 0.22), rgba(227, 182, 51, 0) 70%);
+  background: radial-gradient(circle at 35% 35%, rgba(227, 182, 51, 0.28), rgba(227, 182, 51, 0) 70%);
   animation: dappleBreeze ease-in-out infinite;
+  --dapple-sweep: 6vw;
+  --dapple-bob: -2%;
+  --dapple-peak: 1.06;
 }
 
 @keyframes dappleBreeze {
-  0%   { transform: translateX(-6vw) translateY(0) scale(1); }
-  50%  { transform: translateX(6vw) translateY(-2%) scale(1.06); }
-  100% { transform: translateX(-6vw) translateY(0) scale(1); }
+  0%   { transform: translateX(calc(var(--dapple-sweep) * -1)) translateY(0) scale(1); }
+  50%  { transform: translateX(var(--dapple-sweep)) translateY(var(--dapple-bob)) scale(var(--dapple-peak)); }
+  100% { transform: translateX(calc(var(--dapple-sweep) * -1)) translateY(0) scale(1); }
 }
 
-/* Fewer, less expensive blobs on mobile — this page has a known history
-   of scroll jank on small screens, so keep the ambient layer light there. */
+/* Fewer blobs on mobile — this page has a known history of scroll jank
+   on small screens, so keep the ambient layer light there — but push the
+   remaining blobs to move noticeably more: a bigger, faster sweep, a
+   sharper edge (less blur), and more contrast, since the desktop amplitude
+   reads as barely-there on a small viewport. */
 @media (max-width: 760px) {
-  .dapple-blob { filter: blur(30px); }
+  .dapple-blob {
+    filter: blur(22px);
+    background: radial-gradient(circle at 35% 35%, rgba(227, 182, 51, 0.42), rgba(227, 182, 51, 0) 70%);
+    --dapple-sweep: 22vw;
+    --dapple-bob: -6%;
+    --dapple-peak: 1.2;
+    animation-duration: 3.4s !important;
+  }
   .dapple-blob:nth-child(n + 5) { display: none; }
 }
 
