@@ -76,9 +76,7 @@ img { max-width: 100%; display: block; }
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .light-drift { display: none; }
-}
+
 
 /* ---------- Wing-vein spine ---------- */
 
