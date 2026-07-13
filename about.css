@@ -323,6 +323,43 @@ footer {
   .hud-readout.is-visible {
     opacity: 1;
   }
+
+  /* ---------- Mobile: drop the hard scroll-snap, let beats flow ----------
+     scroll-snap-type: mandatory + scroll-snap-stop: always is a known
+     WebKit/iOS trap: if the user reverses scroll direction mid-inertia
+     (flings up, then immediately down), the snap engine fights the new
+     gesture against the old momentum, which reads as "stuck"/jumpy
+     scrolling. On top of that, .beat was a FIXED 100dvh box — once the
+     duo column (How I got here / Background & skills) stacks to one
+     column here, its content is taller than one screen on real phones,
+     and mandatory snap left no way to scroll further within that beat
+     to reach the rest of it.
+
+     Fix: no snap on mobile at all, and beats size to their content
+     (min-height instead of height) so nothing is ever clipped or
+     unreachable. The translateZ/scale "hide until snapped" trick is
+     swapped for a plain opacity fade, since that trick only looks
+     right when snap guarantees a beat is either fully settled or fully
+     hidden — under free scrolling it would just flash content in and
+     out. Desktop keeps the original locked HUD effect untouched. */
+  html {
+    scroll-snap-type: none;
+  }
+
+  .beat {
+    height: auto;
+    min-height: 100dvh;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition: opacity 0.4s ease;
+  }
+
+  footer {
+    scroll-snap-align: none;
+  }
 }
 
 @media (max-width: 640px) {
