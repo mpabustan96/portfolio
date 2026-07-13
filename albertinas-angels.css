@@ -39,12 +39,25 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+html {
+  scroll-behavior: smooth;
+  /* Proximity, not mandatory: this only snaps when a scroll gesture
+     already lands close to a .ride-scene boundary, so it never yanks
+     momentum scrolling out of a user's hands mid-flick the way
+     mandatory snap does on some mobile browsers. No JS scroll-to-snap
+     loop backs this up on purpose (see albertinas-3d.js) — native
+     snap plus a JS snap loop fighting each other for the same scroll
+     position is what caused the mobile stutter on the counseling
+     page; this page only ever has one thing driving scroll position:
+     the user. */
+  scroll-snap-type: y proximity;
 }
+
+/* No prefers-reduced-motion override here, by design — matching every
+   other 3D page on this site (index-3d.js, counseling-3d.js, and this
+   page's own albertinas-3d.js all state this explicitly): the Firefly
+   Ride scene is meant to always animate, on every device, regardless
+   of OS motion settings. */
 
 body {
   margin: 0;
@@ -964,4 +977,394 @@ img { max-width: 100%; display: block; }
   .tension-card { padding: var(--space-2) var(--space-3); }
 
   .note, .placeholder { padding: var(--space-2); }
+}
+
+/* ============================================================
+   FIREFLY RIDE: 3D scroll scene addition (albertinas-angels.html only)
+   Everything above this line is unchanged from the original flat
+   layout and is retained rather than deleted: tokens, fonts, header,
+   .note/.note-label, .tension/.tension-card/.resolution, .subsection,
+   .origin-block, .style-block/.aa-color-swatch, .pivot, .meta-item,
+   .lightbox, and .vein-spine are all REUSED below instead of being
+   reinvented, so the ride reads as the same design system, just
+   staged differently. Rules below this line are additive and scoped
+   to the new ride-* classes; nothing above this line was removed
+   (aside from the prefers-reduced-motion block already noted above,
+   removed to match the project-wide "always animate" rule).
+
+   Distinct from counseling's Harbor Ride on purpose: this is a warm
+   parchment-on-dusk composition built around a cluster of violet/gold
+   fireflies, matching this page's own "a family's memory, made
+   legible to strangers" thesis and its existing dragonfly/wing-vein
+   motif, instead of borrowing Harbor Ride's identity.
+
+   No jump-rail nav here (a deliberate call, unlike counseling's
+   section-rail) — this page relies on native browser scroll plus
+   CSS proximity snap only. No JS-driven scroll-to-snap loop exists
+   in albertinas-3d.js; see the html rule above for why.
+   ============================================================ */
+
+:root {
+  /* Warm-glass panel tokens — distinct from the page's existing dark
+     tokens above, used only for the ride-panel surface and its plain
+     (non-inset) text, so panels read as warm parchment against the
+     dark firefly field instead of just inverting the whole page. */
+  --panel-bg: rgba(248, 242, 230, 0.94);
+  --panel-ink: #2B2318;
+  --panel-ink-soft: #4B4030;
+  --panel-line: rgba(98, 47, 219, 0.22);
+  --panel-accent: #5A3FA0;
+  --panel-gold: #A67C00;
+}
+
+#fireflies {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+  touch-action: pan-y;
+}
+
+/* Header stays flat, normal DOM, above the canvas — same relationship
+   the homepage and counseling's sticky nav already have to theirs. */
+.site-header { z-index: 80; }
+
+/* .vein-spine (z-index: 1, defined above) now sits between the canvas
+   (0) and the ride content (2) — same layered relationship it had
+   with .section (z-index: 2) in the original flat layout, so the
+   thin memory-line shows only in the gaps around panels, exactly as
+   before. Its progress is now driven by the ride's own scroll
+   fraction rather than full document height (see albertinas-3d.js). */
+
+.ride-track {
+  position: relative;
+  /* Pre-JS fallback for the desktop scene count (12 stops). Real
+     source of truth is set in pixels by albertinas-3d.js on load,
+     the same approach counseling-3d.js uses and for the same reason:
+     100vh alone drifts from the real visible viewport on mobile as
+     the address bar collapses/expands. */
+  height: 1200vh;
+  z-index: 2;
+}
+
+/* ---------- Device-specific scene variants ----------
+   Research & Discovery, Define & Ideate, Origin Story & Colors,
+   Bilingual IA, and the Donation Pivot are dense enough to run long
+   on a short phone screen, so each exists twice: once as a single
+   data-device="desktop" stop, once split into two shorter
+   data-device="mobile" stops carrying the exact same copy, just
+   divided. Shared stops (hero, meta, hook, problem, brand identity,
+   the carousel, results split only on mobile too) have no
+   data-device attribute and are always shown. */
+.ride-scene[data-device="mobile"] { display: none; }
+
+@media (max-width: 760px) {
+  .ride-scene[data-device="desktop"] { display: none; }
+  .ride-scene[data-device="mobile"] { display: flex; }
+
+  .ride-track {
+    /* 18 mobile stops: 5 shared (hero, meta, hook, problem, brand
+       identity) + 6 split pairs (12) + carousel (1) = 18. */
+    height: 1800vh;
+  }
+}
+
+.ride-scene {
+  /* Plain relative block, not sticky — sticky contributes nothing
+     once .ride-track is sized to exactly N x 100vh (no extra pin
+     room), while still sitting in the exact stacked-sticky +
+     JS-mutated-height + shifting-mobile-viewport configuration that
+     triggers WebKit's sticky reverse-scroll defect. A flat relative
+     block with the opacity crossfade below does the same visual job
+     with no failure mode. */
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 var(--space-3);
+  opacity: 0.16;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  scroll-snap-align: start;
+}
+
+.ride-scene.is-active {
+  opacity: 1;
+}
+
+.ride-scene.is-active .ride-panel {
+  pointer-events: auto;
+}
+
+.ride-scene[data-carousel] {
+  align-items: flex-start;
+  padding-top: 6.5rem;
+}
+
+.ride-panel {
+  max-width: 620px;
+  width: 100%;
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--panel-line);
+  border-radius: 18px;
+  padding: var(--space-4);
+  color: var(--panel-ink);
+  box-shadow: 0 32px 80px -28px rgba(98, 47, 219, 0.45);
+}
+
+.ride-panel.compact {
+  padding: var(--space-3) var(--space-4);
+  max-width: 460px;
+}
+
+.ride-panel p {
+  text-align: left;
+  color: var(--panel-ink-soft);
+  margin: 0 0 var(--space-3);
+}
+
+.ride-panel p:last-child { margin-bottom: 0; }
+
+/* Reused dark-surfaced components (.note, .tension-card, .origin-block,
+   .pivot-step) keep their own light-on-dark treatment, since they carry
+   their own dark background — only their un-styled <p> text needs an
+   explicit color restored here, since it would otherwise inherit the
+   ride-panel's dark ink instead of the light text those dark boxes need. */
+.ride-panel .note,
+.ride-panel .tension,
+.ride-panel .origin-block,
+.ride-panel .pivot { margin-top: var(--space-2); margin-bottom: var(--space-2); }
+
+.ride-panel .note p,
+.ride-panel .tension-card p,
+.ride-panel .origin-block p,
+.ride-panel .pivot-step p { color: var(--ink-soft); }
+
+.ride-panel .origin-block h3 { color: var(--paper); }
+
+/* .subsection and .resolution/.hook-line have no dark box of their
+   own in the original design — they sit directly on the page
+   background, which used to be dark. Inside the warm ride-panel they
+   need the panel's own ink tones instead. */
+.ride-panel .subsection { text-align: left; border-top-color: var(--panel-line); }
+.ride-panel .subsection h3 { color: var(--panel-ink); }
+.ride-panel .subsection p { color: var(--panel-ink-soft); }
+
+.ride-panel .resolution { color: var(--panel-accent); }
+.ride-panel .hook-line { color: var(--panel-ink); margin: 0; }
+
+.ride-panel h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  line-height: 1.16;
+  color: var(--panel-ink);
+  margin: 0 0 var(--space-3);
+}
+
+.ride-hero-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto var(--space-3);
+  color: var(--panel-accent);
+}
+.ride-hero-icon svg { width: 100%; height: 100%; }
+
+.ride-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--panel-accent);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+.ride-panel.compact .ride-eyebrow { margin-bottom: 0.3rem; }
+
+.ride-hint {
+  margin-top: var(--space-2);
+  font-size: 0.78rem;
+  color: var(--panel-ink-soft);
+  opacity: 0.8;
+  letter-spacing: 0.02em;
+}
+
+.ride-panel.compact .ride-hint { margin-top: 0.35rem; }
+
+.ride-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3) var(--space-4);
+  text-align: left;
+}
+.ride-meta-grid .label { color: var(--panel-accent); }
+.ride-meta-grid .value { color: var(--panel-ink); }
+
+/* Origin story palette swatches sit directly on the warm panel here
+   (not inside a dark .style-block, so the block keeps its own dark
+   surface — reused unchanged) — just confirm spacing. */
+.ride-panel .style-block { margin: var(--space-2) 0 0; }
+
+/* ---------- carousel UI ---------- */
+.carousel-ui {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ride-scene[data-carousel].is-active .carousel-ui { display: flex; }
+
+.carousel-caption {
+  background: var(--panel-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--panel-line);
+  border-radius: 12px;
+  padding: 0.85rem 1.4rem;
+  font-size: 0.85rem;
+  color: var(--panel-ink-soft);
+  max-width: min(90vw, 440px);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.carousel-caption strong {
+  color: var(--panel-ink);
+  display: block;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-bottom: 0.2rem;
+}
+
+.carousel-caption-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.carousel-back,
+.carousel-expand {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--panel-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.carousel-back { display: none; }
+.carousel-back.is-visible { display: inline-block; }
+
+.carousel-expand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.carousel-expand:hover,
+.carousel-expand:focus-visible,
+.carousel-back:hover,
+.carousel-back:focus-visible {
+  color: var(--panel-gold);
+}
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  pointer-events: auto;
+}
+
+.carousel-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--violet-soft);
+  background: var(--panel-bg);
+  color: var(--panel-accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.carousel-arrow:hover {
+  background: #fff;
+  transform: scale(1.06);
+}
+
+.carousel-dots { display: flex; gap: 0.5rem; }
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(246, 242, 234, 0.4);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.carousel-dot.is-active {
+  background: var(--panel-gold);
+  width: 22px;
+  border-radius: 5px;
+  transition: width 0.2s ease;
+}
+
+/* ============================================================
+   RESPONSIVE : Firefly Ride
+   ============================================================ */
+@media (max-width: 760px) {
+  .ride-panel { padding: var(--space-3); border-radius: 14px; }
+  .ride-panel.compact { padding: var(--space-2) var(--space-3); }
+  .ride-meta-grid { grid-template-columns: 1fr; gap: var(--space-2); }
+  .carousel-controls { gap: var(--space-2); }
+  .carousel-arrow { width: 40px; height: 40px; }
+}
+
+@media (max-width: 480px) {
+  .ride-scene { padding: 0 var(--space-2); }
+  .ride-scene[data-carousel] { padding-top: 5.5rem; }
+  .ride-panel h1 { font-size: clamp(1.6rem, 9vw, 2.2rem); }
+  .carousel-caption { padding: 0.65rem 1rem; font-size: 0.8rem; }
+}
+
+/* ---------- Short / landscape mobile viewports ----------
+   Same safety valve counseling.css uses: caps a tall panel to the
+   viewport and lets it scroll internally first, so a touch drag
+   inside a tall panel scrolls its own text before falling through to
+   the outer ride scroll. Scoped to the panel only, so it never
+   interferes with the carousel's own swipe handling at its stop. */
+@media (max-height: 500px) {
+  .ride-panel {
+    max-height: 92vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+  .ride-scene { align-items: center; }
+  .ride-scene[data-carousel] { padding-top: 1rem; }
+  .ride-panel h1 { font-size: clamp(1.4rem, 5vw, 1.9rem); }
 }
