@@ -1094,7 +1094,9 @@ img { max-width: 100%; display: block; }
   opacity: 0;
   transition: opacity 0.6s ease;
   pointer-events: none;
-  scroll-snap-align: start;
+  /* No scroll-snap-align here on purpose — snapping is scoped to the
+     carousel stop only (see .ride-scene[data-carousel] below), so the
+     rest of the ride scrolls freely instead of snapping stop to stop. */
 }
 
 .ride-scene.is-active {
@@ -1114,10 +1116,17 @@ img { max-width: 100%; display: block; }
 .ride-scene[data-carousel] {
   align-items: flex-start;
   padding-top: 6.5rem;
+  /* The only stop that still snaps — makes it easy to land cleanly on
+     the carousel so its swipe/tap controls have a settled target,
+     while every other stop now scrolls past freely with no snap. */
+  scroll-snap-align: start;
 }
 
 html {
   scroll-behavior: smooth;
+  /* Proximity, not mandatory, and only .ride-scene[data-carousel] opts
+     into scroll-snap-align above, so this only ever has one real
+     target to pull toward — every other stop scrolls freely. */
   scroll-snap-type: y proximity;
 }
 

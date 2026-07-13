@@ -42,14 +42,16 @@
 html {
   scroll-behavior: smooth;
   /* Proximity, not mandatory: this only snaps when a scroll gesture
-     already lands close to a .ride-scene boundary, so it never yanks
-     momentum scrolling out of a user's hands mid-flick the way
-     mandatory snap does on some mobile browsers. No JS scroll-to-snap
-     loop backs this up on purpose (see albertinas-3d.js) — native
-     snap plus a JS snap loop fighting each other for the same scroll
-     position is what caused the mobile stutter on the counseling
-     page; this page only ever has one thing driving scroll position:
-     the user. */
+     already lands close to a snap target, so it never yanks momentum
+     scrolling out of a user's hands mid-flick the way mandatory snap
+     does on some mobile browsers. No JS scroll-to-snap loop backs
+     this up on purpose (see albertinas-3d.js) — native snap plus a
+     JS snap loop fighting each other for the same scroll position is
+     what caused the mobile stutter on the counseling page; this page
+     only ever has one thing driving scroll position: the user. Only
+     .ride-scene[data-carousel] opts into scroll-snap-align (see
+     below), so this only ever has one real target to pull toward —
+     every other stop scrolls freely with no snap. */
   scroll-snap-type: y proximity;
 }
 
@@ -1090,7 +1092,9 @@ img { max-width: 100%; display: block; }
   opacity: 0.16;
   transition: opacity 0.6s ease;
   pointer-events: none;
-  scroll-snap-align: start;
+  /* No scroll-snap-align here on purpose — snapping is scoped to the
+     carousel stop only (see .ride-scene[data-carousel] below), so the
+     rest of the ride scrolls freely instead of snapping stop to stop. */
 }
 
 .ride-scene.is-active {
@@ -1104,6 +1108,10 @@ img { max-width: 100%; display: block; }
 .ride-scene[data-carousel] {
   align-items: flex-start;
   padding-top: 6.5rem;
+  /* The only stop that still snaps — makes it easy to land cleanly on
+     the carousel so its swipe/tap controls have a settled target,
+     while every other stop now scrolls past freely with no snap. */
+  scroll-snap-align: start;
 }
 
 .ride-panel {
