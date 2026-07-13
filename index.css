@@ -907,77 +907,61 @@ footer {
 }
 
 /* ============================================================
-   PORTAL WARP — 3D homepage scene (index.html only)
-   All rules below are pw-scoped and additive: nothing above
-   this line was removed, so any other page still linking
-   index.css is unaffected. matrix-bg.js/#matrix-bg is not
-   used on index.html anymore — see index-3d.js instead.
+   HOME — HERO NETWORK + APERTURE GALLERY REEL (index.html only)
+   Replaces the old Portal Warp tunnel scene. All rules below
+   are home-scoped and additive: nothing above this line was
+   removed, so any other page still linking index.css is
+   unaffected. index-3d.js and index-matrix.js are no longer
+   referenced by index.html and can be deleted from the
+   project — see index-hero-network.js and index-work-reel.js
+   instead.
 
    By design, none of this is gated behind
-   prefers-reduced-motion: the scene always animates, on every
-   device, matching the "always running" precedent matrix-bg.js
-   already set on this site.
-
-   Stacking note: #pw-matrix-bg (index-matrix.js) sits behind
-   #pw-canvas, which sits behind .pw-track. None of these can use
-   negative z-index here, because body has an opaque background
-   (see BASE above) — a negative-z-index box would paint *behind*
-   that opaque background and never be visible. So the layers are
-   ordered 0 / 1 / 2 instead, in DOM order, all >= 0.
+   prefers-reduced-motion: the hero network always animates,
+   matching the "always running" precedent the rest of this
+   site already set with matrix-bg.js.
    ============================================================ */
 
-.pw-body { overflow-x: hidden; }
+.home-page { overflow-x: hidden; }
 
-#pw-matrix-bg {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-  display: block;
-}
-
-#pw-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  display: block;
-}
-
-.pw-track {
+/* ---------- HERO ---------- */
+.home-hero {
   position: relative;
-  height: 620vh;
-  z-index: 2;
-}
-
-.pw-beat {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  min-height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 1.5rem;
-  opacity: 0;
-  transition: opacity 0.7s ease;
+  padding: clamp(4rem, 9vw, 7rem) 1.5rem;
+  overflow: hidden;
+}
+
+#home-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Vignette over the canvas so the network fades out toward the
+   edges instead of hard-cutting at the hero's boundary, and so
+   the headline always sits on a slightly darker patch. */
+.home-hero-fade {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, var(--midnight) 88%);
   pointer-events: none;
 }
 
-.pw-beat.is-active {
-  opacity: 1;
-  pointer-events: auto;
+.home-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
-.pw-beat-inner {
-  max-width: 620px;
-  width: 100%;
-}
-
-.pw-eyebrow {
+.home-eyebrow {
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -990,7 +974,7 @@ footer {
   gap: 0.6rem;
 }
 
-.pw-dot {
+.home-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -998,29 +982,28 @@ footer {
   flex-shrink: 0;
 }
 
-.pw-h1 {
+.home-h1 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(2rem, 4.8vw, 3.5rem);
-  line-height: 1.16;
+  font-size: clamp(2.2rem, 4.8vw, 3.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
   color: var(--paper);
+  max-width: 20ch;
   margin: 0 auto;
   text-shadow: 0 4px 40px rgba(0,0,0,0.85);
 }
 
-.pw-h1 em {
+/* Same fade in/out timing as the rest of the site's "invisible"
+   pulse (pulse-fade-dyn is already defined above, in the legacy
+   HERO block) — reused here rather than redefined. */
+.home-h1 em {
   font-style: italic;
   color: var(--periwinkle);
-}
-
-/* Pulse animation is intentionally scoped to the hero beat only —
-   "invisible" pulses to reinforce the line's meaning; "something good."
-   in the closing beat (#pw-beat-4) is styled the same but stays static. */
-#pw-beat-0 .pw-h1 em {
   animation: pulse-fade-dyn 6s ease-in-out infinite;
 }
 
-.pw-lede {
+.home-lede {
   font-size: clamp(0.98rem, 1.6vw, 1.1rem);
   color: var(--ink-quiet);
   max-width: 42ch;
@@ -1028,16 +1011,16 @@ footer {
   text-shadow: 0 2px 24px rgba(0,0,0,0.9);
 }
 
-.pw-hero-actions {
+.home-hero-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1.75rem;
   margin-top: 2.25rem;
   flex-wrap: wrap;
 }
 
-.pw-btn-primary {
+.home-btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
@@ -1045,14 +1028,16 @@ footer {
   font-weight: 600;
   font-size: 0.95rem;
   background: var(--periwinkle);
-  padding: 0.85rem 1.6rem;
+  padding: 0.85rem 1.5rem;
   border-radius: 10px;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s ease, opacity 0.2s ease;
 }
 
-.pw-btn-primary:hover { background: var(--periwinkle-soft); transform: translateY(-1px); }
+.home-btn-primary:hover { background: var(--periwinkle-soft); }
+.home-btn-primary svg { transition: opacity 0.2s ease; }
+.home-btn-primary:hover svg { opacity: 0.85; }
 
-.pw-btn-ghost {
+.home-btn-ghost {
   font-size: 0.92rem;
   color: var(--ink-quiet);
   font-weight: 500;
@@ -1064,132 +1049,236 @@ footer {
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.pw-btn-ghost:hover { color: var(--paper); border-color: var(--ink-quiet); }
-.pw-btn-ghost svg { transition: transform 0.2s ease; }
-.pw-btn-ghost:hover svg { transform: translateX(3px); }
+.home-btn-ghost:hover { color: var(--paper); border-color: var(--ink-quiet); }
+.home-btn-ghost svg { transition: transform 0.2s ease; }
+.home-btn-ghost:hover svg { transform: translateX(3px); }
 
-/* Glass plaque in front of each portal preview — guarantees the
-   project title/description read clearly no matter what the
-   screenshot behind them looks like. The texture itself is also
-   darkened before it's ever rendered (see buildCardTexture in
-   index-3d.js), so legibility doesn't depend on this alone. */
-.pw-panel {
-  background: rgba(8, 10, 18, 0.62);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 20px;
-  padding: 2.25rem 2.5rem;
-  box-shadow: 0 24px 64px -20px rgba(0,0,0,0.6);
+/* ---------- WORK REEL — Aperture Gallery frames ---------- */
+.home-reel-wrap {
+  padding: 5rem 0 6rem;
+  border-top: 1px solid var(--line);
 }
 
-.pw-status {
-  display: inline-flex;
+.home-reel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--measure-wide);
+  margin: 0 auto 1.5rem;
+  padding: 0 3rem;
+}
+
+.home-reel-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--periwinkle);
+}
+
+.home-reel-hint {
+  font-size: 0.8rem;
+  color: var(--ink-quiet);
+}
+
+.home-reel {
+  display: flex;
+  gap: 1.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  max-width: var(--measure-wide);
+  margin: 0 auto;
+  padding: 1rem 3rem 1rem;
+  cursor: grab;
+  user-select: none;
+}
+
+.home-reel.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+
+.home-reel::-webkit-scrollbar { display: none; }
+
+.home-frame {
+  flex: 0 0 min(820px, 74vw);
+  scroll-snap-align: center;
+  border-radius: 20px;
+  border: 1px solid var(--line-strong);
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+}
+
+.home-frame:hover,
+.home-frame:focus-visible { border-color: var(--periwinkle); }
+
+.home-frame,
+.home-frame img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+.home-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.home-frame--contain img {
+  object-fit: contain;
+  padding: 8%;
+}
+
+.home-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(5,6,10,0.55));
+  z-index: 1;
+  pointer-events: none;
+}
+
+.home-frame-count {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.4rem;
+  font-family: var(--serif);
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+.home-frame-panel {
+  position: relative;
+  z-index: 2;
+  background: rgba(8,10,18,0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(255,255,255,0.09);
+  width: 100%;
+  padding: 1.8rem 2rem;
+}
+
+.home-frame-status {
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ink-quiet);
+  margin-bottom: 0.8rem;
+}
+
+.home-frame-status .home-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--periwinkle); }
+.home-frame-status--wip .home-live-dot { background: var(--line-strong); }
+
+.home-frame h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  color: var(--paper);
+  margin-bottom: 0.6rem;
+}
+
+.home-frame p {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  max-width: 48ch;
   margin-bottom: 1rem;
 }
 
-.pw-live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--periwinkle);
+.home-frame-link { font-size: 0.86rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; }
+.home-frame-link svg { transition: transform 0.2s ease; }
+.home-frame:hover .home-frame-link svg { transform: translateX(3px); }
+
+.home-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.75rem; }
+.home-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--line-strong); transition: background 0.2s ease; }
+.home-dots span.is-active { background: var(--periwinkle); }
+
+/* ---------- CONTACT (the closing beat) ---------- */
+.home-contact {
+  padding: 6rem 1.5rem 7rem;
+  text-align: center;
+  border-top: 1px solid var(--line);
 }
 
-.pw-status--progress .pw-live-dot { background: var(--line-strong); }
-
-.pw-h3 {
+.home-contact h2 {
   font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  margin: 0 0 0.85rem;
-  letter-spacing: -0.01em;
+  font-weight: 400;
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  line-height: 1.2;
+  color: var(--paper);
+  margin-bottom: 1.25rem;
 }
 
-.pw-body-text {
-  font-size: 0.96rem;
+.home-contact h2 em { font-style: italic; color: var(--periwinkle); }
+
+.home-contact p {
+  font-size: 1.02rem;
+  color: var(--ink-quiet);
+  max-width: 42ch;
+  margin: 0 auto 2.25rem;
   line-height: 1.7;
-  color: var(--ink-soft);
-  margin: 0 auto 1.4rem;
-  max-width: 46ch;
 }
 
-.pw-portal-link {
+.home-contact-email {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: 0.88rem;
+  gap: 0.6rem;
   font-weight: 600;
-}
-
-.pw-portal-link svg { transition: transform 0.2s ease; }
-.pw-portal-link:hover svg { transform: translateX(3px); }
-
-#pw-progress {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  height: 3px;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: var(--midnight);
   background: var(--periwinkle);
-  z-index: 60;
-  width: 0%;
-  box-shadow: 0 0 14px var(--periwinkle);
+  padding: 0.9rem 1.75rem;
+  border-radius: 10px;
+  transition: background 0.2s ease;
 }
 
-.pw-scroll-cue {
-  display: inline-block;
-  margin-top: 3.5rem;
-  opacity: 0;
-  color: var(--periwinkle);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 500;
-  animation: pw-cue-rise 1s ease forwards, pw-cue-float 2.6s ease-in-out infinite;
-  animation-delay: 1.1s, 2.1s;
-}
+.home-contact-email:hover { background: var(--periwinkle-soft); }
 
-@keyframes pw-cue-rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pw-cue-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(6px); }
-}
-
-.pw-btn-primary:focus-visible,
-.pw-btn-ghost:focus-visible,
-.pw-portal-link:focus-visible,
-.pw-beat a:focus-visible {
+.home-btn-primary:focus-visible,
+.home-btn-ghost:focus-visible,
+.home-frame-link:focus-visible,
+.home-frame:focus-visible,
+.home-contact-email:focus-visible {
   outline: 2px solid var(--periwinkle);
   outline-offset: 3px;
   border-radius: 4px;
 }
 
-/* ---------- RESPONSIVE ----------
-   Only render cost changes by breakpoint (handled in
-   index-3d.js: particle count, antialiasing, pixel ratio,
-   ring segment count). The scroll-driven behavior itself —
-   camera dolly math and beat activation — is identical on
-   every screen size. */
+/* ---------- RESPONSIVE ---------- */
 @media (max-width: 900px) {
-  .pw-track { height: 560vh; }
-  .pw-panel { padding: 1.75rem 1.5rem; border-radius: 16px; }
+  .home-hero { min-height: 82vh; }
+  .home-reel-head { padding: 0 1.75rem; margin-bottom: 1.25rem; }
+  .home-reel { padding: 1rem 1.75rem 1rem; }
+}
+
+@media (max-width: 760px) {
+  .home-frame { flex: 0 0 88vw; }
+  .home-reel-head { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
 }
 
 @media (max-width: 640px) {
-  .pw-track { height: 520vh; }
-  .pw-beat { padding: 0 1.1rem; }
-  .pw-panel { padding: 1.5rem 1.25rem; }
-  .pw-hero-actions { flex-direction: column; gap: 1rem; }
-  .pw-btn-primary, .pw-btn-ghost { width: 100%; justify-content: center; }
-  .pw-scroll-cue { margin-top: 2.5rem; font-size: 0.72rem; }
+  .home-hero { min-height: 0; padding: 3.5rem 1.25rem 3rem; }
+  .home-hero-actions { flex-direction: column; gap: 1rem; }
+  .home-btn-primary, .home-btn-ghost { width: 100%; justify-content: center; }
+  .home-reel-head { padding: 0 1.25rem; }
+  .home-reel { padding: 1rem 1.25rem 1rem; gap: 1.25rem; }
+  .home-frame-panel { padding: 1.5rem 1.5rem; }
+  .home-contact { padding: 4rem 1.25rem 5rem; }
+  .home-contact-email { width: 100%; justify-content: center; }
 }

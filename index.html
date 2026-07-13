@@ -8,8 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="index.css" />
-
-  <!-- Favicon (theme-adaptive) -->
   <link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
   <link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="images/favicon.ico" sizes="any">
@@ -27,11 +25,8 @@
   <meta name="twitter:title" content="Mark Pabustan — UI/UX Designer">
   <meta name="twitter:description" content="UI/UX designer portfolio featuring selected case studies in product design, based in New York.">
   <meta name="twitter:image" content="images/og-image.png">
-
-  <!-- Three.js r128 — powers the portal warp scene in index-3d.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body class="pw-body">
+<body class="home-page">
   <script src="page-transitions.js"></script>
 
   <a href="#main" class="skip-link">Skip to main content</a>
@@ -42,9 +37,9 @@
       <a href="index.html" class="nav-logo"><img src="images/logo-white.png" alt="Mark Pabustan, home" width="194" height="114"></a>
       <ul class="nav-links" id="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="#pw-beat-1">Work</a></li>
+        <li><a href="#work-reel">Work</a></li>
         <li><a href="about.html">About</a></li>
-        <li><a href="#pw-beat-4" class="nav-cta">Let's talk</a></li>
+        <li><a href="#contact" class="nav-cta">Let's talk</a></li>
       </ul>
       <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links-mobile" aria-label="Open menu">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16"/></svg>
@@ -52,116 +47,113 @@
     </nav>
     <ul class="nav-links-mobile" id="nav-links-mobile">
       <li><a href="index.html">Home</a></li>
-      <li><a href="#pw-beat-1">Work</a></li>
+      <li><a href="#work-reel">Work</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="#pw-beat-4" class="nav-cta">Let's talk</a></li>
+      <li><a href="#contact" class="nav-cta">Let's talk</a></li>
     </ul>
   </header>
 
-  <!-- BINARY MATRIX BACKGROUND — dedicated to this page, ported from
-       matrix-bg.js's own trail/fade/step technique but with a binary
-       (0/1) charset and its own script (index-matrix.js) so the shared
-       matrix-bg.js used on other pages is untouched. Sits behind the
-       3D canvas; independent of scroll/camera/rotation. -->
-  <canvas id="pw-matrix-bg" aria-hidden="true"></canvas>
-
-  <!-- 3D PORTAL WARP SCENE -->
-  <canvas id="pw-canvas" aria-hidden="true"></canvas>
-  <div id="pw-progress" aria-hidden="true"></div>
-
   <main id="main">
-    <div class="pw-track">
 
-      <!-- BEAT 0 — HERO -->
-      <section class="pw-beat" id="pw-beat-0" data-beat="0">
-        <div class="pw-beat-inner">
-          <p class="pw-eyebrow"><span class="pw-dot" aria-hidden="true"></span>Available for full-time roles &amp; freelance work</p>
-          <h1 class="pw-h1">Good design is <em>invisible</em> until it's missing.</h1>
-          <p class="pw-lede">Selected UI/UX case studies — scroll to move through them.</p>
-          <div class="pw-hero-actions">
-            <a href="#pw-beat-1" class="pw-btn-primary">
-              See the work
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
-            </a>
-            <a href="about.html" class="pw-btn-ghost">
-              More about me
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
-            </a>
-          </div>
-          <span class="pw-scroll-cue" aria-hidden="true">Scroll to explore ↓</span>
+    <!-- HERO — particle-network background lives behind this
+         section only (index-hero-network.js). Nodes drift and link
+         to each other, and to the cursor as a "hub," within the
+         hero's bounds; nothing here is scroll-jacked. -->
+    <section class="home-hero" id="home-hero">
+      <canvas id="home-hero-canvas" aria-hidden="true"></canvas>
+      <div class="home-hero-fade" aria-hidden="true"></div>
+      <div class="home-hero-inner">
+        <p class="home-eyebrow"><span class="home-dot" aria-hidden="true"></span>Available for full-time roles &amp; freelance work</p>
+        <h1 class="home-h1">Good design is <em>invisible</em> until it's missing.</h1>
+        <p class="home-lede">Selected UI/UX case studies — drag through them below.</p>
+        <div class="home-hero-actions">
+          <a href="#work-reel" class="home-btn-primary">
+            See the work
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
+          </a>
+          <a href="about.html" class="home-btn-ghost">
+            More about me
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
+          </a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- BEAT 1 — CONNETT FAMILY COUNSELING -->
-      <section class="pw-beat" id="pw-beat-1" data-beat="1" data-href="counseling.html">
-        <div class="pw-beat-inner">
-          <div class="pw-panel">
-            <span class="pw-status"><span class="pw-live-dot" aria-hidden="true"></span>Live since 2025 · Freelance</span>
-            <h3 class="pw-h3" style="color:#7AB8D6">Connett Family Counseling</h3>
-            <p class="pw-body-text">Taking a private-practice therapist from zero online presence to a live site built to earn trust before it asks anything of an anxious visitor.</p>
-            <a class="pw-portal-link" href="counseling.html" style="color:#7AB8D6">
+    <!-- WORK REEL — click-and-drag, mouse wheel, and touch/trackpad
+         swipe all work (index-work-reel.js); dots track the centered
+         frame. Aperture Gallery treatment: wide 16:9 frames with a
+         frosted-glass caption panel over each thumbnail. -->
+    <section class="home-reel-wrap" id="work-reel">
+      <div class="home-reel-head">
+        <span class="home-reel-eyebrow">Selected work</span>
+        <span class="home-reel-hint">Click + drag, or scroll →</span>
+      </div>
+      <div class="home-reel" id="reel">
+
+        <a class="home-frame" href="counseling.html" style="background:linear-gradient(160deg,#123044,#0F4C66 55%,#1a5a76);">
+          <span class="home-frame-count" aria-hidden="true">01 / 03</span>
+          <img src="images/counseling-card.jpg" alt="Connett Family Counseling website" loading="lazy" draggable="false">
+          <div class="home-frame-panel">
+            <p class="home-frame-status"><span class="home-live-dot" aria-hidden="true"></span>Live since 2025 · Freelance</p>
+            <h3 style="color:#7AB8D6">Connett Family Counseling</h3>
+            <p>Taking a private-practice therapist from zero online presence to a site built to earn trust before it asks anything of an anxious visitor.</p>
+            <span class="home-frame-link" style="color:#7AB8D6">
               Enter case study
               <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </a>
+            </span>
           </div>
-        </div>
-      </section>
+        </a>
 
-      <!-- BEAT 2 — ALBERTINA'S ANGELS -->
-      <section class="pw-beat" id="pw-beat-2" data-beat="2" data-href="albertinas-angels.html">
-        <div class="pw-beat-inner">
-          <div class="pw-panel">
-            <span class="pw-status"><span class="pw-live-dot" aria-hidden="true"></span>Live since 2022 · Freelance</span>
-            <h3 class="pw-h3" style="color:#B6ABDB">Albertina's Angels</h3>
-            <p class="pw-body-text">A multi-year nonprofit project spanning brand identity, donor research, and iteration based on stakeholder testing.</p>
-            <a class="pw-portal-link" href="albertinas-angels.html" style="color:#B6ABDB">
+        <a class="home-frame home-frame--contain" href="albertinas-angels.html" style="background:linear-gradient(160deg,#231b33,#3a2d54 55%,#5b4a82);">
+          <span class="home-frame-count" aria-hidden="true">02 / 03</span>
+          <img src="images/albertinas-angels-card.png" alt="Albertina's Angels brand identity" loading="lazy" draggable="false">
+          <div class="home-frame-panel">
+            <p class="home-frame-status"><span class="home-live-dot" style="background:#9C8FC4" aria-hidden="true"></span>Live since 2022 · Freelance</p>
+            <h3 style="color:#B6ABDB">Albertina's Angels</h3>
+            <p>A multi-year nonprofit project spanning brand identity, donor research, and iteration based on stakeholder testing.</p>
+            <span class="home-frame-link" style="color:#B6ABDB">
               Enter case study
               <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </a>
+            </span>
           </div>
-        </div>
-      </section>
+        </a>
 
-      <!-- BEAT 3 — BOOTCAMP PROJECTS -->
-      <section class="pw-beat" id="pw-beat-3" data-beat="3" data-href="education.html">
-        <div class="pw-beat-inner">
-          <div class="pw-panel">
-            <span class="pw-status pw-status--progress"><span class="pw-live-dot" aria-hidden="true"></span>Case studies in progress</span>
-            <h3 class="pw-h3" style="color:#F2A968">Bootcamp Projects</h3>
-            <p class="pw-body-text">A handful of smaller projects from the Google UX Design Certificate and Columbia Engineering UI/UX Bootcamp, earlier reps, different muscles.</p>
-            <a class="pw-portal-link" href="education.html" style="color:#F2A968">
+        <a class="home-frame" href="education.html" style="background:linear-gradient(160deg,#3a2a12,#6b4a1e 55%,#9c6d2e);">
+          <span class="home-frame-count" aria-hidden="true">03 / 03</span>
+          <img src="images/bootcamp-card.jpg" alt="Bootcamp project screenshots" loading="lazy" draggable="false">
+          <div class="home-frame-panel">
+            <p class="home-frame-status home-frame-status--wip"><span class="home-live-dot" aria-hidden="true"></span>Case studies in progress</p>
+            <h3 style="color:#F2A968">Bootcamp Projects</h3>
+            <p>A handful of smaller projects from the Google UX Design Certificate and Columbia Engineering UI/UX Bootcamp — earlier reps, different muscles.</p>
+            <span class="home-frame-link" style="color:#F2A968">
               Enter case studies
               <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </a>
+            </span>
           </div>
-        </div>
-      </section>
+        </a>
 
-      <!-- BEAT 4 — CONTACT (the "doorway") -->
-      <section class="pw-beat" id="pw-beat-4" data-beat="4">
-        <div class="pw-beat-inner">
-          <h2 class="pw-h1" style="font-size:clamp(2rem,4.2vw,3rem);">Let's make <em>something good.</em></h2>
-          <p class="pw-lede">Whether it's a full-time role, a freelance project, or just a conversation about design, my inbox is open.</p>
-          <div class="pw-hero-actions">
-            <a href="mailto:mpabustan96@gmail.com" class="pw-btn-primary">mpabustan96@gmail.com</a>
-          </div>
-        </div>
-      </section>
+      </div>
+      <div class="home-dots" id="dots" aria-hidden="true">
+        <span class="is-active"></span><span></span><span></span>
+      </div>
+    </section>
 
-    </div>
+    <!-- CONTACT -->
+    <section class="home-contact" id="contact">
+      <h2>Let's make <em>something good.</em></h2>
+      <p>Whether it's a full-time role, a freelance project, or just a conversation about design, my inbox is open.</p>
+      <a href="mailto:mpabustan96@gmail.com" class="home-contact-email">mpabustan96@gmail.com</a>
+    </section>
+
   </main>
 
-  <!-- FOOTER — intentionally has no background of its own, same as
-       the rest of the page, so the tunnel (now mostly settled, sparse
-       drifting particles) stays visible behind it, exactly like
-       matrix-bg.js used to sit behind the old footer. -->
   <footer>
     <span class="footer-logo">Mark<span>.</span></span>
     <span class="footer-copy">© 2026 Mark Pabustan, UI/UX Designer</span>
   </footer>
 
-  <script src="index-matrix.js"></script>
-  <script src="index-3d.js"></script>
+  <script src="index-hero-network.js"></script>
+  <script src="index-work-reel.js"></script>
 
   <script>
     const navToggle = document.getElementById('nav-toggle');
