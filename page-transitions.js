@@ -54,8 +54,35 @@
    Usage: include this once, near the very top of
    <body>, on every page listed in THEMES below:
      <script src="page-transitions.js"></script>
+
+   ALWAYS START AT THE TOP (load AND reload):
+   Browsers (Chrome especially) auto-restore the previous
+   scroll position on a reload by default, and separately
+   restore it on back/forward navigation. Neither is what
+   this site wants — every page should always open at its
+   own top, whether it's a fresh load, a hard reload, or a
+   back/forward nav. That matters most on index.html, since
+   index-3d.js's initScrollPosition() reads window.scrollY
+   on load to decide which beat to snap to; if the browser
+   had already restored a stale scrollY before that runs,
+   the Portal Warp scene would open mid-tunnel instead of
+   at the hero. Fixed once, here, since this is the one
+   script already guaranteed to run first, on every page,
+   before any page's own scroll-dependent init code (see
+   the usage note above) — rather than repeating the same
+   two lines in eight separate HTML files.
+   'scrollRestoration' must be set as early as possible
+   (before the browser applies its own restoration), and
+   the scrollTo(0,0) is a synchronous belt-and-suspenders
+   reset in case restoration already happened by the time
+   this file parses.
 ============================================= */
 (function () {
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
   var THEMES = {
     'index.html': {
       name: 'Home', bg: '#0A0C12', accent: '#7A9CFF',
