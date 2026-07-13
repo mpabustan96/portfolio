@@ -6,14 +6,14 @@
   <title>Mark Pabustan, UI/UX Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600&family=Sora:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="index.css" />
   <link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
   <link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="images/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#0A0C12">
+  <meta name="theme-color" content="#F0E9D6">
 
   <!-- Open Graph / social preview -->
   <meta property="og:type" content="website">
@@ -31,15 +31,21 @@
 
   <a href="#main" class="skip-link">Skip to main content</a>
 
+  <!-- The spine — fixed navy binding, stitched with brass thread.
+       .spine-fill is the scroll-progress ribbon bookmark. -->
+  <div class="spine" aria-hidden="true">
+    <div class="spine-fill" id="spineFill"></div>
+  </div>
+
   <!-- NAV -->
   <header>
-    <nav class="nav" aria-label="Primary">
-      <a href="index.html" class="nav-logo"><img src="images/logo-white.png" alt="Mark Pabustan, home" width="194" height="114"></a>
-      <ul class="nav-links" id="nav-links">
+    <nav class="home-nav" aria-label="Primary">
+      <a href="index.html" class="home-logo">Mark<span>.</span></a>
+      <ul class="home-nav-links" id="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="#work-reel">Work</a></li>
         <li><a href="about.html">About</a></li>
-        <li><a href="#contact" class="nav-cta">Let's talk</a></li>
+        <li><a href="#contact" class="home-nav-cta">Let's talk</a></li>
       </ul>
       <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links-mobile" aria-label="Open menu">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16"/></svg>
@@ -49,40 +55,41 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="#work-reel">Work</a></li>
       <li><a href="about.html">About</a></li>
-      <li><a href="#contact" class="nav-cta">Let's talk</a></li>
+      <li><a href="#contact" class="home-nav-cta">Let's talk</a></li>
     </ul>
   </header>
 
   <main id="main">
 
-    <!-- HERO — particle-network background lives behind this
-         section only (index-hero-network.js). Nodes drift and link
-         to each other, and to the cursor as a "hub," within the
-         hero's bounds; nothing here is scroll-jacked. -->
+    <!-- HERO — title page. No canvas: a static, physical opening
+         page rather than a HUD-style particle network. -->
     <section class="home-hero" id="home-hero">
-      <canvas id="home-hero-canvas" aria-hidden="true"></canvas>
-      <div class="home-hero-fade" aria-hidden="true"></div>
-      <div class="home-hero-inner">
-        <p class="home-eyebrow"><span class="home-dot" aria-hidden="true"></span>Available for full-time roles &amp; freelance work</p>
-        <h1 class="home-h1">Good design is <em>invisible</em> until it's missing.</h1>
-        <p class="home-lede">Selected UI/UX case studies — drag through them below.</p>
-        <div class="home-hero-actions">
-          <a href="#work-reel" class="home-btn-primary">
-            See the work
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
-          </a>
-          <a href="about.html" class="home-btn-ghost">
-            More about me
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
-          </a>
-        </div>
+      <div class="hero-ornament" aria-hidden="true">
+        <svg width="120" height="16" viewBox="0 0 120 16" fill="none">
+          <line x1="0" y1="8" x2="48" y2="8" stroke="#233A5E" stroke-width="1"/>
+          <path d="M60 2L66 8L60 14L54 8Z" fill="#233A5E"/>
+          <line x1="72" y1="8" x2="120" y2="8" stroke="#233A5E" stroke-width="1"/>
+        </svg>
       </div>
+      <p class="home-eyebrow"><span class="dot" aria-hidden="true"></span>Available for full-time roles &amp; freelance work</p>
+      <h1 class="home-h1">Good design is <em>invisible</em> until it's missing.</h1>
+      <p class="home-lede">Selected UI/UX case studies — drag through them below.</p>
+      <div class="home-hero-actions">
+        <a href="#work-reel" class="home-btn-primary">
+          See the work
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
+        </a>
+        <a href="about.html" class="home-btn-ghost">
+          More about me
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M7 2.5L11.5 7 7 11.5"/></svg>
+        </a>
+      </div>
+      <span class="home-scroll-cue">Scroll to begin ↓</span>
     </section>
 
-    <!-- WORK REEL — click-and-drag, mouse wheel, and touch/trackpad
-         swipe all work (index-work-reel.js); dots track the centered
-         frame. Aperture Gallery treatment: wide 16:9 frames with a
-         frosted-glass caption panel over each thumbnail. -->
+    <!-- WORK REEL — the original drag/wheel/scroll-snap-dots
+         mechanic from index-work-reel.js, unchanged, reskinned
+         here as numbered book plates. -->
     <section class="home-reel-wrap" id="work-reel">
       <div class="home-reel-head">
         <span class="home-reel-eyebrow">Selected work</span>
@@ -90,46 +97,46 @@
       </div>
       <div class="home-reel" id="reel">
 
-        <a class="home-frame" href="counseling.html" style="background:linear-gradient(160deg,#123044,#0F4C66 55%,#1a5a76);">
-          <span class="home-frame-count" aria-hidden="true">01 / 03</span>
-          <img src="images/counseling-card.jpg" alt="Connett Family Counseling website" loading="lazy" draggable="false">
-          <div class="home-frame-panel">
-            <p class="home-frame-status"><span class="home-live-dot" aria-hidden="true"></span>Live since 2025 · Freelance</p>
-            <h3 style="color:#7AB8D6">Connett Family Counseling</h3>
-            <p>Taking a private-practice therapist from zero online presence to a site built to earn trust before it asks anything of an anxious visitor.</p>
-            <span class="home-frame-link" style="color:#7AB8D6">
-              Enter case study
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
+        <a class="home-frame" href="counseling.html">
+          <span class="plate-fig">Fig. 01</span>
+          <div class="plate-thumb">
+            <img src="images/counseling-card.jpg" alt="Connett Family Counseling website" loading="lazy" draggable="false">
           </div>
+          <p class="plate-status"><span class="live-dot" aria-hidden="true"></span>Live since 2025 · Freelance</p>
+          <h3>Connett Family Counseling</h3>
+          <p>Taking a private-practice therapist from zero online presence to a site built to earn trust before it asks anything of an anxious visitor.</p>
+          <span class="plate-link">
+            Enter case study
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </span>
         </a>
 
-        <a class="home-frame home-frame--contain" href="albertinas-angels.html" style="background:linear-gradient(160deg,#231b33,#3a2d54 55%,#5b4a82);">
-          <span class="home-frame-count" aria-hidden="true">02 / 03</span>
-          <img src="images/albertinas-angels-card.png" alt="Albertina's Angels brand identity" loading="lazy" draggable="false">
-          <div class="home-frame-panel">
-            <p class="home-frame-status"><span class="home-live-dot" style="background:#9C8FC4" aria-hidden="true"></span>Live since 2022 · Freelance</p>
-            <h3 style="color:#B6ABDB">Albertina's Angels</h3>
-            <p>A multi-year nonprofit project spanning brand identity, donor research, and iteration based on stakeholder testing.</p>
-            <span class="home-frame-link" style="color:#B6ABDB">
-              Enter case study
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
+        <a class="home-frame home-frame--contain" href="albertinas-angels.html">
+          <span class="plate-fig">Fig. 02</span>
+          <div class="plate-thumb">
+            <img src="images/albertinas-angels-card.png" alt="Albertina's Angels brand identity" loading="lazy" draggable="false">
           </div>
+          <p class="plate-status"><span class="live-dot" aria-hidden="true"></span>Live since 2022 · Freelance</p>
+          <h3>Albertina's Angels</h3>
+          <p>A multi-year nonprofit project spanning brand identity, donor research, and iteration based on stakeholder testing.</p>
+          <span class="plate-link">
+            Enter case study
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </span>
         </a>
 
-        <a class="home-frame" href="education.html" style="background:linear-gradient(160deg,#3a2a12,#6b4a1e 55%,#9c6d2e);">
-          <span class="home-frame-count" aria-hidden="true">03 / 03</span>
-          <img src="images/bootcamp-card.jpg" alt="Bootcamp project screenshots" loading="lazy" draggable="false">
-          <div class="home-frame-panel">
-            <p class="home-frame-status home-frame-status--wip"><span class="home-live-dot" aria-hidden="true"></span>Case studies in progress</p>
-            <h3 style="color:#F2A968">Bootcamp Projects</h3>
-            <p>A handful of smaller projects from the Google UX Design Certificate and Columbia Engineering UI/UX Bootcamp — earlier reps, different muscles.</p>
-            <span class="home-frame-link" style="color:#F2A968">
-              Enter case studies
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-            </span>
+        <a class="home-frame" href="education.html">
+          <span class="plate-fig">Fig. 03</span>
+          <div class="plate-thumb">
+            <img src="images/bootcamp-card.jpg" alt="Bootcamp project screenshots" loading="lazy" draggable="false">
           </div>
+          <p class="plate-status plate-status--wip"><span class="live-dot" aria-hidden="true"></span>Case studies in progress</p>
+          <h3>Bootcamp Projects</h3>
+          <p>A handful of smaller projects from the Google UX Design Certificate and Columbia Engineering UI/UX Bootcamp — earlier reps, different muscles.</p>
+          <span class="plate-link">
+            Enter case studies
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </span>
         </a>
 
       </div>
@@ -138,7 +145,7 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
+    <!-- CONTACT — the colophon page -->
     <section class="home-contact" id="contact">
       <h2>Let's make <em>something good.</em></h2>
       <p>Whether it's a full-time role, a freelance project, or just a conversation about design, my inbox is open.</p>
@@ -147,12 +154,11 @@
 
   </main>
 
-  <footer>
-    <span class="footer-logo">Mark<span>.</span></span>
-    <span class="footer-copy">© 2026 Mark Pabustan, UI/UX Designer</span>
+  <footer class="home-footer">
+    <span class="home-footer-logo">Mark<span>.</span></span>
+    <span class="home-footer-copy">© 2026 Mark Pabustan, UI/UX Designer</span>
   </footer>
 
-  <script src="index-hero-network.js"></script>
   <script src="index-work-reel.js"></script>
 
   <script>
@@ -162,9 +168,9 @@
     // Keep the mobile dropdown pinned directly under the sticky nav,
     // measuring its real height since it can wrap on small screens.
     function updateMobileNavOffset() {
-      const headerEl = document.querySelector('.nav') || document.querySelector('.site-header');
+      const headerEl = document.querySelector('.home-nav');
       if (headerEl) {
-        document.documentElement.style.setProperty('--mobile-nav-offset', headerEl.offsetHeight + 'px');
+        document.documentElement.style.setProperty('--nav-h', headerEl.offsetHeight + 'px');
       }
     }
     updateMobileNavOffset();
@@ -185,6 +191,17 @@
         navToggle.setAttribute('aria-label', 'Open menu');
       });
     });
+
+    // Spine ribbon-bookmark scroll progress
+    const spineFill = document.getElementById('spineFill');
+    function updateSpineFill() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+      spineFill.style.height = pct + '%';
+    }
+    window.addEventListener('scroll', updateSpineFill, { passive: true });
+    updateSpineFill();
   </script>
 
 </body>
