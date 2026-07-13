@@ -289,7 +289,18 @@ img { max-width: 100%; display: block; }
   position: relative;
   z-index: 1;
 }
-.home-h1 em { font-style: italic; color: var(--navy); }
+.home-h1 em {
+  font-style: italic;
+  color: var(--navy);
+  animation: pulse-fade-dyn 6s ease-in-out infinite;
+}
+
+@keyframes pulse-fade-dyn {
+  0%   { opacity: 1; }
+  45%  { opacity: 0; }
+  55%  { opacity: 0; }
+  100% { opacity: 1; }
+}
 
 .home-lede {
   font-family: var(--font-body);
