@@ -174,62 +174,7 @@ img { max-width: 100%; display: block; }
   color: var(--silver);
 }
 
-/* ---------- Legacy flat-page rules (hero/meta-strip/section/etc) ----------
-   Retained rather than deleted — same precedent counseling.css sets — in
-   case any other page still references these classes. The new ride markup
-   below uses .ride-* classes exclusively so there's no collision. */
-
-.hero {
-  min-height: 88vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-6) var(--space-3) var(--space-5);
-  position: relative;
-  z-index: 2;
-}
-
-.hero-eyebrow {
-  font-family: var(--sans);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--mango);
-  margin-bottom: var(--space-3);
-}
-
-.hero h1 {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(1.9rem, 4.6vw, 3.1rem);
-  line-height: 1.3;
-  color: var(--sand);
-  max-width: 17ch;
-  margin: 0 0 var(--space-4);
-}
-
-.hero p.lede {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  color: var(--silver-dim);
-  max-width: 44ch;
-  margin: 0 auto var(--space-5);
-}
-
-.hero .scroll-cue {
-  color: var(--mango);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
-}
+/* ---------- Metadata (reused inside .ride-meta-grid) ---------- */
 
 .meta-item .label {
   font-size: 0.7rem;
@@ -246,21 +191,7 @@ img { max-width: 100%; display: block; }
   color: var(--sand);
 }
 
-.section-head {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
-}
-
-.section-mark {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  color: var(--mango);
-}
-
-.section h2, .ride-panel h2 {
+.ride-panel h2 {
   font-family: var(--serif);
   font-weight: 400;
   font-size: clamp(1.3rem, 2.6vw, 1.85rem);
@@ -269,12 +200,12 @@ img { max-width: 100%; display: block; }
   line-height: 1.4;
 }
 
-.section p, .ride-panel p {
+.ride-panel p {
   margin: 0 0 var(--space-3);
   color: var(--silver);
 }
 
-.section p.hook-line, .ride-panel p.hook-line {
+.ride-panel p.hook-line {
   font-family: var(--serif);
   font-size: clamp(1rem, 2.4vw, 1.2rem);
   line-height: 1.7;
@@ -755,7 +686,15 @@ img { max-width: 100%; display: block; }
 .ride-scene {
   position: relative;
   height: 100vh;
-  height: 100dvh;
+  /* svh (small viewport height), not dvh: dvh continuously tracks the
+     browser chrome as it collapses/expands mid-scroll, which grows and
+     shrinks every .ride-scene's own height while the person is
+     scrolling. That fought with big-cat-rescue-3d.js's own fixed-pixel
+     .ride-track height and was part of what produced the direction-
+     reversal "boomerang". svh always assumes the smallest possible
+     viewport (chrome fully visible) and never changes after load, so
+     scene height stays stable regardless of scroll direction. */
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -787,8 +726,6 @@ img { max-width: 100%; display: block; }
 
 .ride-panel.wide { max-width: 780px; }
 .ride-panel.centered { text-align: center; }
-
-.ride-panel .section-head { margin-bottom: var(--space-3); }
 
 .ride-eyebrow {
   font-size: 0.72rem;

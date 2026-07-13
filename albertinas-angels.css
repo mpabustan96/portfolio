@@ -53,7 +53,11 @@ html {
      one — the "boomerang" on direction changes. Removing snap entirely
      means there is now exactly one thing driving scroll position: the
      person scrolling, and the active panel is derived from the same
-     continuous scroll-progress math that drives the camera. */
+     continuous scroll-progress math that drives the camera.
+     albertinas-3d.js also caches the viewport height it uses for that
+     math instead of re-reading it live every scroll tick, which closes
+     the remaining source of the same boomerang (see that file's header
+     comment for details). */
 }
 
 /* No prefers-reduced-motion override here, by design — matching every
@@ -209,103 +213,7 @@ img { max-width: 100%; display: block; }
   color: var(--ink-soft);
 }
 
-/* ---------- Hero ---------- */
-
-.hero {
-  min-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-6) var(--space-3) var(--space-5);
-  position: relative;
-  z-index: 2;
-}
-
-.hero-dragonfly {
-  width: 88px;
-  height: 88px;
-  margin-bottom: var(--space-4);
-  opacity: 0;
-  animation: rise 1.1s ease forwards;
-  animation-delay: 0.1s;
-}
-
-.hero-dragonfly svg { width: 100%; height: 100%; }
-
-.hero-eyebrow {
-  font-family: var(--sans);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--violet);
-  margin-bottom: var(--space-3);
-  opacity: 0;
-  animation: rise 0.9s ease forwards;
-  animation-delay: 0.3s;
-}
-
-.hero h1 {
-  font-family: var(--serif);
-  font-weight: 400;
-  font-style: italic;
-  font-size: clamp(2.2rem, 5.5vw, 3.8rem);
-  line-height: 1.18;
-  color: var(--paper);
-  max-width: 18ch;
-  margin: 0 0 var(--space-4);
-  opacity: 0;
-  animation: rise 1s ease forwards;
-  animation-delay: 0.45s;
-}
-
-.hero p.lede {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  color: var(--ink-quiet);
-  max-width: 42ch;
-  margin: 0 auto var(--space-5);
-  opacity: 0;
-  animation: rise 1s ease forwards;
-  animation-delay: 0.65s;
-}
-
-.hero .scroll-cue {
-  opacity: 0;
-  animation: rise 1s ease forwards, float 2.6s ease-in-out infinite;
-  animation-delay: 0.85s, 1.8s;
-  color: var(--wing);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
-}
-
-/* ---------- Metadata strip ---------- */
-
-.meta-strip {
-  max-width: var(--measure-wide);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-5) var(--space-6);
-  border-top: 1px solid var(--vein);
-  border-bottom: 1px solid var(--vein);
-  position: relative;
-  z-index: 2;
-}
+/* ---------- Metadata (reused inside .ride-meta-grid) ---------- */
 
 .meta-item .label {
   font-size: 0.72rem;
@@ -320,68 +228,6 @@ img { max-width: 100%; display: block; }
 .meta-item .value {
   font-size: 0.95rem;
   color: var(--paper);
-}
-
-/* ---------- Sections ---------- */
-
-.section {
-  max-width: var(--measure);
-  margin: 0 auto;
-  padding: var(--space-6) var(--space-3);
-  scroll-margin-top: 90px;
-  position: relative;
-  z-index: 2;
-}
-
-.section.wide { max-width: var(--measure-wide); }
-
-.section-head {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
-}
-
-.section-mark {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  color: var(--violet);
-}
-
-.section h2 {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  color: var(--paper);
-  margin: 0;
-}
-
-.section p {
-  margin: 0 0 var(--space-3);
-  color: var(--ink-soft);
-}
-
-.section p.hook-line {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(1.15rem, 3vw, 1.4rem);
-  line-height: 1.5;
-  color: var(--paper);
-  text-align: center;
-  max-width: 36ch;
-  margin: 0 auto;
-}
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.fade-in.is-visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* ---------- Honest framing / placeholder callouts ---------- */
@@ -405,26 +251,6 @@ img { max-width: 100%; display: block; }
 }
 
 .note p { margin: 0; color: var(--ink-soft); }
-
-.placeholder {
-  background: var(--surface);
-  border: 1px dashed var(--vein-strong);
-  border-radius: 6px;
-  padding: var(--space-2) var(--space-3);
-  margin: var(--space-3) 0;
-}
-
-.placeholder .placeholder-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ember-soft);
-  display: block;
-  margin-bottom: 0.3rem;
-}
-
-.placeholder p { margin: 0; color: var(--ink-quiet); font-size: 0.92rem; font-style: italic; }
 
 /* ---------- Origin story block (name + logo meaning) ---------- */
 
@@ -621,162 +447,6 @@ img { max-width: 100%; display: block; }
   margin: -0.25rem 0;
 }
 
-/* ---------- Screenshot placeholders ---------- */
-
-.shot-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3);
-  margin: var(--space-4) 0;
-}
-
-.shot-frame {
-  aspect-ratio: 16 / 11;
-  border: 1.5px dashed var(--wing-soft);
-  border-radius: 10px;
-  background: var(--surface);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  color: var(--wing);
-}
-
-.shot-frame .shot-icon {
-  width: 28px;
-  height: 28px;
-  opacity: 0.7;
-}
-
-.shot-frame span.shot-label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  text-align: center;
-  padding: 0 var(--space-2);
-}
-
-/* ---------- Reflection card ---------- */
-
-.reflection-card {
-  background: var(--surface);
-  border-radius: 14px;
-  padding: var(--space-5) var(--space-4);
-  border: 1px solid var(--vein);
-}
-
-.reflection-card .note { background: var(--dusk-2); border-left-color: var(--wing-soft); }
-.reflection-card .placeholder { background: var(--dusk-2); }
-.reflection-card .shot-row { margin: var(--space-4) 0; }
-.reflection-card .shot-frame { background: var(--dusk-2); }
-
-/* ---------- Footer / project nav ---------- */
-
-.project-nav {
-  border-top: 1px solid var(--vein);
-  padding: var(--space-6) var(--space-5);
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-3);
-  max-width: var(--measure-wide);
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.project-nav a {
-  flex: 1;
-  padding: var(--space-3);
-  border: 1px solid var(--vein);
-  border-radius: 10px;
-  background: var(--surface);
-  transition: border-color 0.2s ease, transform 0.2s ease;
-  min-height: 44px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.project-nav a:hover {
-  border-color: var(--wing-soft);
-  transform: translateY(-2px);
-}
-
-.project-nav .direction {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--wing);
-  margin-bottom: 0.3rem;
-}
-
-.project-nav .title {
-  font-family: var(--serif);
-  font-style: italic;
-  color: var(--paper);
-  font-size: 1.05rem;
-}
-
-.project-nav a.next { text-align: right; }
-
-.site-footer {
-  text-align: center;
-  padding: var(--space-4) var(--space-3) var(--space-5);
-  font-size: 0.85rem;
-  color: var(--ink-quiet);
-  position: relative;
-  z-index: 2;
-}
-
-/* ---------- 3-column equal-height screenshot row ---------- */
-
-.shot-row--3col {
-  grid-template-columns: repeat(3, 1fr);
-  align-items: start;
-}
-
-.shot-frame--fixed {
-  aspect-ratio: auto;
-  height: 320px;
-  margin: 0;
-  display: block;
-  position: relative;
-  padding: 0;
-  overflow: hidden;
-}
-
-.shot-frame--fixed img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  border-radius: 8px;
-  display: block;
-  cursor: zoom-in;
-  transition: filter 0.2s ease, transform 0.3s ease;
-}
-
-.shot-frame--fixed img:hover,
-.shot-frame--fixed img:focus-visible {
-  filter: brightness(1.04);
-  transform: scale(1.01);
-}
-
-.shot-caption {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--ink-quiet);
-  text-align: center;
-  margin-top: 0.6rem;
-}
-
 /* ---------- Image lightbox ---------- */
 
 .lightbox {
@@ -845,6 +515,66 @@ img { max-width: 100%; display: block; }
   .lightbox-close { top: var(--space-2); right: var(--space-2); width: 40px; height: 40px; }
 }
 
+/* ---------- Footer / project nav ---------- */
+
+.project-nav {
+  border-top: 1px solid var(--vein);
+  padding: var(--space-6) var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  max-width: var(--measure-wide);
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.project-nav a {
+  flex: 1;
+  padding: var(--space-3);
+  border: 1px solid var(--vein);
+  border-radius: 10px;
+  background: var(--surface);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-nav a:hover {
+  border-color: var(--wing-soft);
+  transform: translateY(-2px);
+}
+
+.project-nav .direction {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--wing);
+  margin-bottom: 0.3rem;
+}
+
+.project-nav .title {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--paper);
+  font-size: 1.05rem;
+}
+
+.project-nav a.next { text-align: right; }
+
+.site-footer {
+  text-align: center;
+  padding: var(--space-4) var(--space-3) var(--space-5);
+  font-size: 0.85rem;
+  color: var(--ink-quiet);
+  position: relative;
+  z-index: 2;
+}
+
 /* ============================================================
    RESPONSIVE — 760px and below
    ============================================================ */
@@ -878,34 +608,6 @@ img { max-width: 100%; display: block; }
     z-index: 49;
   }
 
-  .hero {
-    min-height: 82vh;
-    padding: var(--space-5) var(--space-3) var(--space-4);
-  }
-
-  .hero-dragonfly { width: 64px; height: 64px; }
-
-  .hero h1 {
-    font-size: clamp(1.9rem, 8vw, 2.6rem);
-    max-width: none;
-  }
-
-  .hero p.lede {
-    font-size: 1rem;
-    max-width: none;
-    margin-bottom: var(--space-4);
-  }
-
-  .meta-strip {
-    grid-template-columns: repeat(2, 1fr);
-    padding: var(--space-3) var(--space-3) var(--space-4);
-    gap: var(--space-2) var(--space-3);
-  }
-
-  .section { padding: var(--space-4) var(--space-3); }
-
-  .section-head { margin-bottom: var(--space-3); gap: var(--space-1); }
-
   .note { padding: var(--space-2) var(--space-3); }
 
   .color-swatch-group { gap: var(--space-1); }
@@ -934,13 +636,6 @@ img { max-width: 100%; display: block; }
 
   .pivot { grid-template-columns: 1fr; }
 
-  .shot-row { grid-template-columns: 1fr; }
-  .shot-frame { aspect-ratio: 4 / 3; }
-  .shot-row--3col { grid-template-columns: 1fr; }
-  .shot-frame--fixed { height: 260px; }
-
-  .reflection-card { padding: var(--space-3) var(--space-3); border-radius: 10px; }
-
   .project-nav {
     flex-direction: column;
     padding: var(--space-4) var(--space-3);
@@ -961,15 +656,7 @@ img { max-width: 100%; display: block; }
 
   body { font-size: 16px; }
 
-  .hero { min-height: 78vh; }
-
-  .hero h1 { font-size: clamp(1.7rem, 9vw, 2.3rem); line-height: 1.2; }
-
-  .meta-strip { grid-template-columns: 1fr 1fr; gap: var(--space-2); }
-
   .meta-item .value { font-size: 0.88rem; word-break: break-word; }
-
-  .section h2 { font-size: clamp(1.3rem, 6vw, 1.75rem); }
 
   .hook-line { font-size: clamp(1.05rem, 4.5vw, 1.2rem) !important; }
 
@@ -979,7 +666,7 @@ img { max-width: 100%; display: block; }
 
   .tension-card { padding: var(--space-2) var(--space-3); }
 
-  .note, .placeholder { padding: var(--space-2); }
+  .note { padding: var(--space-2); }
 }
 
 /* ============================================================
@@ -991,9 +678,7 @@ img { max-width: 100%; display: block; }
    .lightbox, and .vein-spine are all REUSED below instead of being
    reinvented, so the ride reads as the same design system, just
    staged differently. Rules below this line are additive and scoped
-   to the new ride-* classes; nothing above this line was removed
-   (aside from the prefers-reduced-motion block already noted above,
-   removed to match the project-wide "always animate" rule).
+   to the new ride-* classes; nothing above this line was removed.
 
    Distinct from counseling's Harbor Ride on purpose: this is a warm
    parchment-on-dusk composition built around a cluster of violet/gold
@@ -1002,9 +687,9 @@ img { max-width: 100%; display: block; }
    motif, instead of borrowing Harbor Ride's identity.
 
    No jump-rail nav here (a deliberate call, unlike counseling's
-   section-rail) — this page relies on native browser scroll plus
-   CSS proximity snap only. No JS-driven scroll-to-snap loop exists
-   in albertinas-3d.js; see the html rule above for why.
+   section-rail) — this page relies on native browser scroll only.
+   No JS-driven scroll-to-snap loop exists in albertinas-3d.js; see
+   the html rule above for why.
    ============================================================ */
 
 :root {
@@ -1084,7 +769,17 @@ img { max-width: 100%; display: block; }
      with no failure mode. */
   position: relative;
   height: 100vh;
-  height: 100dvh;
+  /* svh (small viewport height), not dvh: dvh continuously tracks the
+     browser chrome as it collapses/expands mid-scroll, which grows and
+     shrinks every .ride-scene's own height while the person is
+     scrolling. That fought with albertinas-3d.js's own fixed-pixel
+     .ride-track height (see syncTrackHeight there) and was part of
+     what produced the direction-reversal "boomerang". svh always
+     assumes the smallest possible viewport (chrome fully visible) and
+     never changes after load, so scene height stays stable regardless
+     of scroll direction; albertinas-3d.js's own cached viewport-height
+     value (see that file's header comment) is what fully resolves it. */
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1167,7 +862,17 @@ img { max-width: 100%; display: block; }
 .ride-panel .subsection p { color: var(--panel-ink-soft); }
 
 .ride-panel .resolution { color: var(--panel-accent); }
-.ride-panel .hook-line { color: var(--panel-ink); margin: 0; }
+
+.ride-panel .hook-line {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.15rem, 3vw, 1.4rem);
+  line-height: 1.5;
+  color: var(--panel-ink);
+  text-align: center;
+  max-width: 36ch;
+  margin: 0 auto;
+}
 
 .ride-panel h1 {
   font-family: var(--serif);

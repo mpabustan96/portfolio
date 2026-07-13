@@ -25,6 +25,14 @@
    snap removed entirely, there is now exactly one thing driving
    scroll position: the person scrolling.
 
+   A second, subtler source of the same boomerang remained even
+   after that: the scroll-progress math below used to read
+   window.innerHeight live on every scroll tick, and that value
+   itself changes continuously on mobile as the address bar
+   collapses/expands. viewportH is now cached once and only
+   re-measured on a genuine resize (see the width-gated resize
+   handler), which removes that feedback loop too.
+
    The screenshot carousel is now a flat-DOM filmstrip (real
    <img> tags, horizontal scroll-snap, drag/swipe/arrows/dots,
    tap-to-zoom into the lightbox) instead of a Three.js-rigged
@@ -48,6 +56,23 @@
    Portal Warp scene, and Harbor Ride.
 ============================================= */
 (function () {
+  /* Force every load/reload to start at the top of the page. Mobile
+     browsers restore the previous scroll position by default, which,
+     combined with this page being one continuous scroll-driven "ride",
+     made a reload appear to drop the visitor wherever they'd last
+     scrolled to (often a carousel stop). Disabling automatic scroll
+     restoration and forcing scrollTo(0,0) up front — on script start,
+     on 'load', and on a bfcache restore via 'pageshow' — guarantees a
+     fresh visit always starts at the hero. */
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) window.scrollTo(0, 0);
+  });
+
   var canvas = document.getElementById('fireflies');
   if (!canvas || typeof THREE === 'undefined') return;
 
@@ -151,12 +176,17 @@
   }
   computeScenes();
 
-  /* ---------- track height: real pixels, from the actual filtered scene count ---------- */
+  /* ---------- track height: real pixels, from the actual filtered scene count ----------
+     viewportH is captured once here and only re-measured on a genuine
+     resize (see the width-gated resize handler below), rather than
+     read live every scroll tick — see the file header comment for why
+     that live read was the root cause of the mobile boomerang. */
   var track = document.querySelector('.ride-track');
+  var viewportH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   function syncTrackHeight() {
     if (!track) return;
-    var vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    track.style.height = (beats.length * vh) + 'px';
+    viewportH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    track.style.height = (beats.length * viewportH) + 'px';
   }
   syncTrackHeight();
 
@@ -171,7 +201,7 @@
   var frozen = false;
 
   function trackScrollHeight() {
-    return Math.max(0, track.offsetHeight - window.innerHeight);
+    return Math.max(0, track.offsetHeight - viewportH);
   }
   function beatScrollY(index) {
     var th = trackScrollHeight();
@@ -225,10 +255,21 @@
     window.scrollTo({ top: beatScrollY(target), left: 0, behavior: 'smooth' });
   });
 
+  /* Width-gated resize: mobile browsers fire 'resize' whenever the
+     address bar collapses/expands, which only ever changes
+     innerHeight, never innerWidth. Reacting to that with a full
+     recompute is exactly what fed the boomerang above, so real work
+     here only runs when the width actually changes (device rotation,
+     or a real window resize on desktop) — height-only churn from the
+     address bar is ignored entirely, and viewportH stays exactly as
+     captured until a genuine resize occurs. */
+  var lastWidth = window.innerWidth;
   var resizeTimer = null;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
       var nowMobile = window.matchMedia('(max-width: 760px)').matches;
       if (nowMobile !== isMobile) {
         isMobile = nowMobile;
@@ -346,7 +387,15 @@
       var dots = dotsWrap ? dotsWrap.querySelectorAll('.dot') : [];
       dots.forEach(function (d, i) { d.classList.toggle('is-active', i === index); });
       var target = cards[index];
-      if (target) target.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', inline: 'center', block: 'nearest' });
+      if (!target) return;
+      /* Scroll the filmstrip's own horizontal scroll position directly,
+         instead of target.scrollIntoView(). scrollIntoView moves EVERY
+         scrollable ancestor into view, including the outer page — this
+         runs on load, so it was what silently scrolled the whole page
+         down to the carousel stop on every load. track.scrollTo only
+         ever touches this one horizontal strip. */
+      var left = target.offsetLeft - (track.clientWidth - target.clientWidth) / 2;
+      track.scrollTo({ left: left, behavior: smooth ? 'smooth' : 'instant' });
     }
 
     function next() { index = Math.min(shotList.length - 1, index + 1); scrollToIndex(true); }

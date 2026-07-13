@@ -48,7 +48,10 @@ html {
      one thing driving scroll position: the person scrolling. The active
      panel is now derived from the same continuous scroll-progress math
      that drives the camera (see counseling-3d.js), not a second, async
-     observer that could disagree with it. */
+     observer that could disagree with it. counseling-3d.js also caches
+     the viewport height it uses for that math instead of re-reading it
+     live every scroll tick, which closes the remaining source of the
+     same boomerang (see that file's header comment for details). */
 }
 
 /* No prefers-reduced-motion override here, by design — matching every
@@ -183,89 +186,7 @@ img { max-width: 100%; display: block; }
   color: var(--ink-soft);
 }
 
-/* ---------- Hero ---------- */
-
-.hero {
-  min-height: 86vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-6) var(--space-3) var(--space-5);
-  position: relative;
-}
-
-.hero-eyebrow {
-  font-family: var(--sans);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--current);
-  margin-bottom: var(--space-3);
-  opacity: 0;
-  animation: rise 0.9s ease forwards;
-  animation-delay: 0.1s;
-}
-
-.hero h1 {
-  font-family: var(--serif);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  font-size: clamp(2.4rem, 6vw, 4.2rem);
-  line-height: 1.1;
-  color: var(--harbor);
-  max-width: 14ch;
-  margin: 0 0 var(--space-4);
-  opacity: 0;
-  animation: rise 1s ease forwards;
-  animation-delay: 0.25s;
-}
-
-.hero p.lede {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  color: var(--ink-quiet);
-  max-width: 38ch;
-  margin: 0 auto var(--space-5);
-  opacity: 0;
-  animation: rise 1s ease forwards;
-  animation-delay: 0.45s;
-}
-
-.hero .scroll-cue {
-  opacity: 0;
-  animation: rise 1s ease forwards, float 2.6s ease-in-out infinite;
-  animation-delay: 0.7s, 1.6s;
-  color: var(--current);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
-}
-
-/* ---------- Metadata strip ---------- */
-
-.meta-strip {
-  max-width: var(--measure-wide);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-5) var(--space-6);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
+/* ---------- Metadata (reused inside .ride-meta-grid) ---------- */
 
 .meta-item .label {
   font-size: 0.72rem;
@@ -280,96 +201,6 @@ img { max-width: 100%; display: block; }
 .meta-item .value {
   font-size: 0.95rem;
   color: var(--ink-soft);
-}
-
-/* ---------- Sections ---------- */
-
-.section {
-  max-width: var(--measure);
-  margin: 0 auto;
-  padding: var(--space-6) var(--space-3);
-  scroll-margin-top: 90px;
-}
-
-.section.wide { max-width: var(--measure-wide); }
-
-.section-head {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
-}
-
-.section-num {
-  font-family: var(--sans);
-  font-size: 0.85rem;
-  color: var(--current);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-  flex-shrink: 0;
-}
-
-.section h2 {
-  font-family: var(--sans);
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  color: var(--harbor);
-  margin: 0;
-}
-
-.section p {
-  margin: 0 0 var(--space-3);
-  color: var(--ink-soft);
-}
-
-.section p.hook-line {
-  font-family: var(--serif);
-  font-size: clamp(1.15rem, 3vw, 1.4rem);
-  font-style: italic;
-  line-height: 1.5;
-  color: var(--harbor);
-  text-align: center;
-  max-width: 32ch;
-  margin: 0 auto;
-}
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-
-.fade-in.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ---------- Overview list ---------- */
-
-.overview-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3) var(--space-4);
-}
-
-.overview-grid li {
-  padding: var(--space-2) 0;
-  border-top: 1px solid var(--line);
-}
-
-.overview-grid .label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--current);
-  display: block;
-  margin-bottom: 0.3rem;
 }
 
 /* ---------- Honest framing callouts ---------- */
@@ -443,92 +274,6 @@ img { max-width: 100%; display: block; }
   color: var(--harbor);
   font-style: italic;
   margin-top: var(--space-3);
-}
-
-/* ---------- Screenshot placeholders ---------- */
-
-.shot-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3);
-  margin: var(--space-4) 0;
-}
-
-.shot-row.single { grid-template-columns: 1fr; }
-
-.shot-frame {
-  aspect-ratio: 16 / 11;
-  border: 1.5px dashed var(--current);
-  border-radius: 10px;
-  background: var(--seafoam-soft);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  color: var(--current);
-}
-
-.shot-frame .shot-icon {
-  width: 28px;
-  height: 28px;
-  opacity: 0.7;
-}
-
-.shot-frame span.shot-label {
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  text-align: center;
-  padding: 0 var(--space-2);
-}
-
-/* Real images replacing placeholders — solid border, image fills frame */
-.shot-frame.has-image {
-  border-style: solid;
-  border-color: var(--line);
-  padding: 0;
-  overflow: hidden;
-  display: block;
-}
-
-.shot-frame.has-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  border-radius: 8px;
-  display: block;
-  cursor: zoom-in;
-  transition: filter 0.2s ease, transform 0.3s ease;
-}
-
-.shot-frame.has-image img:hover,
-.shot-frame.has-image img:focus-visible {
-  filter: brightness(1.04);
-  transform: scale(1.01);
-}
-
-.shot-frame.has-image img:focus-visible {
-  outline: 2px solid var(--current);
-  outline-offset: -2px;
-}
-
-/* Full-page homepage capture is naturally near-square and content-dense
-   top to bottom — let it run its own ratio instead of forcing a 16:11
-   crop, the same approach used for full-page shots in the other case
-   studies. */
-.shot-frame.has-image.tall-shot {
-  aspect-ratio: auto;
-  max-width: 560px;
-  margin: 0 auto;
-}
-
-.shot-frame.has-image.tall-shot img {
-  height: auto;
-  object-fit: contain;
-  background: var(--linen);
 }
 
 /* ---------- Image lightbox ---------- */
@@ -615,16 +360,6 @@ img { max-width: 100%; display: block; }
   color: var(--harbor);
   margin: 0 0 var(--space-2);
 }
-
-/* ---------- Reflection card ---------- */
-
-.reflection-card {
-  background: var(--seafoam-soft);
-  border-radius: 14px;
-  padding: var(--space-5) var(--space-4);
-}
-
-.reflection-card .note { background: var(--linen); border-left-color: var(--current); }
 
 /* ---------- Footer / project nav ---------- */
 
@@ -729,52 +464,6 @@ img { max-width: 100%; display: block; }
     z-index: 49;
   }
 
-  /* Hero */
-  .hero {
-    min-height: 80vh;
-    padding: var(--space-5) var(--space-3) var(--space-4);
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  .hero h1 {
-    font-size: clamp(2rem, 9vw, 2.8rem);
-    max-width: none;
-  }
-
-  .hero p.lede {
-    font-size: 1rem;
-    max-width: none;
-    text-align: left;
-    margin-bottom: var(--space-4);
-  }
-
-  .hero-eyebrow {
-    font-size: 0.72rem;
-  }
-
-  /* Meta strip */
-  .meta-strip {
-    grid-template-columns: repeat(2, 1fr);
-    padding: var(--space-3) var(--space-3) var(--space-4);
-    gap: var(--space-2) var(--space-3);
-  }
-
-  /* Sections */
-  .section {
-    padding: var(--space-4) var(--space-3);
-  }
-
-  .section-head {
-    margin-bottom: var(--space-3);
-    gap: var(--space-1);
-  }
-
-  /* Overview grid */
-  .overview-grid {
-    grid-template-columns: 1fr;
-  }
-
   /* Note callouts — reduce side padding on small screens */
   .note {
     padding: var(--space-2) var(--space-3);
@@ -805,21 +494,6 @@ img { max-width: 100%; display: block; }
     border-left: 1px solid var(--line);
     border-right: 1px solid var(--line);
     font-size: 0.85rem;
-  }
-
-  /* Screenshot placeholders — stack */
-  .shot-row {
-    grid-template-columns: 1fr;
-  }
-
-  .shot-frame:not(.has-image) {
-    aspect-ratio: 4 / 3;
-  }
-
-  /* Reflection card */
-  .reflection-card {
-    padding: var(--space-3) var(--space-3);
-    border-radius: 10px;
   }
 
   /* Project nav */
@@ -855,27 +529,9 @@ img { max-width: 100%; display: block; }
     font-size: 16px;
   }
 
-  .hero {
-    min-height: 75vh;
-  }
-
-  .hero h1 {
-    font-size: clamp(1.8rem, 10vw, 2.4rem);
-    line-height: 1.15;
-  }
-
-  .meta-strip {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-2);
-  }
-
   .meta-item .value {
     font-size: 0.88rem;
     word-break: break-word;
-  }
-
-  .section h2 {
-    font-size: clamp(1.35rem, 6vw, 1.8rem);
   }
 
   .hook-line {
@@ -989,12 +645,17 @@ img { max-width: 100%; display: block; }
      mode entirely with no visual change going forward. */
   position: relative;
   height: 100vh;
-  height: 100dvh; /* dvh tracks the real, currently-visible viewport as the
-     iOS address bar collapses/expands, instead of the one-time vh value —
-     this cuts down (but by itself doesn't fully solve) the drift between
-     "how tall the browser says the viewport is" and what's actually on
-     screen. counseling-3d.js's own active-scene detection (see
-     getBoundingClientRect() in updateScroll) is what fully resolves it. */
+  /* svh (small viewport height), not dvh: dvh continuously tracks the
+     browser chrome as it collapses/expands mid-scroll, which grows and
+     shrinks every .ride-scene's own height while the person is
+     scrolling. That fought with counseling-3d.js's own fixed-pixel
+     .ride-track height (see syncTrackHeight there) and was part of
+     what produced the direction-reversal "boomerang". svh always
+     assumes the smallest possible viewport (chrome fully visible) and
+     never changes after load, so scene height stays stable regardless
+     of scroll direction; counseling-3d.js's own cached viewport-height
+     value (see that file's header comment) is what fully resolves it. */
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1004,7 +665,7 @@ img { max-width: 100%; display: block; }
   transition: opacity 0.6s ease;
   pointer-events: none;
   /* No scroll-snap-align here on purpose — snapping is scoped to the
-     carousel stop only (see .ride-scene[data-carousel] below), so the
+     carousel stop only (see .ride-scene[data-carousel] above), so the
      rest of the ride scrolls freely instead of snapping stop to stop. */
 }
 
@@ -1070,7 +731,14 @@ img { max-width: 100%; display: block; }
 }
 
 .ride-panel .hook-line {
-  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 3vw, 1.4rem);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--harbor);
+  text-align: center;
+  max-width: 32ch;
+  margin: 0 auto;
 }
 
 .ride-eyebrow {
@@ -1277,7 +945,3 @@ img { max-width: 100%; display: block; }
   .ride-scene { align-items: center; }
   .ride-panel h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
 }
-
-
-
-

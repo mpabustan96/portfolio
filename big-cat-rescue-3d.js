@@ -44,6 +44,23 @@
    every other ride script on this site.
 ============================================= */
 (function () {
+  /* Force every load/reload to start at the top of the page. Mobile
+     browsers restore the previous scroll position by default, which,
+     combined with this page being one continuous scroll-driven "ride",
+     made a reload appear to drop the visitor wherever they'd last
+     scrolled to (often a carousel stop). Disabling automatic scroll
+     restoration and forcing scrollTo(0,0) up front — on script start,
+     on 'load', and on a bfcache restore via 'pageshow' — guarantees a
+     fresh visit always starts at the hero. */
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+  window.addEventListener('load', function () { window.scrollTo(0, 0); });
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) window.scrollTo(0, 0);
+  });
+
   var canvas = document.getElementById('safari-canvas');
   if (!canvas || typeof THREE === 'undefined') return;
 
@@ -145,12 +162,24 @@
   }
   computeScenes();
 
-  /* ---------- track height: real pixels, from the actual filtered scene count ---------- */
+  /* ---------- track height: real pixels, from the actual filtered scene count ----------
+     viewportH is captured once here and only re-measured on a genuine
+     resize (see the width-gated resize handler below), rather than
+     read live on every scroll tick. Mobile browsers change
+     window.innerHeight / visualViewport.height continuously as the
+     address bar collapses (scrolling down) and re-expands (scrolling
+     back up). Reading that live value inside the scroll-progress math
+     meant the exact same scrollY position mapped to a different
+     progress value depending on which direction you'd just scrolled
+     from — that mismatch was the "boomerang" jump on direction
+     changes. Caching the value and only updating it on a real resize
+     removes that feedback loop entirely. */
   var track = document.querySelector('.ride-track');
+  var viewportH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   function syncTrackHeight() {
     if (!track) return;
-    var vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    track.style.height = (beats.length * vh) + 'px';
+    viewportH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    track.style.height = (beats.length * viewportH) + 'px';
   }
   syncTrackHeight();
 
@@ -164,7 +193,7 @@
   var frozen = false;
 
   function trackScrollHeight() {
-    return Math.max(0, track.offsetHeight - window.innerHeight);
+    return Math.max(0, track.offsetHeight - viewportH);
   }
   function beatScrollY(index) {
     var th = trackScrollHeight();
@@ -218,10 +247,21 @@
     window.scrollTo({ top: beatScrollY(target), left: 0, behavior: 'smooth' });
   });
 
+  /* Width-gated resize: mobile browsers fire 'resize' whenever the
+     address bar collapses/expands, which only ever changes
+     innerHeight, never innerWidth. Reacting to that with a full
+     recompute is exactly what fed the boomerang above, so real work
+     here only runs when the width actually changes (device rotation,
+     or a real window resize on desktop) — height-only churn from the
+     address bar is ignored entirely, and viewportH stays exactly as
+     captured until a genuine resize occurs. */
+  var lastWidth = window.innerWidth;
   var resizeTimer = null;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
       var nowMobile = window.matchMedia('(max-width: 760px)').matches;
       if (nowMobile !== isMobile) {
         isMobile = nowMobile;
@@ -369,7 +409,16 @@
       var dots = dotsWrap ? dotsWrap.querySelectorAll('.dot') : [];
       dots.forEach(function (d, i) { d.classList.toggle('is-active', i === index); });
       var target = cards[index];
-      if (target) target.scrollIntoView({ behavior: smooth ? 'smooth' : 'instant', inline: 'center', block: 'nearest' });
+      if (!target) return;
+      /* Scroll the filmstrip's own horizontal scroll position directly,
+         instead of target.scrollIntoView(). scrollIntoView moves EVERY
+         scrollable ancestor into view, including the outer page — since
+         this runs on load for all three filmstrips on this page, that's
+         what was silently scrolling the whole page down to whichever
+         carousel happened to initialize, on every load. track.scrollTo
+         only ever touches this one horizontal strip. */
+      var left = target.offsetLeft - (track.clientWidth - target.clientWidth) / 2;
+      track.scrollTo({ left: left, behavior: smooth ? 'smooth' : 'instant' });
     }
 
     function next() { index = Math.min(shots.length - 1, index + 1); scrollToIndex(true); }
