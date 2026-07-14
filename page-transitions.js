@@ -89,7 +89,9 @@
     },
     'counseling.html': {
       name: 'Connett Family Counseling', bg: '#F0F6FA', accent: '#0F4C66',
-      font: "'Cormorant', Georgia, serif", weight: 500, italic: false, gfont: 'Cormorant:wght@500'
+      font: "'Cormorant', Georgia, serif", weight: 500, italic: false, gfont: 'Cormorant:wght@500',
+      sans: "'Nunito', -apple-system, BlinkMacSystemFont, sans-serif", sansGfont: 'Nunito:wght@600;700',
+      labelColor: '#2F7A9E', lineColor: '#D7E5EC'
     },
     'ui-ux-nest.html': {
       name: 'UI/UX Nest', bg: '#F1F6F8', accent: '#06405A',
@@ -163,7 +165,10 @@
   function ensureFontsLoaded() {
     if (document.getElementById('mp-transition-fonts')) return;
     var families = ['family=Space+Mono:wght@400;700'];
-    for (var key in THEMES) { if (THEMES[key].gfont) families.push('family=' + THEMES[key].gfont); }
+    for (var key in THEMES) {
+      if (THEMES[key].gfont) families.push('family=' + THEMES[key].gfont);
+      if (THEMES[key].sansGfont) families.push('family=' + THEMES[key].sansGfont);
+    }
     var link = document.createElement('link');
     link.id = 'mp-transition-fonts';
     link.rel = 'stylesheet';
@@ -217,19 +222,25 @@
     div.style.background = theme.bg;
     div.style.color = readableFg(theme.bg);
 
+    var labelColor = theme.labelColor || theme.accent;
+    var labelFont = theme.sans || BOOK_MONO;
+
     if (contents) {
       var items = sectionsFor(theme._pageName);
       if (!items.length) items = ['More inside'];
-      var html = '<span class="mp-tag" style="color:' + theme.accent + '">CONTENTS</span><ol class="mp-toc-list">';
+      var html = '<span class="mp-tag" style="color:' + labelColor + ';font-family:' + labelFont + '">CONTENTS</span>' +
+        '<ol class="mp-toc-list" style="font-family:' + labelFont + '">';
       items.forEach(function (item, i) {
-        html += '<li><span class="mp-toc-num">0' + (i + 1) + '</span><span>' + item + '</span></li>';
+        var liStyle = theme.lineColor ? ' style="border-top-color:' + theme.lineColor + '"' : '';
+        html += '<li' + liStyle + '><span class="mp-toc-num" style="color:' + labelColor + ';opacity:1">0' + (i + 1) + '</span><span>' + item + '</span></li>';
       });
       html += '</ol>';
       div.innerHTML = html;
     } else {
       var tagSpan = document.createElement('span');
       tagSpan.className = 'mp-tag';
-      tagSpan.style.color = theme.accent;
+      tagSpan.style.color = labelColor;
+      tagSpan.style.fontFamily = labelFont;
       tagSpan.textContent = 'A CASE STUDY';
 
       var nameSpan = document.createElement('span');
