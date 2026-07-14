@@ -28,6 +28,8 @@
   --thread:      #C9A961;
   --thread-soft: rgba(201, 169, 97, 0.4);
 
+  --available:   #3E8F5C;
+
   --line:        rgba(43, 36, 28, 0.12);
   --line-strong: rgba(43, 36, 28, 0.22);
 
@@ -256,9 +258,10 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--navy);
+  line-height: 1.5;
   margin-bottom: 1.5rem;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 0.6rem;
   opacity: 0;
@@ -269,8 +272,12 @@ img { max-width: 100%; display: block; }
 }
 .home-eyebrow .dot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: var(--navy);
+  background: var(--available);
   flex-shrink: 0;
+  /* Anchors the dot to the vertical center of the first text line
+     rather than the center of the whole (possibly multi-line, on
+     mobile) eyebrow block. */
+  margin-top: calc((1.5em - 6px) / 2);
 }
 
 .home-h1 {
