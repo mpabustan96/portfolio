@@ -28,11 +28,7 @@
 <body>
   <script src="page-transitions.js"></script>
 
-  <div class="aurora-bg" aria-hidden="true">
-    <div class="aurora-band band-1"></div>
-    <div class="aurora-band band-2"></div>
-    <div class="aurora-band band-3"></div>
-  </div>
+  <div class="aurora-bg" aria-hidden="true" id="ambientBg"></div>
 
   <div class="trust-track" aria-hidden="true">
     <div class="trust-fill" id="trustFill"></div>
@@ -193,7 +189,7 @@
           <span class="note-label">Honest framing</span>
           <p>I don't have a measured outcome for this project. No inquiry counts, no booking data, no follow-up survey. What I have is that the site shipped, has been live since spring 2025, and my client is still using it as her practice's primary online presence. I'd rather flag that limitation directly than imply a result I can't back up.</p>
         </div>
-        <p style="margin-top: 1.5rem;"><strong style="color: var(--harbor);">What I'd do differently:</strong> ask her to gather patient feedback, even informally, with a quick question like "how did you find us, and what almost stopped you from reaching out," instead of relying on her general impressions. That single change would turn a stakeholder opinion into real evidence, and it would tell me whether the trust-before-services bet paid off, instead of leaving it as a decision I still believe in but can't prove.</p>
+        <p class="reflection-followup" style="margin-top: 1.5rem;"><strong style="color: var(--harbor);">What I'd do differently:</strong> ask her to gather patient feedback, even informally, with a quick question like "how did you find us, and what almost stopped you from reaching out," instead of relying on her general impressions. That single change would turn a stakeholder opinion into real evidence, and it would tell me whether the trust-before-services bet paid off, instead of leaving it as a decision I still believe in but can't prove.</p>
       </div>
     </section>
 
@@ -223,6 +219,33 @@
   </div>
 
 <script>
+  // Bioluminescent Drift — populate the ambient background with
+  // drifting, pulsing sparks
+  const ambientBg = document.getElementById('ambientBg');
+  const sparkCount = 46;
+  for (let i = 0; i < sparkCount; i++) {
+    const s = document.createElement('div');
+    s.className = 'spark';
+    const size = 3 + Math.random() * 7;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.top = (Math.random() * 100) + '%';
+    const driftDur = 7 + Math.random() * 6;
+    const pulseDur = 2 + Math.random() * 3;
+    s.style.animationDuration = driftDur + 's, ' + pulseDur + 's';
+    s.style.animationDelay = (Math.random() * -10) + 's, ' + (Math.random() * -4) + 's';
+    s.style.setProperty('--dx1', (Math.random() * 60 - 30) + 'px');
+    s.style.setProperty('--dy1', (-20 - Math.random() * 30) + 'px');
+    s.style.setProperty('--dx2', (Math.random() * 60 - 30) + 'px');
+    s.style.setProperty('--dy2', (-50 - Math.random() * 30) + 'px');
+    s.style.setProperty('--dx3', (Math.random() * 60 - 30) + 'px');
+    s.style.setProperty('--dy3', (-80 - Math.random() * 30) + 'px');
+    s.style.setProperty('--dx4', (Math.random() * 40 - 20) + 'px');
+    s.style.setProperty('--dy4', (-110 - Math.random() * 40) + 'px');
+    ambientBg.appendChild(s);
+  }
+
   // Mobile nav toggle
   const navToggle = document.getElementById('nav-toggle');
   const mobileNav = document.getElementById('nav-links-mobile');

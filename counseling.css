@@ -16,6 +16,19 @@
   --ink-quiet: #6B7B83;
   --line: #D7E5EC;
 
+  /* Bioluminescent Drift ambient theme — dark gradient + light-on-dark
+     typography for any text sitting directly on the ambient background
+     (as opposed to text inside an opaque white/seafoam card, which keeps
+     the original dark-on-light colors above). */
+  --deep-1: #0A3244;
+  --deep-2: #123A52;
+  --deep-3: #0F4C66;
+  --heading-on-dark: #FFFFFF;
+  --ink-on-dark: #EAF3F7;
+  --ink-quiet-on-dark: #B7D3DC;
+  --accent-on-dark: #A9D2C8;
+  --link-on-dark: #BFE3DA;
+
   --serif: 'Cormorant', Georgia, serif;
   --sans: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
 
@@ -39,8 +52,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--mist);
-  color: var(--ink-soft);
+  background: linear-gradient(180deg, var(--deep-1), var(--deep-2) 55%, var(--deep-3));
+  color: var(--ink-on-dark);
   font-family: var(--sans);
   font-size: 17px;
   line-height: 1.65;
@@ -71,69 +84,37 @@ img { max-width: 100%; display: block; }
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background: var(--mist);
+  background: linear-gradient(180deg, var(--deep-1), var(--deep-2) 55%, var(--deep-3));
 }
 
-.aurora-band {
+.aurora-bg .spark {
   position: absolute;
-  top: -20%;
-  width: 160%;
-  height: 140%;
-  filter: blur(55px);
-  opacity: 0.44;
-  transform-origin: center;
-  will-change: transform;
+  border-radius: 50%;
+  background: var(--seafoam);
+  animation-name: spark-drift, spark-pulse;
+  animation-timing-function: ease-in-out, ease-in-out;
+  animation-iteration-count: infinite, infinite;
 }
 
-.aurora-band.band-1 {
-  left: -35%;
-  background: linear-gradient(100deg, transparent 30%, var(--seafoam) 50%, transparent 70%);
-  animation: aurora-drift-1 16s ease-in-out infinite;
+@keyframes spark-drift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(var(--dx1, 20px), var(--dy1, -30px)); }
+  50%  { transform: translate(var(--dx2, -15px), var(--dy2, -55px)); }
+  75%  { transform: translate(var(--dx3, 25px), var(--dy3, -80px)); }
+  100% { transform: translate(var(--dx4, 0px), var(--dy4, -110px)); }
 }
 
-.aurora-band.band-2 {
-  left: -20%;
-  opacity: 0.34;
-  background: linear-gradient(105deg, transparent 25%, var(--current) 50%, transparent 75%);
-  animation: aurora-drift-2 20s ease-in-out infinite;
+@keyframes spark-pulse {
+  0%, 100% { opacity: 0.15; box-shadow: 0 0 4px 1px var(--seafoam); }
+  50%      { opacity: 0.95; box-shadow: 0 0 18px 5px var(--seafoam); }
 }
 
-.aurora-band.band-3 {
-  left: -45%;
-  opacity: 0.3;
-  background: linear-gradient(95deg, transparent 35%, var(--harbor) 50%, transparent 65%);
-  animation: aurora-drift-3 24s ease-in-out infinite;
-}
-
-@keyframes aurora-drift-1 {
-  0%, 100% { transform: translate(0, 0) rotate(-6deg) scale(1); }
-  50% { transform: translate(26%, 16%) rotate(6deg) scale(1.18); }
-}
-
-@keyframes aurora-drift-2 {
-  0%, 100% { transform: translate(0, 0) rotate(5deg) scale(1); }
-  50% { transform: translate(-28%, -14%) rotate(-6deg) scale(1.15); }
-}
-
-@keyframes aurora-drift-3 {
-  0%, 100% { transform: translate(0, 0) rotate(-3deg) scale(1); }
-  50% { transform: translate(20%, -20%) rotate(8deg) scale(1.2); }
-}
-
-/* Mobile: less blur so motion actually reads on a narrow viewport,
-   higher opacity, and faster cycles for a more noticeable effect */
+/* Mobile: slightly smaller glow radius so sparks don't overwhelm a
+   narrow viewport */
 @media (max-width: 760px) {
-  .aurora-band {
-    filter: blur(32px);
-    opacity: 0.5;
+  .aurora-bg .spark {
+    filter: brightness(1.05);
   }
-
-  .aurora-band.band-2 { opacity: 0.4; }
-  .aurora-band.band-3 { opacity: 0.36; }
-
-  .aurora-band.band-1 { animation-duration: 12s; }
-  .aurora-band.band-2 { animation-duration: 15s; }
-  .aurora-band.band-3 { animation-duration: 17s; }
 }
 
 
@@ -178,6 +159,7 @@ img { max-width: 100%; display: block; }
   justify-content: space-between;
   padding: var(--space-3) var(--space-5);
   background: var(--mist);
+  color: var(--ink-soft);
   border-bottom: 1px solid var(--line);
   isolation: isolate;
 }
@@ -286,7 +268,7 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--current);
+  color: var(--accent-on-dark);
   margin-bottom: var(--space-3);
   opacity: 0;
   animation: rise 0.9s ease forwards;
@@ -299,7 +281,8 @@ img { max-width: 100%; display: block; }
   letter-spacing: -0.01em;
   font-size: clamp(2.4rem, 6vw, 4.2rem);
   line-height: 1.1;
-  color: var(--harbor);
+  color: var(--heading-on-dark);
+  text-shadow: 0 2px 28px rgba(0,0,0,0.28);
   max-width: 14ch;
   margin: 0 0 var(--space-4);
   opacity: 0;
@@ -309,7 +292,7 @@ img { max-width: 100%; display: block; }
 
 .hero p.lede {
   font-size: clamp(1rem, 2.5vw, 1.15rem);
-  color: var(--ink-quiet);
+  color: var(--ink-quiet-on-dark);
   max-width: 38ch;
   margin: 0 auto var(--space-5);
   opacity: 0;
@@ -321,7 +304,7 @@ img { max-width: 100%; display: block; }
   opacity: 0;
   animation: rise 1s ease forwards, float 2.6s ease-in-out infinite;
   animation-delay: 0.7s, 1.6s;
-  color: var(--current);
+  color: var(--accent-on-dark);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -356,14 +339,21 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--current);
+  color: var(--accent-on-dark);
   margin-bottom: 0.35rem;
   display: block;
 }
 
 .meta-item .value {
   font-size: 0.95rem;
-  color: var(--ink-soft);
+  color: var(--ink-on-dark);
+}
+
+.meta-item .value a {
+  color: var(--link-on-dark);
+  text-decoration: underline;
+  text-decoration-color: rgba(191, 227, 218, 0.45);
+  text-underline-offset: 2px;
 }
 
 /* ---------- Sections ---------- */
@@ -387,7 +377,7 @@ img { max-width: 100%; display: block; }
 .section-num {
   font-family: var(--sans);
   font-size: 0.85rem;
-  color: var(--current);
+  color: var(--accent-on-dark);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
@@ -399,13 +389,13 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   letter-spacing: -0.005em;
   font-size: clamp(1.5rem, 3vw, 2.1rem);
-  color: var(--harbor);
+  color: var(--heading-on-dark);
   margin: 0;
 }
 
 .section p {
   margin: 0 0 var(--space-3);
-  color: var(--ink-soft);
+  color: var(--ink-on-dark);
 }
 
 .section p.hook-line {
@@ -413,7 +403,7 @@ img { max-width: 100%; display: block; }
   font-size: clamp(1.15rem, 3vw, 1.4rem);
   font-style: italic;
   line-height: 1.5;
-  color: var(--harbor);
+  color: var(--heading-on-dark);
   text-align: center;
   max-width: 32ch;
   margin: 0 auto;
@@ -508,7 +498,7 @@ img { max-width: 100%; display: block; }
 .tension-card.call .who { color: var(--current); }
 .tension-card.call { border-color: var(--seafoam); box-shadow: 0 8px 24px -12px rgba(15, 76, 102, 0.18); }
 
-.tension-card p { margin: 0; font-size: 0.95rem; }
+.tension-card p { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
 
 .tension-divider {
   display: flex;
@@ -524,7 +514,7 @@ img { max-width: 100%; display: block; }
   text-align: center;
   font-family: var(--serif);
   font-size: 1.1rem;
-  color: var(--harbor);
+  color: var(--heading-on-dark);
   font-style: italic;
   margin-top: var(--space-3);
 }
@@ -696,7 +686,7 @@ img { max-width: 100%; display: block; }
   font-family: var(--sans);
   font-weight: 600;
   font-size: 1.15rem;
-  color: var(--harbor);
+  color: var(--heading-on-dark);
   margin: 0 0 var(--space-2);
 }
 
@@ -709,6 +699,8 @@ img { max-width: 100%; display: block; }
 }
 
 .reflection-card .note { background: var(--linen); border-left-color: var(--current); }
+
+.reflection-card p.reflection-followup { color: var(--ink-soft); }
 
 /* ---------- Footer / project nav ---------- */
 
@@ -764,7 +756,7 @@ img { max-width: 100%; display: block; }
   text-align: center;
   padding: var(--space-4) var(--space-3) var(--space-5);
   font-size: 0.85rem;
-  color: var(--ink-quiet);
+  color: var(--ink-quiet-on-dark);
 }
 
 /* ============================================================
