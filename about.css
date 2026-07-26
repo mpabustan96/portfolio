@@ -199,6 +199,8 @@ main {
 
 /* ---------- How I got here — illuminated drop cap ---------- */
 .bio-text { font-size: 15.5px; color: var(--ink-soft); line-height: 1.85; margin: 0; }
+.bio-text p { margin: 0 0 1.15em; }
+.bio-text p:last-child { margin-bottom: 0; }
 .bio-text .dropcap {
   float: left; font-family: var(--font-display); font-weight: 700;
   font-size: 64px; line-height: 0.78; color: var(--navy);
