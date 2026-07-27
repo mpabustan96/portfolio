@@ -16,12 +16,12 @@
 
   <!-- Open Graph / social preview -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Mark Pabustan — UI/UX Designer">
-  <meta property="og:title" content="Albertina's Angels — Case Study | Mark Pabustan">
+  <meta property="og:site_name" content="Mark Pabustan, UI/UX Designer">
+  <meta property="og:title" content="Albertina's Angels, Case Study | Mark Pabustan">
   <meta property="og:description" content="Brand identity through a full site build for a nonprofit, from zero to a trusted donor experience.">
   <meta property="og:image" content="images/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Albertina's Angels — Case Study | Mark Pabustan">
+  <meta name="twitter:title" content="Albertina's Angels, Case Study | Mark Pabustan">
   <meta name="twitter:description" content="Brand identity through a full site build for a nonprofit, from zero to a trusted donor experience.">
   <meta name="twitter:image" content="images/og-image.png">
 </head>
@@ -248,12 +248,27 @@
       </div>
 
       <div class="reflection-card">
-        <div class="note">
-          <span class="note-label">Honest framing</span>
-          <p>There's no donation total, no traffic numbers, no conversion data tracked over the three years of this project. What I do have is this: the site has been live and in active use for three years, carrying real fundraising weight for an organization that started with nothing. After it launched, the founders relayed that friends and family found the donation flow intuitive and easy to use. That's secondhand and informal, but it's real signal from people in the target audience, and it's the closest thing to validation this project has.</p>
+        <div class="result-stats">
+          <div class="result-stat">
+            <span class="stat-number">$11,304.70</span>
+            <span class="stat-label">Raised to date</span>
+          </div>
+          <div class="result-stat">
+            <span class="stat-number">~375</span>
+            <span class="stat-label">Individual gifts</span>
+          </div>
+          <div class="result-stat">
+            <span class="stat-number">~$30</span>
+            <span class="stat-label">Average gift</span>
+          </div>
         </div>
 
-        <p style="margin-top: 1.5rem;"><strong style="color: var(--paper);">What I'd do differently:</strong> push for donor-facing feedback sooner, something as simple as a one-question post-donation prompt asking what almost stopped someone from giving. Three years is a long time to run on founder-relayed impressions alone. That single change would turn an opinion I still believe in into something I could actually prove.</p>
+        <div class="note">
+          <span class="note-label">Honest framing</span>
+          <p>No traffic data or conversion tracking exists for the three years this project has been live. What does exist is a concrete outcome: the site has raised $11,304.70 to date across an estimated 375 individual gifts, averaging approximately $30 each. That figure was already recorded in Donorbox. I requested it directly from the founders while preparing this case study, since it had not previously been compiled. Following launch, the founders also reported that friends and family found the donation flow intuitive and easy to use. That feedback is secondhand and informal, but combined with the donation total, it represents the strongest available evidence of the project's impact.</p>
+        </div>
+
+        <p style="margin-top: 1.5rem;"><strong style="color: var(--paper);">What I'd do differently:</strong> collect donor feedback directly, through a simple post-donation prompt asking what nearly prevented someone from giving. The donation total confirms how much this effort raised. It does not explain why donors gave or what almost stopped them, and closing that gap remains the next step for this project.</p>
       </div>
     </section>
 
@@ -314,7 +329,7 @@
     });
   });
 
-  // Ambient light drift — soft motes rising slowly behind all page content
+  // Ambient light drift: soft motes rising slowly behind all page content
   (function () {
     const canvas = document.getElementById('lightDrift');
     if (!canvas) return;
@@ -383,7 +398,7 @@
     requestAnimationFrame(draw);
   })();
 
-  // Wing-vein scroll spine — fills as the visitor moves through the story
+  // Wing-vein scroll spine: fills as the visitor moves through the story
   const veinSpine = document.getElementById('veinSpine');
   function updateVein() {
     const scrollTop = window.scrollY;
@@ -405,7 +420,7 @@
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  // Image lightbox — click any case-study screenshot to enlarge
+  // Image lightbox: click any case-study screenshot to enlarge
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
