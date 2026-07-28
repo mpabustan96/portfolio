@@ -97,7 +97,7 @@
         <span class="section-num">01</span>
         <h2>The Problem</h2>
       </div>
-      <p>For our final group project, the brief was open: pick a product, design it, and code it ourselves. That last part mattered. This wasn't a design exercise with engineering handed off to someone else, it was meant to build the muscle of translating a Figma file into a working site, the same muscle that separates a designer who can spec something from one who understands what it costs to build.</p>
+      <p>For our final group project, the brief was open: pick a product, design it, and code it ourselves. That last part mattered. The brief didn't split design from engineering and hand the second half to someone else. It asked all four of us to translate our own Figma file into a working site: the muscle that separates a designer who can spec something from one who understands what it costs to build.</p>
       <p>We chose to build for people just outside the field looking in: aspiring UI/UX designers who know they want in, but don't know where to start. That's a real, specific gap. There's no shortage of UI/UX content online, YouTube tutorials, Medium posts, bootcamp ads, but very little of it is sequenced. We set out to build <strong style="color: var(--ink);">UI/UX Nest</strong>: a guided starting point, not another firehose of scattered resources.</p>
 
       <div class="team-strip">
@@ -149,7 +149,7 @@
         <h2>Define &amp; Ideate</h2>
       </div>
 
-      <p>With four people, a self-chosen concept, and no client to draw a line for us, scope creep showed up immediately. Everyone had a feature they were excited about, and almost all of them were genuinely good ideas. The defining tension of this project wasn't disagreement about quality, it was about fit: which of these ideas served "help someone find their starting point," and which were exciting tangents that would eat the time we didn't have.</p>
+      <p>With four people, a self-chosen concept, and no client to draw a line for us, scope creep showed up immediately. Everyone had a feature they were excited about, and almost all of them were genuinely good ideas. The defining tension wasn't about quality, every idea cleared that bar. The real question was fit: which of these ideas served "help someone find their starting point," and which were exciting tangents that would eat the time we didn't have.</p>
 
       <div class="scope-ledger">
         <div class="scope-ledger-head">
@@ -179,7 +179,7 @@
         <div class="scope-row">
           <div class="scope-cell kept">
             <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
-            Job-prep reference: roles, skills, pay ranges
+            Career Paths: role breakdowns, responsibilities, and pay ranges
           </div>
           <div class="scope-cell cut">
             <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
@@ -187,11 +187,11 @@
           </div>
         </div>
         <div class="scope-row">
-          <div class="scope-cell kept">
-            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>
-            Networking page pointing to events &amp; communities
+          <div class="scope-cell kept empty">Reserved for a future iteration, see below</div>
+          <div class="scope-cell cut">
+            <svg class="scope-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            <span class="strike">Networking page pointing to events &amp; communities</span>
           </div>
-          <div class="scope-cell empty">Reserved for a future iteration, see below</div>
         </div>
         <div class="scope-ledger-foot">
           Every cut feature solved a real problem. None of them solved <em>"where do I even start,"</em> which is the one problem the MVP had to solve completely.
@@ -210,7 +210,7 @@
 
       <div class="subsection">
         <h3>A curriculum that's a path, not a library</h3>
-        <p>The core deliverable became a phased curriculum: a sequence of phases, each broken into specific topics, each topic paired with a short video tutorial and a written summary of that same video. That pairing was deliberate, not redundant. The research told us people learn differently, some want to watch, some want to read a quick recap before or instead of watching, and building both into every topic meant neither type of learner had to settle for the format that didn't suit them.</p>
+        <p>The core deliverable became a phased curriculum: a sequence of phases, each broken into specific topics, each topic paired with a short video tutorial and a written summary of that same video. That pairing was deliberate rather than redundant. The research told us people learn differently, some want to watch, some want to read a quick recap before or instead of watching, and building both into every topic meant neither type of learner had to settle for the format that didn't suit them.</p>
 
         <div class="curriculum-path">
           <div class="path-phase">
@@ -251,12 +251,51 @@
               <span class="path-num">4</span>
             </div>
             <div class="path-content">
-              <h4>Job prep &amp; networking</h4>
-              <p>What roles exist, what they pay, and where to find the people already doing them.</p>
-              <span class="path-tag">Reference + directory</span>
+              <h4>Career Paths</h4>
+              <p>A breakdown of the roles inside a UI/UX team, what each one actually does, and what it pays, so a learner can see where they might fit before picking a specialty.</p>
+              <span class="path-tag">Role reference</span>
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Wireframes first</h3>
+        <p>Before any color or type decisions, we blocked out every page in the product at low fidelity: the homepage, the topic grids, the individual tutorial and concept pages, and the job-description page that would later become Career Paths. Every image was a gray box and every label read "Topic 1." That was deliberate. We were testing structure, not style, so the four of us could agree on what a page needed to hold before anyone spent time making it look good.</p>
+        <p>This stage is also where "UI/UX Topics" and "UI/UX Concepts" showed up as two separate content types sharing one shape, one holding Figma-specific tutorials, the other holding broader UX theory. Keeping their wireframes identical made it obvious early that they could share a single template in code.</p>
+        <p>The job-description wireframe below did the same job for what became Career Paths: a description block, a responsibilities list, and a salary slider, worked out before any video or quote was added.</p>
+
+        <div class="shot-row tall-shot-row">
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-lofi-homepage.png" alt="Lo-fi wireframe of the UI/UX Nest homepage, with placeholder hero art, an About Us block, and gray placeholder cards under UI/UX Tutorial and Job Preparation headings">
+          </div>
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-lofi-figma-overview.png" alt="Lo-fi wireframe of the Figma Tutorials overview page, a four-card grid of gray placeholder thumbnails labeled Topic 1 with Learn More buttons">
+          </div>
+        </div>
+
+        <div class="shot-row tall-shot-row" style="margin-top: var(--space-3);">
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-lofi-figma-tutorial.png" alt="Lo-fi wireframe of an individual Figma tutorial page, with a placeholder video block, two Title and body columns, and a More Resources list">
+          </div>
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-lofi-concepts-overview.png" alt="Lo-fi wireframe of the UI/UX Concepts overview page, the same four-card grid pattern with early photo placeholders mixed in among the gray boxes">
+          </div>
+        </div>
+
+        <div class="shot-row tall-shot-row" style="margin-top: var(--space-3);">
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-lofi-concept-detail.png" alt="Lo-fi wireframe of an individual Concept page, with Back and Next Concept navigation, a placeholder video block, two Title columns, and a More Resources list">
+          </div>
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-midfi-job-descriptions.png" alt="Mid-fidelity grayscale wireframe of the Job Descriptions page, showing a User Researcher entry with description, main tasks, a salary range slider, a Day-in-the-Life video block, and a mentorship carousel">
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>From wireframes to the built product</h3>
+        <p>Once the structure held up, we moved into hi-fi. The gray boxes became real thumbnails and screenshots, the placeholder type became Monda and Audiowide, and the topic grid picked up the color coding described below.</p>
 
         <div class="shot-row tall-shot-row">
           <div class="shot-frame has-image tall-shot">
@@ -275,16 +314,37 @@
             <img src="images/ui-ux-nest-ui-elements-topic.png" alt="UI/UX Nest individual topic page for UI Elements, showing the embedded video tutorial with Previous and Next topic navigation above and three written summary blocks below">
           </div>
         </div>
+
+        <p style="margin-top: var(--space-4);">Job prep started out as two ideas: a reference for roles and pay, and a networking page pointing to communities and events. The networking half got cut for time in the scope pass above. What got built instead was Career Paths, one page per role, each with a plain-language description, a list of main responsibilities, a salary range, and a short "day in the life" video from someone actually working in that role. A learner browsing UX Designer, UI Developer, and User Researcher side by side gets a clearer read on which specialty fits them than a directory of meetup links would have given.</p>
+
+        <div class="shot-row tall-shot-row" style="margin-top: var(--space-3);">
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-career-paths-overview.png" alt="Hi-fi Career Paths overview page, grouping roles into UX Designer/Architect, UI Designer/Developer, UX Researcher, and UX Writer/Content Strategist tracks">
+          </div>
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-career-ux-designer.png" alt="Hi-fi UX Designer career page, with a description, main responsibilities, a salary range slider, a day-in-the-life video, and a pull quote">
+          </div>
+        </div>
+
+        <div class="shot-row tall-shot-row" style="margin-top: var(--space-3);">
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-career-ui-developer.png" alt="Hi-fi UI Developer career page, matching the UX Designer layout with its own day-in-the-life video and salary range">
+          </div>
+          <div class="shot-frame has-image tall-shot">
+            <img src="images/ui-ux-nest-career-user-researcher.png" alt="Hi-fi User Researcher career page, following the same layout with its own day-in-the-life video and salary range">
+          </div>
+        </div>
       </div>
+
 
       <div class="subsection">
         <h3>Color as a wayfinding system, not decoration</h3>
-        <p>Once the curriculum had multiple phases and topics, the real risk wasn't visual dullness, it was a learner losing their place. We assigned a distinct color to each topic area and carried it consistently across every related screen, the topic card, the video page, the written summary. That gave a learner a quiet, constant answer to "where am I in this," without needing a progress bar to spell it out every time.</p>
+        <p>Once the curriculum had multiple phases and topics, the real risk had nothing to do with visual dullness. It was a learner losing track of where they were. We assigned a distinct color to each topic area and carried it consistently across every related screen, the topic card, the video page, the written summary. That gave a learner a quiet, constant answer to "where am I in this," without needing a progress bar to spell it out every time.</p>
       </div>
 
       <div class="subsection">
         <h3>A style system built to hold four people together</h3>
-        <p>Because four people were building different pages simultaneously, the style system wasn't decoration, it was infrastructure. Without a shared visual language locked down early, each teammate's section would have drifted: slightly different blues, different type hierarchies, different button shapes. The system gave everyone the same rules to code against, which is what made the final product feel like one site instead of four.</p>
+        <p>Because four people were building different pages at the same time, the style system had to work as infrastructure, not decoration. Without a shared visual language locked down early, each teammate's section would have drifted: slightly different blues, different type hierarchies, different button shapes. The system gave everyone the same rules to code against, which is what made the final product feel like one site instead of four.</p>
         <p>The two main colors, a sky blue (#30ABF0) and a deep teal (#06405A), were chosen to feel approachable and calm without tipping into clinical. The sky blue carries the primary UI weight, buttons, active states, key labels, while the dark teal grounds the overall layout. The highlight palette of four distinct hue pairs, purple, gold, brown, and teal-sage, served a functional purpose as much as a visual one: each topic area in the curriculum got its own color, so a learner always had a quiet visual cue for where they were without needing a label to say it.</p>
         <p>Typography split across two distinct roles. Monda handled all headline levels in regular weight, clean and geometric without being cold. Audiowide handled topic numbers at 60pt with 10% letter spacing, giving the curriculum structure a stamp-like presence that made navigating phases feel intentional rather than arbitrary. Inter Light carried all body copy, subtitles, quotes, and list items, keeping the reading experience low-friction once you were inside content. The illustration style followed the same logic: 2D pop art characters, bold, friendly, and retro-chic, were chosen specifically to counterbalance information density. A curriculum platform has a lot to say; the illustrations gave the eye somewhere to rest.</p>
 
@@ -401,7 +461,7 @@
 
       <div class="subsection">
         <h3>Splitting design and code without losing consistency</h3>
-        <p>Because we each had to code our own sections, I coded the video/curriculum pages myself, and then went back through every other teammate's code afterward to check it against a shared structure, naming conventions, component patterns, the same handful of decisions that keep four people's code from reading like four different sites stitched together. That review pass was as much a part of my role as leading design decisions: as team lead, the job wasn't to have the loudest opinion in the room, it was to make sure everyone's ideas made it into the product fairly, while still holding the line on what the MVP needed to be.</p>
+        <p>Because we each had to code our own sections, I coded the video/curriculum pages myself, and then went back through every other teammate's code afterward to check it against a shared structure, naming conventions, component patterns, the same handful of decisions that keep four people's code from reading like four different sites stitched together. That review pass was as much a part of my role as leading design decisions. As team lead, my job was less about having the loudest opinion in the room and more about making sure everyone's ideas made it into the product fairly, while still holding the line on what the MVP needed to be.</p>
       </div>
     </section>
 
@@ -419,7 +479,7 @@
         <li><span class="findings-dot" aria-hidden="true"></span>Pairing video and written summaries on every topic was called out specifically as useful for accommodating different learning styles</li>
       </ul>
 
-      <p>The same testing also surfaced the features we'd cut for scope, mentorship matching, community forums, and a job board, as things people wanted next. We treated that as confirmation rather than a miss: those ideas were good in our scope ledger for a reason, and now we had real user signal, not just internal instinct, pointing at them as the right next phase rather than the right first one.</p>
+      <p>The same testing also surfaced three of the features we'd cut for scope: live tutoring, mock interview practice, and a way to connect with other learners, as things people wanted next. We treated that as confirmation rather than a miss. Those ideas were already good, and now we had real user signal pointing at them as the right next phase, not the right first one.</p>
     </section>
 
     <!-- RESULTS & REFLECTION -->
