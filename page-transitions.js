@@ -114,7 +114,7 @@
     'index.html': ['Work', 'About', "Let's talk"],
     'about.html': ['Philosophy', 'How I Got Here', 'Background & Skills', 'Availability'],
     'education.html': ['Big Cat Rescue', 'UI/UX Nest', 'Chiron'],
-    'chiron.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'User Flow', 'Design Decisions', 'Results & Reflection'],
+    'chiron.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'User Flow', 'Lo-Fi Prototype', 'Design Decisions', 'Results & Reflection'],
     'counseling.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'Design Decisions', 'Results & Reflection'],
     'ui-ux-nest.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'Design Decisions', 'Usability Testing', 'Results & Reflection'],
     'albertinas-angels.html': ['The Problem', 'Research & Discovery', 'Define & Ideate', 'Design Decisions', 'Results & Reflection'],

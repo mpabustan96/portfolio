@@ -83,10 +83,11 @@ button:focus-visible {
 
 img { max-width: 100%; display: block; }
 
-/* ---------- Constellation background — Sagittarius, the archer ----------
-   Chiron is the mythological figure behind the constellation Sagittarius.
-   A fixed canvas draws a faint starfield, with the bow-and-arrow star
-   pattern periodically tracing itself in bronze light before fading —
+/* ---------- Bow and arrow background motif ----------
+   Chiron the archer, the myth behind the project name, stands in for
+   the shape here. A fixed canvas draws a faint starfield, with a
+   handful of bronze points laid out in the shape of a drawn bow and
+   arrow, twinkling like the rest of the sky rather than being drawn —
    sitting behind the reticle spine and all page content. */
 
 #constellation-bg {
@@ -847,6 +848,7 @@ img { max-width: 100%; display: block; }
 
 .shot-row.single { grid-template-columns: 1fr; }
 .shot-row.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.shot-row.cols-4 { grid-template-columns: repeat(4, 1fr); }
 
 .shot-frame {
   aspect-ratio: 16 / 11;
