@@ -479,6 +479,17 @@ img { max-width: 100%; display: block; }
 
 /* ---------- Stat grid (real survey data) ---------- */
 
+.stat-context-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--silver-quiet);
+  font-style: italic;
+  margin: var(--space-3) 0 0.5rem;
+}
+
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -515,9 +526,10 @@ img { max-width: 100%; display: block; }
 .stat-row:first-of-type { border-top: none; }
 
 .stat-row .stat-num {
-  font-family: var(--serif);
-  color: var(--mango);
-  font-size: 1.05rem;
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--sand);
+  font-size: 0.95rem;
 }
 
 /* ---------- SPLIT / MERGE — the signature motif ----------
@@ -607,6 +619,16 @@ img { max-width: 100%; display: block; }
 }
 
 /* ---------- Subsection blocks (Design Decisions) ---------- */
+
+.shot-caption {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--silver-dim);
+  text-align: center;
+  max-width: 46ch;
+  margin: var(--space-2) auto 0;
+  line-height: 1.6;
+}
 
 .subsection {
   padding: var(--space-3) 0;

@@ -61,7 +61,7 @@
     <!-- HERO -->
     <section class="hero">
       <span class="hero-eyebrow">UI/UX Case Study, Bootcamp Team Project, Mobile Redesign</span>
-      <h1>A Donation Flow That Actually Works on the Phone in Your Hand.</h1>
+      <h1>A Donation Flow Built for the Phone in Your Hand.</h1>
       <p class="lede">Big Cat Rescue runs on the generosity of people who will never set foot on the property, and most of those people found the old site on a phone, not at a desk. That old site wasn't built with that in mind, donation options buried, text too small to read at arm's length, a layout that looked worn enough to make the organization seem shut down. We chose this project ourselves, decided early that the phone experience was the actual product, and spent the weeks after learning that agreement is harder to reach than any one good idea.</p>
       <span class="scroll-cue">Scroll to begin ↓</span>
     </section>
@@ -118,6 +118,7 @@
 
       <p>We ran user interviews and a short survey with people who'd donated to causes like this before, to understand what moves someone from "I care about this" to "I gave money." The sample was small, this was a bootcamp project on a bootcamp timeline, but the pattern across answers was consistent enough to act on.</p>
 
+      <span class="stat-context-label">What we heard, not a validated study</span>
       <div class="stat-grid">
         <div class="stat-card">
           <span class="stat-label">Preferred payment method</span>
@@ -143,11 +144,6 @@
       </div>
 
       <p>The most useful finding wasn't any single number, it was "100% say transparency is very important" sitting next to a donation flow that gave almost no information about where money went. That gap became the thesis for the whole redesign: <em>a site that's honest about itself reads as more trustworthy than one that just looks polished.</em> Payment habits and update preferences also matched how people use their phones, checking in occasionally rather than logging into a dashboard, so the mobile screen had to carry that thesis, not just mirror a desktop page.</p>
-
-      <div class="note">
-        <span class="note-label">Honest framing</span>
-        <p>This was a real survey, but a small, informal one run by a student team, not a validated research study. We treated it as a strong directional signal, not a statistically rigorous dataset, and weighed our own judgment alongside it rather than letting four data points override every design conversation.</p>
-      </div>
     </section>
 
     <!-- THE OLD SITE -->
@@ -167,11 +163,6 @@
         <li><span class="findings-dot" aria-hidden="true"></span>Tap targets sized for a mouse pointer, not a thumb</li>
         <li><span class="findings-dot" aria-hidden="true"></span>Information overload on pages that needed to make a fast case for donating</li>
       </ul>
-
-      <div class="note">
-        <span class="note-label">Honest framing</span>
-        <p>We don't have a saved screenshot of the old site's mobile view from this stage of the project, only the findings above, written down from testing it live on our own phones.</p>
-      </div>
     </section>
 
     <!-- DEFINE & IDEATE -->
@@ -230,7 +221,7 @@
 
       <div class="subsection">
         <h3>One phone screen, two directions</h3>
-        <p>The first pass at the mobile homepage was fast and dark, stripped down, meant to get a structure in front of the team quickly rather than be a final answer. That's the version on the left. Once we reviewed it together, we kept the instinct to lead with the tiger and the mission statement, but pushed for a warmer palette and a fuller content stack, trending news, popular posts, a donate banner, so a visitor had somewhere to go after the hero. The version on the right is what that discussion turned into.</p>
+        <p>The first pass was fast, dark, and stripped down, just enough structure to react to. The final version keeps that bone structure but adds warmth, and somewhere to go after the hero.</p>
         <div class="shot-row">
           <div class="shot-frame has-image mobile-shot tall">
             <img src="images/home-mobile-lofi.png" alt="Early mobile homepage draft, a dark, stripped-down layout with a tiger hero image, a mission statement block, and a gray image placeholder">
@@ -239,11 +230,12 @@
             <img src="images/home-mobile-hifi.png" alt="Final high-fidelity mobile homepage, showing the hero with a tiger, mission statement, give now button, about us, trending news, popular posts, a donation banner, and footer">
           </div>
         </div>
+        <p class="shot-caption">Left, the early structural pass. Right, the final page, with trending news, popular posts, and a donate banner added so a visitor has somewhere to go next.</p>
       </div>
 
       <div class="subsection">
         <h3>A donation flow built around how people give, on a phone</h3>
-        <p>The research was direct: a strong majority preferred card payment, and donation frequency split heavily toward one-time gifts over monthly ones. We designed around that reality, one-time and monthly as equally prominent toggles, preset amounts sized for the most common gift ranges, Venmo and Zelle above the card form for anyone who didn't want to type a card number on a phone keyboard, and a confirmation screen that closes the loop.</p>
+        <p>Research pointed straight at card payment and one-time gifts over monthly ones, so the flow is built around that reality instead of assumption.</p>
         <div class="shot-row">
           <div class="shot-frame has-image mobile-shot tall">
             <img src="images/donate-mobile-hifi.png" alt="Mobile donation flow from amount selection through Venmo and Zelle options, credit card entry, billing information fields, and a confirm donation button">
@@ -252,11 +244,12 @@
             <img src="images/donate-confirmation-mobile-hifi.png" alt="Mobile donation confirmation screen reading Thank You, your donation is confirmed, with a back to home button">
           </div>
         </div>
+        <p class="shot-caption">One-time and monthly sit as equal toggles. Venmo and Zelle sit above the card form for anyone avoiding a card number on a phone keyboard. A confirmation screen closes the loop.</p>
       </div>
 
       <div class="subsection">
         <h3>Get Involved, without the maze</h3>
-        <p>The old site scattered volunteer, internship, and advocacy content across separate pages with no shared layout. On a phone that meant a lot of back-and-forth tapping just to compare options. The lo-fi pass set the pattern early: Help Cats, Volunteer, and Intern as tabs on one page, each with a short description and a single learn more button, instead of four separate destinations. Cat Laws and Recycle stayed further down the same page.</p>
+        <p>The old site spread this content across separate pages with no shared layout, a lot of tapping back and forth on a phone. We collapsed it into tabs on one page instead.</p>
         <div class="shot-row">
           <div class="shot-frame has-image mobile-shot tall">
             <img src="images/get-involved-mobile-lofi.png" alt="Low-fidelity wireframe of the Get Involved mobile page, showing gray placeholder boxes for Help Cats, Volunteer, Intern, Cat Laws, and Recycle sections with a tab bar at the top">
@@ -265,11 +258,12 @@
             <img src="images/get-involved-mobile-hifi.png" alt="Final high-fidelity Get Involved mobile page, with Help Cats, Volunteer, and Intern tabs, each with a photo, description, and learn more button, followed by Cat Laws and Recycle sections and a donate banner">
           </div>
         </div>
+        <p class="shot-caption">Help Cats, Volunteer, and Intern sit as tabs, each with a photo and one button. Cat Laws and Recycle stay further down the same page.</p>
       </div>
 
       <div class="subsection">
         <h3>A wheel instead of a list</h3>
-        <p>Cub Facts was the one page where we debated the interaction model, not just the visual style. A plain list of species felt flat for content this visual, so we sketched an alternative: a circular wheel of animal photos a visitor could spin through, with the selected species named in the center, then tap into for a detail view with its own back and forward arrows. The lo-fi sketches below worked out spacing and tap targets before any real photography went in. Photographs of tigers, leopards, jaguars, and the rest fill the final wheel, and the center label swaps as you move around it.</p>
+        <p>Cub Facts was the one page where we debated the interaction itself, not just the visual style. A plain list of species felt flat for content this visual, so we built a wheel instead.</p>
         <div class="shot-row trio">
           <div class="shot-frame has-image mobile-shot tall">
             <img src="images/cub-facts-wheel-lofi.png" alt="Low-fidelity wireframe of the Cub Facts wheel, gray placeholder circles arranged around a center title, with a dot pagination indicator below">
@@ -281,21 +275,23 @@
             <img src="images/cub-facts-mobile-hifi.png" alt="Final high-fidelity Cub Facts wheel, a circular arrangement of tiger, leopard, jaguar, and other big cat photos around a center label reading Tiger">
           </div>
         </div>
+        <p class="shot-caption">Lo-fi wireframes worked out the wheel and a tap-through detail screen with back and forward arrows. The final wheel swaps its center label as you spin through tiger, leopard, jaguar, and the rest.</p>
       </div>
 
       <div class="subsection">
         <h3>Navigation you can run with your thumb</h3>
-        <p>With deeper content moved a level in behind Get Involved and Cub Facts, the hamburger menu had to carry more weight than it would on a simpler site. We gave it large, evenly spaced tap targets, Home, Donate, Cub Facts, Latest News, Get Involved, Contact Us, over a dimmed version of the hero photography rather than a plain sheet, so it still felt like the same site while open.</p>
+        <p>With more content moved a level in, the hamburger menu had to carry more weight than it would on a simpler site.</p>
         <div class="shot-row single">
           <div class="shot-frame has-image mobile-shot tall">
             <img src="images/mobile-menu-hifi.png" alt="Mobile navigation menu open over a dimmed forest background, listing Home, Donate, Cub Facts, Latest News, Get Involved, and Contact Us, with social icons at the bottom">
           </div>
         </div>
+        <p class="shot-caption">Large, evenly spaced tap targets sit over a dimmed hero photo instead of a plain sheet, so the menu still feels like the same site while it's open.</p>
       </div>
 
       <div class="subsection">
         <h3>A real brand system, not just a homepage</h3>
-        <p>Because we were redesigning an existing organization rather than inventing one, we built out a full style system, checked against how it held up at phone type sizes. Color and type weren't decoration, they were a working spec: a warm olive-and-mango palette suited to a sanctuary rather than a sterile non-profit look, Rubik Mono One for headlines to give the brand a bit of stubborn personality, and Work Sans for everything else so body copy stayed legible at the smaller sizes a phone forces on you. That system is what let four people design different pages and still have them feel like one site.</p>
+        <p>Because we were redesigning an existing organization rather than inventing one, we built a full style system, checked against how it held up at phone type sizes.</p>
         <div class="shot-row style-system-row">
           <div class="shot-frame has-image">
             <img src="images/design-system-colors.png" alt="Design system color palette: Dark Lava, Mango, Dark Olive, Ruddy Brown, Desert Sand, Pale Silver, Rusty Red, Alto, and Spanish Gray with usage notes">
@@ -307,6 +303,7 @@
             <img src="images/design-system-logos.png" alt="Design system logo lockups: full-color, black, and white versions of the Big Cat Rescue tiger mark, wordmark, and 30th anniversary badge">
           </div>
         </div>
+        <p class="shot-caption">Olive and mango, Rubik Mono One for headlines, Work Sans for body copy legible at small sizes. The same system holds together across four different pages.</p>
       </div>
     </section>
 
@@ -332,17 +329,17 @@
       <p>That last finding closed the loop on the research: the same group that said transparency mattered most also said, independently, that they wanted to see it at the moment they were about to give money. We took that as confirmation we'd built the right priority into the page.</p>
     </section>
 
-    <!-- RESULTS & REFLECTION -->
+    <!-- REFLECTION -->
     <section class="section fade-in" id="reflection">
       <div class="section-head">
         <svg class="section-mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="12" cy="15.5" rx="5" ry="4.5"/><ellipse cx="7" cy="9.5" rx="2.2" ry="2.8"/><ellipse cx="12" cy="7.5" rx="2.2" ry="2.8"/><ellipse cx="17" cy="9.5" rx="2.2" ry="2.8"/></svg>
-        <h2>Results &amp; Reflection</h2>
+        <h2>Where This Landed</h2>
       </div>
 
       <div class="reflection-card">
         <div class="note">
           <span class="note-label">Honest framing</span>
-          <p>This redesign never shipped, and there's no donation or traffic data to point to. It exists as a complete Figma prototype built mobile screens first: full site map, lo-fi through hi-fi phone layouts, a working style system, and usability testing on real phones that fed changes back into the design. What I can speak to is the process, not a deployed result.</p>
+          <p>This redesign never shipped, so there's no donation or traffic data here. What exists is a complete Figma prototype built mobile screens first: full site map, lo-fi through hi-fi phone layouts, a working style system, and usability testing on real phones that fed changes back into the design. What follows is the process and what I'd change, not a deployed result.</p>
         </div>
 
         <div class="closure-note">
