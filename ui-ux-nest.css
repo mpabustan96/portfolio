@@ -656,6 +656,16 @@ img { max-width: 100%; display: block; }
 
 /* ---------- Subsection blocks (Design Decisions) ---------- */
 
+.shot-caption {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--ink-quiet);
+  text-align: center;
+  max-width: 46ch;
+  margin: var(--space-2) auto 0;
+  line-height: 1.6;
+}
+
 .subsection {
   padding: var(--space-3) 0;
   border-top: 1px solid var(--line);
