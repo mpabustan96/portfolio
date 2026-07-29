@@ -748,16 +748,24 @@ img { max-width: 100%; display: block; }
   .lightbox-close { top: var(--space-2); right: var(--space-2); width: 40px; height: 40px; }
 }
 
-/* Mobile capture is a full scrollable page, not a single screen,
-   let it run its natural (taller) ratio instead of forcing 9:16 */
+/* Mobile captures vary a lot in real length: some are a single screen,
+   some are full scrolling pages. Letting each render at its true
+   proportional width made the long ones balloon to several times the
+   height of a normal screen next to them. Capping every mobile shot to
+   one consistent height and cropping from the top keeps the row even;
+   anyone who wants the full capture can click through the lightbox. */
 .shot-frame.has-image.mobile-shot.tall {
   aspect-ratio: auto;
   max-width: 260px;
+  height: 560px;
+  margin: 0 auto;
 }
 
 .shot-frame.has-image.mobile-shot.tall img {
-  height: auto;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
   background: var(--lava-2);
 }
 
@@ -971,7 +979,7 @@ img { max-width: 100%; display: block; }
 
   .shot-row { grid-template-columns: 1fr; }
   .shot-frame:not(.has-image) { aspect-ratio: 4 / 3; }
-  .shot-frame.has-image.mobile-shot.tall { max-width: 220px; margin: 0 auto; }
+  .shot-frame.has-image.mobile-shot.tall { max-width: 220px; height: 480px; margin: 0 auto; }
 
   .reflection-card { padding: var(--space-3) var(--space-3); border-radius: 10px; }
 
