@@ -748,29 +748,7 @@ img { max-width: 100%; display: block; }
   .lightbox-close { top: var(--space-2); right: var(--space-2); width: 40px; height: 40px; }
 }
 
-/* Donation flow: stacked desktop crops beside one full-height mobile capture */
-.shot-row.donation-row {
-  grid-template-columns: 1fr 260px;
-  align-items: start;
-}
-
-.donation-stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.shot-frame.has-image.wide-shot {
-  aspect-ratio: auto;
-}
-
-.shot-frame.has-image.wide-shot img {
-  height: auto;
-  object-fit: contain;
-  background: var(--lava-2);
-}
-
-/* Mobile capture is a full scrollable page, not a single screen —
+/* Mobile capture is a full scrollable page, not a single screen,
    let it run its natural (taller) ratio instead of forcing 9:16 */
 .shot-frame.has-image.mobile-shot.tall {
   aspect-ratio: auto;
@@ -783,19 +761,18 @@ img { max-width: 100%; display: block; }
   background: var(--lava-2);
 }
 
-/* Full-page hifi screenshot — runs its natural tall ratio instead of
-   forcing a fixed 16:11 crop, so the full redesign scroll is visible */
-.shot-frame.has-image.tall-shot {
-  aspect-ratio: auto;
+/* Three-up rows for a lo-fi to lo-fi to hi-fi progression, still full
+   scrollable mobile captures, just three side by side instead of two */
+.shot-row.trio {
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
 }
 
-.shot-frame.has-image.tall-shot img {
-  height: auto;
-  object-fit: contain;
-  background: var(--lava-2);
+.shot-row.trio .shot-frame.has-image.mobile-shot.tall {
+  max-width: 100%;
 }
 
-/* Style system reference sheets — 3 across, natural ratio so dense
+/* Style system reference sheets, 3 across, natural ratio so dense
    sheets (color swatches, type scale, logo lockups) stay legible */
 .shot-row.style-system-row {
   grid-template-columns: repeat(3, 1fr);
