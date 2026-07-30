@@ -112,12 +112,9 @@
         <h2>Research &amp; Discovery</h2>
       </div>
 
-      <div class="note">
-        <span class="note-label">Honest framing</span>
-        <p>There was no formal user research here, no donor surveys, no analytics to study, because there was no existing donor base or site to study in the first place. What I had instead was direct, ongoing access to the two people who knew this audience better than any survey could tell me: the founders themselves.</p>
-      </div>
+      <p>There was no donor base or existing site to study yet, so there was no formal user research here, no surveys, no analytics. What I had instead was direct, ongoing access to the two people who knew this audience better than any survey could tell me, the founders themselves.</p>
 
-      <p>We worked together closely over the full three years, and the conversations weren't a one-time intake. They were a running back-and-forth. I'd bring a direction or a decision, and they'd bring their read on how the people in their own circle, the friends, family, and community they were trying to reach, would respond to it. That's a real source of insight, but it's a specific kind: relayed impressions from people close to the donors, not the donors speaking for themselves. I treated it that way rather than mistaking it for harder evidence.</p>
+      <p>We worked together closely over the full three years, and the conversations weren't a one-time intake. They were a running back-and-forth. I'd bring a direction or a decision, and they'd bring their read on how the people in their own circle, the friends, family, and community they were trying to reach, would respond to it. That's a real source of insight, but a specific kind, relayed impressions from people close to the donors, not the donors speaking for themselves. I treated it that way rather than mistaking it for harder evidence.</p>
 
     </section>
 
@@ -192,15 +189,34 @@
       </div>
 
       <div class="subsection">
+        <h3>Wireframes first</h3>
+        <p>Before any color, logo, or real copy went into Squarespace, I blocked out the homepage, the donate page, and the updates feed at low fidelity, gray hero blocks, placeholder mission copy, a bare donation widget placeholder standing in for whichever platform we'd eventually land on. Structure got agreed on before anything had to compete with a photo or a brand color.</p>
+        <div class="shot-row shot-row--3col">
+          <figure class="shot-frame has-image shot-frame--fixed">
+            <img src="images/albertinas-lofi-homepage.png" alt="Low-fidelity wireframe of the Albertina's Angels homepage, a gray hero block, placeholder mission text, and a bare donation widget placeholder to the right">
+            <figcaption class="shot-caption">Homepage wireframe</figcaption>
+          </figure>
+          <figure class="shot-frame has-image shot-frame--fixed">
+            <img src="images/albertinas-lofi-donate.png" alt="Low-fidelity wireframe of the donate page, placeholder appeal copy on the left and a gray donation widget placeholder with amount buttons on the right">
+            <figcaption class="shot-caption">Donate page wireframe</figcaption>
+          </figure>
+          <figure class="shot-frame has-image shot-frame--fixed">
+            <img src="images/albertinas-lofi-news.png" alt="Low-fidelity wireframe of the updates feed, a placeholder year heading, body text, and a row of gray photo placeholders with arrow navigation">
+            <figcaption class="shot-caption">Updates feed wireframe</figcaption>
+          </figure>
+        </div>
+        <p class="shot-note">Homepage, donate, and the updates feed, worked out in gray boxes before the dragonfly mark or the founders' colors touched a single page.</p>
+      </div>
+
+      <div class="subsection">
         <h3>Brand identity</h3>
         <p>The logo had to carry a real story without turning into something too literal or too precious to function as a working nonprofit mark. The goal wasn't to illustrate the memory itself, it was to extract something usable from it: a recurring visual element that could sit on a homepage, a donation page, or printed material without needing the backstory explained every time. The story gives the mark meaning for people who know it. The mark still has to work for people who don't.</p>
       </div>
 
       <div class="subsection">
         <h3>Information architecture and bilingual structure</h3>
-        <p>The bilingual English/Spanish structure wasn't part of the original scope. It came later, once it was clear the audience reached beyond English-speaking friends and family into Spanish-speaking community and family connections tied to the founders and the mission in the Dominican Republic.</p>
-        <p>The obvious first move was Squarespace's built-in auto-translate. The founders rejected it, the translation read too literal, not how they'd say it. They translated the copy themselves, by hand, which meant I needed a way to get their Spanish copy onto the site without fighting the platform's default behavior.</p>
-        <p>I ended up building the Spanish pages separately, as their own dedicated pages, then went into Squarespace's code settings to write logic that shows or hides pages depending on which language a visitor has selected. That's not a feature Squarespace gives you out of the box, it's something I had to construct myself.</p>
+        <p>The bilingual English and Spanish structure wasn't part of the original scope. It came later, once it was clear the audience reached beyond English-speaking friends and family into Spanish-speaking community and family connections tied to the mission in the Dominican Republic.</p>
+        <p>The founders rejected Squarespace's built-in auto-translate, the translation read too literal, not how they'd say it, and translated the copy themselves by hand instead. I built the Spanish pages as their own dedicated pages, then went into Squarespace's code settings to write logic that shows or hides pages depending on which language a visitor has selected, a feature Squarespace doesn't give you out of the box.</p>
       </div>
 
       <div class="subsection">
@@ -219,9 +235,7 @@
           <div class="pivot-arrow">led to a real integration problem</div>
         </div>
 
-        <p>Donorbox wasn't built to live inside Squarespace, and the embed didn't sit well by default. I used custom CSS injection to restyle it so it didn't look like a foreign widget dropped onto the page, and worked through iframe sizing and responsiveness issues so it held up across screen sizes instead of breaking the layout.</p>
-
-        <p>A lot of designers would have flagged that limitation and waited on a developer. The front-end background let me just go fix it.</p>
+        <p>Donorbox wasn't built to live inside Squarespace, and the embed didn't sit well by default. I used custom CSS injection to restyle it so it didn't look like a foreign widget dropped onto the page, and worked through iframe sizing so it held up across screen sizes instead of breaking the layout. A lot of designers would have flagged that limitation and waited on a developer. The front-end background let me just go fix it.</p>
       </div>
 
       <div class="shot-row shot-row--3col">
@@ -240,11 +254,11 @@
       </div>
     </section>
 
-    <!-- RESULTS & REFLECTION -->
+    <!-- REFLECTION -->
     <section class="section fade-in" id="reflection">
       <div class="section-head">
         <svg class="section-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3v18M12 9c-4-3-9-2-10 2 4 1 8 0 10-2zM12 9c4-3 9-2 10 2-4 1-8 0-10-2z"/></svg>
-        <h2>Results &amp; Reflection</h2>
+        <h2>Where This Landed</h2>
       </div>
 
       <div class="reflection-card">
