@@ -563,7 +563,7 @@ img { max-width: 100%; display: block; }
   padding: 0 var(--space-2);
 }
 
-/* Real images replacing placeholders — solid border, image fills frame */
+/* Real images replacing placeholders, solid border, image fills frame */
 .shot-frame.has-image {
   border-style: solid;
   border-color: var(--line);
@@ -595,7 +595,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* Full-page homepage capture is naturally near-square and content-dense
-   top to bottom — let it run its own ratio instead of forcing a 16:11
+   top to bottom, let it run its own ratio instead of forcing a 16:11
    crop, the same approach used for full-page shots in the other case
    studies. */
 .shot-frame.has-image.tall-shot {
@@ -608,6 +608,26 @@ img { max-width: 100%; display: block; }
   height: auto;
   object-fit: contain;
   background: var(--linen);
+}
+
+/* Three-up row for the lo-fi wireframe pass, one per page */
+.shot-row.trio {
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+}
+
+.shot-row.trio .shot-frame.has-image.tall-shot {
+  max-width: 100%;
+}
+
+.shot-caption {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--ink-quiet-on-dark);
+  text-align: center;
+  max-width: 46ch;
+  margin: var(--space-2) auto 0;
+  line-height: 1.6;
 }
 
 /* ---------- Image lightbox ---------- */
