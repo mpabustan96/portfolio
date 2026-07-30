@@ -796,6 +796,34 @@ img { max-width: 100%; display: block; }
   transform: scale(1.01);
 }
 
+/* Lo-fi wireframe row: these are wide Figma canvas exports, not tall
+   mobile captures, so show the full frame instead of cropping to a
+   fixed height. */
+.shot-frame.has-image.wireframe-shot {
+  aspect-ratio: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: block;
+}
+
+.shot-frame.has-image.wireframe-shot img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
+  cursor: zoom-in;
+  transition: filter 0.2s ease, transform 0.3s ease;
+}
+
+.shot-frame.has-image.wireframe-shot img:hover,
+.shot-frame.has-image.wireframe-shot img:focus-visible {
+  filter: brightness(1.04);
+  transform: scale(1.01);
+}
+
 .shot-caption {
   display: block;
   font-size: 0.72rem;
