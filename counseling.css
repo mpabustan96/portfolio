@@ -621,12 +621,14 @@ img { max-width: 100%; display: block; }
 }
 
 .shot-caption {
+  display: block;
+  width: 100%;
   font-size: 0.82rem;
   font-style: italic;
   color: var(--ink-quiet-on-dark);
-  text-align: center;
+  text-align: center !important;
   max-width: 46ch;
-  margin: var(--space-2) auto 0;
+  margin: var(--space-2) auto 0 !important;
   line-height: 1.6;
 }
 
