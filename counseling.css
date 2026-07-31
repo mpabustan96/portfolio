@@ -6,28 +6,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@400;500;600;700&display=swap');
 
 :root {
-  --mist: #F0F6FA;
-  --harbor: #0F4C66;
-  --current: #2F7A9E;
-  --seafoam: #A9D2C8;
-  --seafoam-soft: #E4F1ED;
+  --mist: #EDF1EE;
+  --harbor: #263440;
+  --current: #3E5460;
+  --seafoam: #A8C7AC;
+  --seafoam-soft: #E9F0EA;
   --linen: #FFFFFF;
   --ink-soft: #3D4A52;
-  --ink-quiet: #6B7B83;
-  --line: #D7E5EC;
+  --ink-quiet: #63766C;
+  --line: #D7E1DA;
 
-  /* Bioluminescent Drift ambient theme — dark gradient + light-on-dark
+  /* Slate & Sage ambient theme — dark slate gradient + light-on-dark
      typography for any text sitting directly on the ambient background
-     (as opposed to text inside an opaque white/seafoam card, which keeps
+     (as opposed to text inside an opaque white/sage card, which keeps
      the original dark-on-light colors above). */
-  --deep-1: #0A3244;
-  --deep-2: #123A52;
-  --deep-3: #0F4C66;
-  --heading-on-dark: #FFFFFF;
-  --ink-on-dark: #EAF3F7;
-  --ink-quiet-on-dark: #B7D3DC;
-  --accent-on-dark: #A9D2C8;
-  --link-on-dark: #BFE3DA;
+  --deep-1: #263440;
+  --deep-2: #33454F;
+  --deep-3: #3E5460;
+  --heading-on-dark: #F4F7F5;
+  --ink-on-dark: #E7EFE8;
+  --ink-quiet-on-dark: #C4D3CA;
+  --accent-on-dark: #A8C7AC;
+  --link-on-dark: #BFDCC3;
 
   --serif: 'Cormorant', Georgia, serif;
   --sans: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -76,7 +76,12 @@ button:focus-visible {
 
 img { max-width: 100%; display: block; }
 
-/* ---------- Ambient background: Aurora Bands (site-wide) ---------- */
+/* ---------- Ambient background: Drifting Depth Orbs (site-wide) ----------
+   Three large, heavily blurred color fields slowly drift and scale in
+   place. Slower and fewer than the previous spark field on purpose —
+   large/slow/few reads as calm ambient light, not as something to
+   track, which fits the "trust before information" brief better than
+   many small fast-moving points did. */
 
 .aurora-bg {
   position: fixed;
@@ -87,33 +92,68 @@ img { max-width: 100%; display: block; }
   background: linear-gradient(180deg, var(--deep-1), var(--deep-2) 55%, var(--deep-3));
 }
 
-.aurora-bg .spark {
+.aurora-bg .orb {
   position: absolute;
   border-radius: 50%;
-  background: var(--seafoam);
-  animation-name: spark-drift, spark-pulse;
-  animation-timing-function: ease-in-out, ease-in-out;
-  animation-iteration-count: infinite, infinite;
+  filter: blur(60px);
+  opacity: 0.5;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
 }
 
-@keyframes spark-drift {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(var(--dx1, 20px), var(--dy1, -30px)); }
-  50%  { transform: translate(var(--dx2, -15px), var(--dy2, -55px)); }
-  75%  { transform: translate(var(--dx3, 25px), var(--dy3, -80px)); }
-  100% { transform: translate(var(--dx4, 0px), var(--dy4, -110px)); }
+.aurora-bg .orb.orb-a {
+  width: 46vw;
+  height: 46vw;
+  left: -10%;
+  top: -8%;
+  background: radial-gradient(circle, var(--seafoam), transparent 70%);
+  animation-name: orb-drift-a;
+  animation-duration: 34s;
 }
 
-@keyframes spark-pulse {
-  0%, 100% { opacity: 0.15; box-shadow: 0 0 4px 1px var(--seafoam); }
-  50%      { opacity: 0.95; box-shadow: 0 0 18px 5px var(--seafoam); }
+.aurora-bg .orb.orb-b {
+  width: 38vw;
+  height: 38vw;
+  right: -8%;
+  top: 30%;
+  background: radial-gradient(circle, var(--deep-3), transparent 70%);
+  animation-name: orb-drift-b;
+  animation-duration: 40s;
 }
 
-/* Mobile: slightly smaller glow radius so sparks don't overwhelm a
-   narrow viewport */
+.aurora-bg .orb.orb-c {
+  width: 34vw;
+  height: 34vw;
+  left: 20%;
+  bottom: -14%;
+  background: radial-gradient(circle, var(--seafoam), transparent 70%);
+  opacity: 0.32;
+  animation-name: orb-drift-c;
+  animation-duration: 37s;
+}
+
+@keyframes orb-drift-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(10vw, 8vh) scale(1.18); }
+}
+
+@keyframes orb-drift-b {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-9vw, -10vh) scale(1.14); }
+}
+
+@keyframes orb-drift-c {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(7vw, -7vh) scale(1.2); }
+}
+
+/* Mobile: slightly smaller blur radius so the orbs don't smear across
+   the entire narrow viewport at once */
 @media (max-width: 760px) {
-  .aurora-bg .spark {
-    filter: brightness(1.05);
+  .aurora-bg .orb {
+    filter: blur(42px);
   }
 }
 
@@ -161,11 +201,11 @@ img { max-width: 100%; display: block; }
   /* Translucent deep-1 fill + blur so the sticky header blends with the
      aurora gradient behind it instead of sitting as a light block on
      top of a dark page. */
-  background: rgba(10, 50, 68, 0.72);
+  background: rgba(38, 52, 64, 0.72);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   color: var(--ink-on-dark);
-  border-bottom: 1px solid rgba(191, 227, 218, 0.15);
+  border-bottom: 1px solid rgba(191, 220, 195, 0.15);
   isolation: isolate;
 }
 
@@ -225,14 +265,14 @@ img { max-width: 100%; display: block; }
   border-radius: 8px;
 }
 
-.nav-toggle:hover { background: rgba(169, 210, 200, 0.12); }
+.nav-toggle:hover { background: rgba(168, 199, 172, 0.12); }
 
 .nav-links-mobile {
   display: none;
   list-style: none;
   flex-direction: column;
   background: var(--deep-2);
-  border-bottom: 1px solid rgba(191, 227, 218, 0.15);
+  border-bottom: 1px solid rgba(191, 220, 195, 0.15);
   position: relative;
   z-index: 49;
   margin: 0;
@@ -241,7 +281,7 @@ img { max-width: 100%; display: block; }
 
 .nav-links-mobile.is-open { display: flex; }
 
-.nav-links-mobile li { border-top: 1px solid rgba(191, 227, 218, 0.12); }
+.nav-links-mobile li { border-top: 1px solid rgba(191, 220, 195, 0.12); }
 .nav-links-mobile li:first-child { border-top: none; }
 
 .nav-links-mobile a {
@@ -357,7 +397,7 @@ img { max-width: 100%; display: block; }
 .meta-item .value a {
   color: var(--link-on-dark);
   text-decoration: underline;
-  text-decoration-color: rgba(191, 227, 218, 0.45);
+  text-decoration-color: rgba(191, 220, 195, 0.45);
   text-underline-offset: 2px;
 }
 
@@ -501,7 +541,7 @@ img { max-width: 100%; display: block; }
 
 .tension-card.instinct .who { color: var(--ink-quiet); }
 .tension-card.call .who { color: var(--current); }
-.tension-card.call { border-color: var(--seafoam); box-shadow: 0 8px 24px -12px rgba(15, 76, 102, 0.18); }
+.tension-card.call { border-color: var(--seafoam); box-shadow: 0 8px 24px -12px rgba(38, 52, 64, 0.18); }
 
 .tension-card p { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
 
@@ -642,7 +682,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: center;
   padding: var(--space-4);
-  background: rgba(15, 30, 38, 0.85);
+  background: rgba(20, 28, 34, 0.85);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   opacity: 0;
@@ -662,7 +702,7 @@ img { max-width: 100%; display: block; }
   height: auto;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 24px 64px -16px rgba(15, 30, 38, 0.5);
+  box-shadow: 0 24px 64px -16px rgba(20, 28, 34, 0.5);
   background: var(--linen);
   transform: scale(0.96);
   transition: transform 0.25s ease;

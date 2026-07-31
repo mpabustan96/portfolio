@@ -88,10 +88,10 @@
       font: "'Russo One', sans-serif", weight: 400, italic: false, gfont: 'Russo+One'
     },
     'counseling.html': {
-      name: 'Connett Family Counseling', bg: '#123A52', accent: '#A9D2C8',
+      name: 'Connett Family Counseling', bg: '#33454F', accent: '#A8C7AC',
       font: "'Cormorant', Georgia, serif", weight: 500, italic: false, gfont: 'Cormorant:wght@500',
       sans: "'Nunito', -apple-system, BlinkMacSystemFont, sans-serif", sansGfont: 'Nunito:wght@600;700',
-      labelColor: '#A9D2C8', lineColor: 'rgba(234, 243, 247, 0.18)'
+      labelColor: '#A8C7AC', lineColor: 'rgba(231, 239, 232, 0.18)'
     },
     'ui-ux-nest.html': {
       name: 'UI/UX Nest', bg: '#F1F6F8', accent: '#06405A',
