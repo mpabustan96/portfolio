@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DHPA, Case Study | Mark Pabustan</title>
+<link rel="stylesheet" href="dhpa.css">
+
+  <!-- Favicon (theme-adaptive) -->
+  <link rel="icon" href="images/favicon-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="images/favicon-dark.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="images/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#16232E">
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mark Pabustan — UI/UX Designer">
+  <meta property="og:title" content="DHPA, Case Study | Mark Pabustan">
+  <meta property="og:description" content="A 40-page internal security policy turned into a three-step data handling assistant, built during a Cimpress development internship.">
+  <meta property="og:image" content="images/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DHPA, Case Study | Mark Pabustan">
+  <meta name="twitter:description" content="A 40-page internal security policy turned into a three-step data handling assistant, built during a Cimpress development internship.">
+  <meta name="twitter:image" content="images/og-image.png">
+</head>
+<body>
+  <script src="page-transitions.js"></script>
+
+  <div id="terminal-grid-bg" aria-hidden="true"></div>
+  <div class="access-spine" id="accessSpine" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a href="index.html" class="logo"><img src="images/logo-white.png" alt="Mark Pabustan, home" width="194" height="114"></a>
+    <nav aria-label="Primary">
+      <a href="index.html">&larr; All Work</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links-mobile" aria-label="Open menu">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16"/></svg>
+    </button>
+  </header>
+  <ul class="nav-links-mobile" id="nav-links-mobile">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#work-reel">All Projects</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-badge" aria-hidden="true">
+        <svg viewBox="0 0 60 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="16" width="56" height="58" rx="10" stroke="var(--brass)" stroke-width="2" fill="var(--surface)"/>
+          <rect x="20" y="2" width="20" height="18" rx="6" stroke="var(--brass)" stroke-width="2" fill="var(--navy)"/>
+          <circle cx="30" cy="38" r="9" stroke="var(--brass-bright)" stroke-width="2"/>
+          <path d="M22 62c0-5 3.5-9 8-9s8 4 8 9" stroke="var(--brass-bright)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="hero-eyebrow">UI/UX Case Study, Cimpress Internship, 2019</span>
+      <h1>The Policy Was 40 Pages. The Answer Took Three Clicks.</h1>
+      <p class="lede">A dense internal security policy nobody wanted to read, turned into a step by step assistant that Cimpress's cyber security team still had running years later.</p>
+      <span class="scroll-cue">Scroll to begin &darr;</span>
+    </section>
+
+    <!-- METADATA STRIP -->
+    <section class="meta-strip fade-in">
+      <div class="meta-item">
+        <span class="label">Role</span>
+        <span class="value">Sole Developer</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Timeline</span>
+        <span class="value">Final month, Cimpress internship, 2019</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Tools</span>
+        <span class="value">HTML, CSS, JavaScript, Procreate</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Status</span>
+        <span class="value">Live internal tool, deployed on AWS</span>
+      </div>
+    </section>
+
+    <!-- HOOK -->
+    <section class="section fade-in">
+      <p class="hook-line">"I wasn't designing yet. I was just trying to make forty pages make sense in three clicks."</p>
+    </section>
+
+    <!-- THE PROBLEM -->
+    <section class="section fade-in" id="problem">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 24 30" fill="none" aria-hidden="true">
+          <rect x="1" y="7" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="8" y="1" width="8" height="7" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="16" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>The Problem</h2>
+      </div>
+      <p>The cyber security team had a policy document that laid out how to handle different categories of company and customer data. It was long, and a lot of it repeated itself, since many data types shared the same handling rules once you sorted them by security level.</p>
+      <p>If you were an employee trying to figure out how to handle a spreadsheet full of customer emails, you had to dig through pages of text to find the two paragraphs that actually applied to you. Nobody had built anything to fix that gap, and it had been sitting on the team's backlog for a while before it landed with me.</p>
+    </section>
+
+    <!-- MY PROCESS -->
+    <section class="section wide fade-in" id="process">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 24 30" fill="none" aria-hidden="true">
+          <rect x="1" y="7" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="8" y="1" width="8" height="7" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="16" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>My Process</h2>
+      </div>
+
+      <div class="subsection">
+        <h3>Shaping the workflow</h3>
+        <p>The core decision was the workflow shape: pick your data types, pick how you're handling that data, get your instructions. Grouping by security level instead of by individual data type let the tool stay short, since so much of the source document's length was repetition once you sorted it that way.</p>
+        <p>Every part of the flow was my call, including the classification logic and the step order. I checked in with the cyber security team and the development team as I went, and neither raised objections.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>The classification rule</h3>
+        <p>One rule runs the whole tool. Whichever data type carries the highest security level sets the level for everything else you selected. That rule came straight from how the security team already thought about mixed data. I didn't have to invent it, just build it.</p>
+        <div class="rule-block">
+          <span class="rule-pill lvl1">Level 1 selected</span>
+          <span class="rule-arrow">+</span>
+          <span class="rule-pill lvl3">Level 3 selected</span>
+          <span class="rule-arrow">&rarr;</span>
+          <span class="rule-result">Follow <strong>Level 3</strong> requirements for everything, full stop.</span>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3>Building the icon system</h3>
+        <p>The icons were their own project inside the project. Some of the terms in the policy document, like "data triggering US notification" or "breach notification," don't have obvious visual shorthand. I researched what each term actually meant, then sketched interpretations in Procreate on my iPad and exported them as PNGs. I kept text labels under every icon so nobody had to guess.</p>
+        <div class="icon-showcase">
+          <img src="images/dhpa-icon-system.png" alt="Full set of hand-illustrated icons covering every data type and usage category in the tool, each paired with a text label">
+        </div>
+        <p class="shot-caption">Every data type and usage category got its own icon, researched and hand-drawn individually rather than pulled from an icon library.</p>
+      </div>
+    </section>
+
+    <!-- LO-FI WIREFRAMES -->
+    <section class="section wide fade-in" id="lofi">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 24 30" fill="none" aria-hidden="true">
+          <rect x="1" y="7" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="8" y="1" width="8" height="7" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="16" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>Lo-Fi Wireframes</h2>
+      </div>
+      <p>These three screens weren't sketched out in 2019. This was a developer's project built straight into code. What's shown here reconstructs the flow decisions above the way I'd actually plan them today: three screens, one rule carried through all of them.</p>
+      <div class="shot-row cols-3">
+        <div class="shot-frame"><img src="images/dhpa-lofi-01-data-selection.png" alt="Lo-fi wireframe of the data selection step, a grid of placeholder cards with checkboxes"></div>
+        <div class="shot-frame"><img src="images/dhpa-lofi-02-usage-selection.png" alt="Lo-fi wireframe of the usage selection step, placeholder cards with short description lines"></div>
+        <div class="shot-frame"><img src="images/dhpa-lofi-03-summary.png" alt="Lo-fi wireframe of the summary step, a level badge and a list of requirement rows"></div>
+      </div>
+      <p class="shot-caption">Data selection, usage selection, summary. The same three-step shape that shipped, worked out in gray boxes first.</p>
+    </section>
+
+    <!-- DESIGN DECISIONS -->
+    <section class="section wide fade-in" id="decisions">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 24 30" fill="none" aria-hidden="true">
+          <rect x="1" y="7" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="8" y="1" width="8" height="7" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="16" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>Design Decisions</h2>
+      </div>
+
+      <div class="subsection">
+        <h3>From a checkbox form to a guided flow</h3>
+        <p>Looking at the earliest version of the code now, the difference is stark. Everything lived on a single page. Selections were plain checkboxes with hover tooltips. Submitting your answers triggered a JavaScript <code>alert()</code> box that dumped your results as plain text. There was a looping video background behind it all, and jQuery was loaded but barely used. It worked, but it looked and felt like a proof of concept, because that's what it was.</p>
+        <div class="compare-row">
+          <div class="compare-col before">
+            <span class="compare-label">2019, first pass</span>
+            <div class="shot-frame"><img src="images/dhpa-before-2019.png" alt="Screenshot of the original 2019 prototype, a single long page of checkboxes and tooltips with a raw browser alert for results"></div>
+          </div>
+          <div class="compare-col after">
+            <span class="compare-label">Shipped version</span>
+            <div class="shot-frame"><img src="images/dhpa-hifi-01-data-selection.png" alt="The finished data selection step, a clean card grid replacing the original checkbox list"></div>
+          </div>
+        </div>
+        <p class="shot-caption">The version I eventually shipped moved away from all of that: a real step by step flow, card based selection instead of checkboxes, a printable summary page instead of a browser alert.</p>
+      </div>
+
+      <div class="subsection">
+        <h3>The finished flow</h3>
+        <div class="shot-row cols-3">
+          <div class="shot-frame"><img src="images/dhpa-hifi-01-data-selection.png" alt="Data selection step in the finished tool, showing a card grid with two items selected and a level badge"></div>
+          <div class="shot-frame"><img src="images/dhpa-hifi-02-usage-selection.png" alt="Usage selection step in the finished tool, showing category cards with several selected"></div>
+          <div class="shot-frame"><img src="images/dhpa-hifi-03-summary.png" alt="Requirements summary step, listing handling instructions for each selected usage category with a print option"></div>
+        </div>
+        <p class="shot-caption">Selecting personal and employee data locks the flow to Level 3, and the summary spells out exactly what that means for sharing, archiving, and storage, no more digging through forty pages to find the two paragraphs that apply to you.</p>
+      </div>
+    </section>
+
+    <!-- CHALLENGES -->
+    <section class="section fade-in" id="challenges">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 24 30" fill="none" aria-hidden="true">
+          <rect x="1" y="7" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="8" y="1" width="8" height="7" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="16" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>Challenges &amp; Tradeoffs</h2>
+      </div>
+      <p>This was my first real project in JavaScript, so I was learning the language while building with it. I kept the logic simple and readable, not clever, mostly because I knew someone else might eventually have to maintain this code without me around to explain it.</p>
+      <p>I was also doing design and development at the same time, alone, with no design process to fall back on. The visual style ended up close to monochrome. Some of that was a deliberate choice to keep things clean. Most of it was the reality of limited time and no room to explore more than one direction.</p>
+    </section>
+
+    <!-- OUTCOME -->
+    <section class="section fade-in" id="outcome">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 24 30" fill="none" aria-hidden="true">
+          <rect x="1" y="7" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="8" y="1" width="8" height="7" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="16" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>Outcome</h2>
+      </div>
+      <p>The tool went live as a static site on the company's AWS environment before my internship ended, so anyone on the team could reach it without extra setup. Internal testers called the workflow intuitive. They liked that it was short, since the role already assumed a baseline of job-related knowledge going in. There was no pushback from the security team on the classification logic or content, which mattered more to me than it probably should have, given how carefully that document had been put together.</p>
+      <p>I don't know if it's still running today. What I do know is that a former colleague reached out in 2023, four years after I left, asking for help with the code, since they'd taken over maintaining it and some of the underlying policy wording had changed. My manager at the time was glad to see it finished. It had sat unaddressed for a while before I picked it up.</p>
+    </section>
+
+    <!-- REFLECTION -->
+    <section class="section fade-in" id="reflection">
+      <div class="section-head">
+        <svg class="section-mark" viewBox="0 0 24 30" fill="none" aria-hidden="true">
+          <rect x="1" y="7" width="22" height="22" rx="4" stroke="currentColor" stroke-width="1.6"/>
+          <rect x="8" y="1" width="8" height="7" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="16" r="3.4" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>Where This Landed</h2>
+      </div>
+
+      <div class="reflection-card">
+        <div class="note">
+          <span class="note-label">Honest framing</span>
+          <p>A note on framing: this was built before I moved into UX. At the time I was a developer, not a designer, and I didn't run a formal design process. The lo-fi wireframes earlier in this case study reconstruct that thinking, they aren't a claim that sketches like these existed back in 2019.</p>
+        </div>
+
+        <p style="margin-top: 1.5rem;"><strong style="color: var(--cream);">What I'd change first:</strong> the color scheme. Close to monochrome was me being cautious with a limited timeline, not a real design decision. I'd also clean up the JavaScript itself. I was learning the language as I wrote it, and it shows.</p>
+
+        <p style="margin-top: 1rem;"><strong style="color: var(--cream);">The bigger difference would be process:</strong> I'd test the classification logic against edge cases before building it, and treat the icon set as one system instead of solving each icon on its own. That gap between how I built this and how I'd build it now is why I'm turning it into a case study instead of just linking the old site.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="project-nav">
+    <a href="albertinas-angels.html" class="prev">
+      <span class="direction">&larr; Previous</span>
+      <span class="title">Albertina's Angels</span>
+    </a>
+    <a href="education.html" class="next">
+      <span class="direction">Next &rarr;</span>
+      <span class="title">Bootcamp Projects</span>
+    </a>
+  </nav>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Mark Pabustan, UI/UX Designer</p>
+  </footer>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close enlarged image">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17"/></svg>
+    </button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </div>
+
+<script>
+  // Mobile nav toggle
+  const navToggle = document.getElementById('nav-toggle');
+  const mobileNav = document.getElementById('nav-links-mobile');
+
+  function updateMobileNavOffset() {
+    const headerEl = document.querySelector('.site-header');
+    if (headerEl) {
+      document.documentElement.style.setProperty('--mobile-nav-offset', headerEl.offsetHeight + 'px');
+    }
+  }
+  updateMobileNavOffset();
+  window.addEventListener('resize', updateMobileNavOffset);
+  window.addEventListener('orientationchange', updateMobileNavOffset);
+
+  navToggle.addEventListener('click', () => {
+    updateMobileNavOffset();
+    const isOpen = mobileNav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+  });
+
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Open menu');
+    });
+  });
+
+  // Access spine — fills as the visitor moves through the page
+  const accessSpine = document.getElementById('accessSpine');
+  function updateAccess() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+    accessSpine.style.setProperty('--access-progress', pct + '%');
+  }
+  window.addEventListener('scroll', updateAccess, { passive: true });
+  updateAccess();
+
+  // Scroll-triggered fade-ins
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+      }
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Image lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  let lastFocused = null;
+
+  function openLightbox(imgEl) {
+    lastFocused = document.activeElement;
+    lightboxImg.src = imgEl.src;
+    lightboxImg.alt = imgEl.alt || '';
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxImg.src = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.shot-frame img').forEach(img => {
+    img.tabIndex = 0;
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', 'Click to enlarge image');
+    img.addEventListener('click', () => openLightbox(img));
+    img.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(img);
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
+</script>
+
+</body>
+</html>
