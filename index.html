@@ -93,9 +93,19 @@
     <section class="home-reel-wrap" id="work-reel">
       <div class="home-reel-head">
         <span class="home-reel-eyebrow">Selected work</span>
-        <span class="home-reel-hint">Click + drag, or scroll →</span>
+        <div class="home-reel-controls">
+          <span class="home-reel-hint">Click + drag, or scroll →</span>
+          <div class="reel-arrows">
+            <button type="button" class="reel-arrow reel-arrow--prev" id="reelPrev" aria-label="Previous project">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+            </button>
+            <button type="button" class="reel-arrow reel-arrow--next" id="reelNext" aria-label="Next project">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="home-reel" id="reel">
+      <div class="home-reel" id="reel" role="region" aria-roledescription="carousel" aria-label="Selected work" tabindex="0">
 
         <a class="home-frame" href="counseling.html">
           <span class="plate-fig">Fig. 01</span>
@@ -131,7 +141,7 @@
             <img src="images/dhpa-card.png" alt="Cimpress and Vistaprint logo lockup, representing the DHPA internal tool project" loading="lazy" draggable="false">
           </div>
           <p class="plate-status"><span class="live-dot" aria-hidden="true"></span>Live since 2019 · Cimpress</p>
-          <h3>DHPA</h3>
+          <h3>Cimpress Project</h3>
           <p>A 40-page internal security policy turned into a step by step data handling assistant, built during a Cimpress development internship.</p>
           <span class="plate-link">
             Enter case study
@@ -144,7 +154,7 @@
           <div class="plate-thumb">
             <img src="images/bootcamp-card.jpg" alt="Bootcamp project screenshots" loading="lazy" draggable="false">
           </div>
-          <p class="plate-status plate-status--wip"><span class="live-dot" aria-hidden="true"></span>Case studies in progress</p>
+          <p class="plate-status"><span class="live-dot" aria-hidden="true"></span>Completed in 2023</p>
           <h3>Bootcamp Projects</h3>
           <p>A handful of smaller projects from the Google UX Design Certificate and Columbia Engineering UI/UX Bootcamp — earlier reps, different muscles.</p>
           <span class="plate-link">
@@ -154,8 +164,11 @@
         </a>
 
       </div>
-      <div class="home-dots" id="dots" aria-hidden="true">
-        <span class="is-active"></span><span></span><span></span><span></span>
+      <div class="home-dots" id="dots" role="tablist" aria-label="Jump to a project">
+        <button type="button" class="is-active" role="tab" aria-selected="true" aria-label="Connett Family Counseling"></button>
+        <button type="button" role="tab" aria-selected="false" aria-label="Albertina's Angels"></button>
+        <button type="button" role="tab" aria-selected="false" aria-label="Cimpress Project"></button>
+        <button type="button" role="tab" aria-selected="false" aria-label="Bootcamp Projects"></button>
       </div>
     </section>
 
