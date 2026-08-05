@@ -102,7 +102,7 @@
       font: "'EB Garamond', Georgia, serif", weight: 400, italic: true, gfont: 'EB+Garamond:ital,wght@1,400'
     },
     'dhpa.html': {
-      name: 'DHPA', bg: '#16232E', accent: '#C9A227',
+      name: 'Data Handling Policy Assistant', bg: '#16232E', accent: '#C9A227',
       font: "'JetBrains Mono', monospace", weight: 700, italic: false, gfont: 'JetBrains+Mono:wght@700'
     },
     'big-cat-rescue.html': {
